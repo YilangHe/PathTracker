@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { StationCard } from "./StationCard";
@@ -10,10 +11,11 @@ interface DraggableStationCardProps {
   loading: boolean;
   error: string | null;
   isClosest?: boolean;
-  onRemove?: () => void;
+  onRemove?: (stationId: string) => void;
+  stationId: string;
 }
 
-export const DraggableStationCard = ({
+const DraggableStationCardComponent = ({
   id,
   stationCode,
   data,
@@ -21,6 +23,7 @@ export const DraggableStationCard = ({
   error,
   isClosest,
   onRemove,
+  stationId,
 }: DraggableStationCardProps) => {
   const {
     attributes,
@@ -36,6 +39,8 @@ export const DraggableStationCard = ({
     transition,
   };
 
+  const handleRemove = onRemove ? () => onRemove(stationId) : undefined;
+
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
       <StationCard
@@ -44,10 +49,32 @@ export const DraggableStationCard = ({
         loading={loading}
         error={error}
         isClosest={isClosest}
-        onRemove={onRemove}
+        onRemove={handleRemove}
         isDragging={isDragging}
         dragHandleProps={listeners}
       />
     </div>
   );
 };
+
+// Custom comparison function - only re-render if this station's props actually changed
+const areEqual = (
+  prevProps: DraggableStationCardProps,
+  nextProps: DraggableStationCardProps
+) => {
+  return (
+    prevProps.id === nextProps.id &&
+    prevProps.stationCode === nextProps.stationCode &&
+    prevProps.data === nextProps.data && // This uses object reference equality from our hook optimization
+    prevProps.loading === nextProps.loading &&
+    prevProps.error === nextProps.error &&
+    prevProps.isClosest === nextProps.isClosest &&
+    prevProps.onRemove === nextProps.onRemove &&
+    prevProps.stationId === nextProps.stationId
+  );
+};
+
+export const DraggableStationCard = memo(
+  DraggableStationCardComponent,
+  areEqual
+);

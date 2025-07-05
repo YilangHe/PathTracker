@@ -213,10 +213,9 @@ export default function PathTracker() {
                   error={data?.error || null}
                   isClosest={isClosest}
                   onRemove={
-                    stations.length > 1
-                      ? () => handleRemoveStation(station.id)
-                      : undefined
+                    stations.length > 1 ? handleRemoveStation : undefined
                   }
+                  stationId={station.id}
                 />
               );
             })}

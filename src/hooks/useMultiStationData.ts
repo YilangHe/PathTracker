@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { StationResult, StationCode } from "../types/path";
 import { fetchRidePath } from "../services/pathApi";
 import { POLLING_INTERVAL } from "../constants/stations";
@@ -16,9 +16,18 @@ interface MultiStationData {
 export const useMultiStationData = (stationCodes: StationCode[]) => {
   const [stationData, setStationData] = useState<MultiStationData>({});
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const previousStationCodes = useRef<StationCode[]>([]);
+  const currentStationCodes = useRef<StationCode[]>(stationCodes);
 
+  // Update the ref whenever stationCodes changes
+  useEffect(() => {
+    currentStationCodes.current = stationCodes;
+  }, [stationCodes]);
+
+  // Load function that doesn't depend on stationCodes directly
   const load = useCallback(async () => {
-    if (stationCodes.length === 0) return;
+    const codes = currentStationCodes.current;
+    if (codes.length === 0) return;
 
     try {
       const json = await fetchRidePath();
@@ -27,7 +36,7 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
       setStationData((prev) => {
         const updated = { ...prev };
 
-        stationCodes.forEach((code) => {
+        codes.forEach((code) => {
           const found = json.results.find((s) => s.consideredStation === code);
           const newStationData = found ?? null;
 
@@ -53,7 +62,8 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
 
       setStationData((prev) => {
         const updated = { ...prev };
-        stationCodes.forEach((code) => {
+        const codes = currentStationCodes.current;
+        codes.forEach((code) => {
           updated[code] = {
             data: prev[code]?.data || null,
             loading: false,
@@ -65,30 +75,74 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
 
       setLastUpdated(null);
     }
-  }, [stationCodes]);
+  }, []); // No dependencies! This prevents reload on stationCodes change
 
-  // Initialize data for new stations
+  // Handle station changes (add/remove) without re-fetching
   useEffect(() => {
-    setStationData((prev) => {
-      const updated = { ...prev };
-      let hasChanges = false;
+    const prevCodes = previousStationCodes.current;
+    const currentCodes = stationCodes;
 
-      stationCodes.forEach((code) => {
-        if (!updated[code]) {
+    // Find added and removed stations
+    const addedStations = currentCodes.filter(
+      (code) => !prevCodes.includes(code)
+    );
+    const removedStations = prevCodes.filter(
+      (code) => !currentCodes.includes(code)
+    );
+
+    if (addedStations.length > 0 || removedStations.length > 0) {
+      setStationData((prev) => {
+        const updated = { ...prev };
+
+        // Initialize new stations
+        addedStations.forEach((code) => {
           updated[code] = { data: null, loading: true, error: null };
-          hasChanges = true;
-        }
+        });
+
+        // Remove deleted stations (this won't trigger re-renders for other stations)
+        removedStations.forEach((code) => {
+          delete updated[code];
+        });
+
+        return updated;
       });
 
-      return hasChanges ? updated : prev;
-    });
-  }, [stationCodes]);
+      // Only fetch new data if we added stations (not if we just removed them)
+      if (addedStations.length > 0) {
+        console.log(
+          "Fetching data because stations were added:",
+          addedStations
+        );
+        // Set loading for existing stations only if we're adding new ones
+        setStationData((prev) => {
+          const updated = { ...prev };
+          currentCodes.forEach((code) => {
+            if (updated[code]) {
+              updated[code] = { ...updated[code], loading: true };
+            }
+          });
+          return updated;
+        });
+        // Trigger a fetch for the new stations
+        load();
+      } else {
+        console.log(
+          "Stations were only removed, no fetch needed:",
+          removedStations
+        );
+      }
+    }
 
-  // Polling effect
+    previousStationCodes.current = currentCodes;
+  }, [stationCodes, load]);
+
+  // Initial polling setup - only runs once
   useEffect(() => {
     if (stationCodes.length === 0) return;
 
-    // Set initial loading state
+    console.log("Setting up initial polling for stations:", stationCodes);
+
+    // Initial load
     setStationData((prev) => {
       const updated = { ...prev };
       stationCodes.forEach((code) => {
@@ -104,7 +158,7 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
     load();
     const id = setInterval(load, POLLING_INTERVAL);
     return () => clearInterval(id);
-  }, [load]);
+  }, []); // Only run once on mount, never restart polling
 
   return {
     stationData,
