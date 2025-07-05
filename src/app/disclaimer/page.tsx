@@ -25,10 +25,10 @@ export default function DisclaimerPage() {
               Important Notice
             </h2>
             <p className="text-gray-800 leading-relaxed">
-              MyPath is an independent platform developed to help PATH train
-              riders access real-time schedules and updates conveniently. This
-              site is not affiliated with or endorsed by the Port Authority of
-              New York and New Jersey (PANYNJ) or any official PATH services.
+              Path Tracker is an independent platform developed to help PATH
+              train riders access real-time schedules and updates conveniently.
+              This site is not affiliated with or endorsed by the Port Authority
+              of New York and New Jersey (PANYNJ) or any official PATH services.
             </p>
           </div>
 
