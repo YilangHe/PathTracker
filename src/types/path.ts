@@ -31,3 +31,32 @@ export interface StalenessStatus {
 import { STATIONS } from "../constants/stations";
 
 export type StationCode = keyof typeof STATIONS;
+
+// Alert types for the new alerts API
+export interface AlertFormVariableItem {
+  val: string[];
+  variableName: string;
+  isRequired: boolean;
+  seq: number;
+  variableId: number;
+  prefixName: string;
+}
+
+export interface AlertIncidentMessage {
+  subject: string;
+  preMessage: string;
+  formVariableItems: AlertFormVariableItem[];
+  sysVarTodayDateFormat: string;
+  sysVarCurrentTimeFormat: string;
+}
+
+export interface Alert {
+  incidentMessage: AlertIncidentMessage;
+  CreatedDate: string;
+  ModifiedDate: string;
+}
+
+export interface AlertsResponse {
+  status: string;
+  data: Alert[];
+}
