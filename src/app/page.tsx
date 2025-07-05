@@ -27,6 +27,38 @@ import { AlertsCard } from "../components/AlertsCard";
 import { DraggableStationCard } from "../components/DraggableStationCard";
 import { AddStationCard } from "../components/AddStationCard";
 
+// LocalStorage keys
+const STATIONS_STORAGE_KEY = "pathTracker_stations";
+const AUTO_SELECTED_STORAGE_KEY = "pathTracker_hasAutoSelected";
+
+// Default stations configuration
+const DEFAULT_STATIONS: StationConfig[] = [
+  { id: "default-1", stationCode: "NWK" },
+];
+
+// LocalStorage utility functions
+const saveToStorage = (key: string, value: any) => {
+  try {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  } catch (error) {
+    console.error("Error saving to localStorage:", error);
+  }
+};
+
+const loadFromStorage = function <T>(key: string, defaultValue: T): T {
+  try {
+    if (typeof window !== "undefined") {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    }
+  } catch (error) {
+    console.error("Error loading from localStorage:", error);
+  }
+  return defaultValue;
+};
+
 /**
  * PATH realtime feed UI
  *  — Multi-station support with drag-and-drop reordering
@@ -41,13 +73,43 @@ import { AddStationCard } from "../components/AddStationCard";
  *  — **NEW: PATH Alerts from Port Authority API**
  *  — **NEW: Auto-select closest station based on user location**
  *  — **NEW: Multi-station dashboard with drag-and-drop**
+ *  — **NEW: Persistent station configuration across browser sessions**
  */
 
 export default function PathTracker() {
-  const [stations, setStations] = useState<StationConfig[]>([
-    { id: "default-1", stationCode: "NWK" },
-  ]);
+  const [stations, setStations] = useState<StationConfig[]>(DEFAULT_STATIONS);
   const [hasAutoSelected, setHasAutoSelected] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load saved configuration on mount
+  useEffect(() => {
+    const savedStations = loadFromStorage(
+      STATIONS_STORAGE_KEY,
+      DEFAULT_STATIONS
+    );
+    const savedHasAutoSelected = loadFromStorage(
+      AUTO_SELECTED_STORAGE_KEY,
+      false
+    );
+
+    setStations(savedStations);
+    setHasAutoSelected(savedHasAutoSelected);
+    setIsLoaded(true);
+  }, []);
+
+  // Save stations to localStorage whenever they change
+  useEffect(() => {
+    if (isLoaded) {
+      saveToStorage(STATIONS_STORAGE_KEY, stations);
+    }
+  }, [stations, isLoaded]);
+
+  // Save hasAutoSelected to localStorage whenever it changes
+  useEffect(() => {
+    if (isLoaded) {
+      saveToStorage(AUTO_SELECTED_STORAGE_KEY, hasAutoSelected);
+    }
+  }, [hasAutoSelected, isLoaded]);
 
   // Memoize stationCodes to prevent infinite re-renders
   const stationCodes = useMemo(
@@ -71,7 +133,7 @@ export default function PathTracker() {
 
   // Auto-select closest station when detected (only once)
   useEffect(() => {
-    if (closestStation && !hasAutoSelected) {
+    if (closestStation && !hasAutoSelected && isLoaded) {
       setStations((prev) =>
         prev.map((station) =>
           station.id === "default-1"
@@ -81,7 +143,7 @@ export default function PathTracker() {
       );
       setHasAutoSelected(true);
     }
-  }, [closestStation, hasAutoSelected]);
+  }, [closestStation, hasAutoSelected, isLoaded]);
 
   // Sensors for drag and drop
   const sensors = useSensors(
@@ -163,6 +225,17 @@ export default function PathTracker() {
 
     return null;
   };
+
+  // Don't render until we've loaded from localStorage
+  if (!isLoaded) {
+    return (
+      <div className="mx-auto max-w-4xl p-4 space-y-4">
+        <div className="text-center text-gray-500">
+          Loading your saved stations...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-4xl p-4 space-y-4">
