@@ -91,7 +91,10 @@ export function Navbar() {
                   <ListItem title="Privacy" href="/">
                     Your data stays on your device
                   </ListItem>
-                  <ListItem title="Contact" href="/">
+                  <ListItem
+                    title="Contact"
+                    href="mailto:livepathtracker@gmail.com"
+                  >
                     Questions or feedback about this app
                   </ListItem>
                 </ul>
