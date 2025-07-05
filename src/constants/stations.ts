@@ -17,4 +17,10 @@ export const STATIONS = {
 export const RAW_API_URL = "https://panynj.gov/bin/portauthority/ridepath.json";
 export const PROXY_API_URL = `https://corsproxy.io/?${RAW_API_URL}`;
 
+export const ALERTS_API_URL =
+  "https://www.panynj.gov/bin/portauthority/everbridge/incidents?status=All&department=Path";
+export const ALERTS_PROXY_URL = `https://corsproxy.io/?${encodeURIComponent(
+  ALERTS_API_URL
+)}`;
+
 export const POLLING_INTERVAL = 10_000; // 10 seconds
