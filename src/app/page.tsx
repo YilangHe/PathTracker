@@ -8,7 +8,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { Loader2, Train } from "lucide-react";
+import { Loader2, Train, Clock, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**
@@ -19,7 +19,7 @@ import { motion, AnimatePresence } from "framer-motion";
  *  — Right‑aligned Arrival column
  *  — Friendly station list that mirrors live feed codes
  *  — Row‑level refresh with cube‑rotation animation (no full card flicker)
- *  — **NEW: "Last updated" ribbon in the header** (priority #1)
+ *  — **Enhanced: Prominent "Last updated" ribbon in the header** (priority #1)
  */
 
 const RAW_API_URL = "https://panynj.gov/bin/portauthority/ridepath.json";
@@ -99,6 +99,33 @@ const arrivalClass = (m: Message) =>
     ? "text-red-500 font-semibold"
     : heat(parseInt(m.secondsToArrival, 10));
 
+// Get staleness status based on last update time
+const getStalenessStatus = (
+  lastUpdated: string | null,
+  error: string | null
+) => {
+  if (error)
+    return {
+      status: "error",
+      color: "bg-red-600",
+      text: "Error fetching data",
+    };
+  if (!lastUpdated)
+    return { status: "unknown", color: "bg-gray-500", text: "No data" };
+
+  const now = new Date();
+  const updated = new Date(lastUpdated);
+  const diffMinutes = Math.floor((now.getTime() - updated.getTime()) / 60000);
+
+  if (diffMinutes <= 1)
+    return { status: "fresh", color: "bg-green-500", text: "Live" };
+  if (diffMinutes <= 5)
+    return { status: "recent", color: "bg-yellow-500", text: "Recent" };
+  if (diffMinutes <= 15)
+    return { status: "stale", color: "bg-orange-500", text: "Stale" };
+  return { status: "very-stale", color: "bg-red-500", text: "Very stale" };
+};
+
 export default function PathTracker() {
   const [station, setStation] = useState<StationCode>("NWK");
   const [data, setData] = useState<StationResult | null>(null);
@@ -109,16 +136,22 @@ export default function PathTracker() {
   const load = useCallback(async () => {
     try {
       const json = await fetchRidePath();
+      console.log("API Response:", json); // Debug: Check what we're getting
       const found = json.results.find((s) => s.consideredStation === station);
       setData((prev) =>
         JSON.stringify(prev) === JSON.stringify(found) ? prev : found ?? null
       );
-      setLastUpdated(json.lastUpdated);
+
+      // Debug: Check the lastUpdated field
+      console.log("LastUpdated from API:", json.lastUpdated);
+      setLastUpdated(json.lastUpdated || new Date().toISOString());
       setError(null);
     } catch (e: any) {
-      console.error(e);
+      console.error("API Error:", e);
       setError(e?.message ?? "Fetch failed");
       setData(null);
+      // Set lastUpdated to null on error to show stale state
+      setLastUpdated(null);
     } finally {
       setLoading(false);
     }
@@ -140,8 +173,32 @@ export default function PathTracker() {
       })
     : null;
 
+  const staleness = getStalenessStatus(lastUpdated, error);
+
   return (
     <div className="mx-auto max-w-2xl p-4 space-y-4">
+      {/* Prominent Last Updated Ribbon */}
+      <div className="relative">
+        <div
+          className={`${staleness.color} text-white px-4 py-2 rounded-lg shadow-lg`}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Clock size={16} />
+              <span className="font-medium text-sm">
+                {staleness.text} • Last updated: {prettyTime || "Never"}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              {staleness.status === "very-stale" && (
+                <AlertTriangle size={16} className="text-white" />
+              )}
+              {loading && <Loader2 className="animate-spin" size={16} />}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <h1 className="text-3xl font-bold text-center">RidePATH Arrivals</h1>
 
       {/* Station selector */}
@@ -168,13 +225,7 @@ export default function PathTracker() {
               <span className="text-xl font-semibold capitalize">
                 {STATIONS[station] ?? station}
               </span>
-              {loading && <Loader2 className="animate-spin" />}
             </div>
-            {prettyTime && (
-              <span className="text-xs text-gray-400">
-                Last updated: {prettyTime}
-              </span>
-            )}
           </div>
         </CardHeader>
         <CardContent>
