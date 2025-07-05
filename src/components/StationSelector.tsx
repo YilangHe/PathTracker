@@ -17,7 +17,11 @@ export const StationSelector = ({ value, onChange }: StationSelectorProps) => {
   return (
     <Select value={value} onValueChange={(v) => onChange(v as StationCode)}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select station" />
+        <div className="flex items-center justify-between w-full">
+          <span className="capitalize text-foreground">
+            {STATIONS[value] || "Select station"}
+          </span>
+        </div>
       </SelectTrigger>
       <SelectContent>
         {Object.entries(STATIONS).map(([code, name]) => (

@@ -3,6 +3,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Plus, X } from "lucide-react";
 import { StationSelector } from "./StationSelector";
 import { StationCode } from "../types/path";
+import { STATIONS } from "../constants/stations";
 
 interface AddStationCardProps {
   onAddStation: (stationCode: StationCode) => void;
@@ -14,21 +15,46 @@ export const AddStationCard = ({
   existingStations,
 }: AddStationCardProps) => {
   const [isAdding, setIsAdding] = useState(false);
-  const [selectedStation, setSelectedStation] = useState<StationCode>("NWK");
+  const [selectedStation, setSelectedStation] = useState<StationCode>(
+    Object.keys(STATIONS)[0] as StationCode
+  );
 
   const handleAdd = () => {
     if (!existingStations.includes(selectedStation)) {
       onAddStation(selectedStation);
+      // Reset state after successful add
+      setSelectedStation(Object.keys(STATIONS)[0] as StationCode);
       setIsAdding(false);
     }
   };
 
   const handleCancel = () => {
     setIsAdding(false);
-    setSelectedStation("NWK");
+    setSelectedStation(Object.keys(STATIONS)[0] as StationCode);
+  };
+
+  const handleStartAdding = () => {
+    // Find the first station that's not already added
+    const availableStation =
+      (Object.keys(STATIONS) as StationCode[]).find(
+        (code) => !existingStations.includes(code)
+      ) || (Object.keys(STATIONS)[0] as StationCode);
+
+    console.log(
+      "Setting selected station to:",
+      availableStation,
+      "Available stations:",
+      Object.keys(STATIONS)
+    );
+    setSelectedStation(availableStation);
+    setIsAdding(true);
   };
 
   if (isAdding) {
+    console.log(
+      "Rendering add station form with selectedStation:",
+      selectedStation
+    );
     return (
       <Card className="bg-gray-800 border-2 border-dashed border-gray-600 text-white">
         <CardHeader>
@@ -44,10 +70,15 @@ export const AddStationCard = ({
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <StationSelector
-            value={selectedStation}
-            onChange={setSelectedStation}
-          />
+          <div>
+            <p className="text-xs text-gray-400 mb-2">
+              Selected: {selectedStation} ({STATIONS[selectedStation]})
+            </p>
+            <StationSelector
+              value={selectedStation}
+              onChange={setSelectedStation}
+            />
+          </div>
           <div className="flex gap-2">
             <button
               onClick={handleAdd}
@@ -74,7 +105,7 @@ export const AddStationCard = ({
     <Card className="bg-gray-800 border-2 border-dashed border-gray-600 text-white hover:border-gray-500 transition-colors">
       <CardContent className="p-8">
         <button
-          onClick={() => setIsAdding(true)}
+          onClick={handleStartAdding}
           className="w-full flex flex-col items-center gap-2 text-gray-400 hover:text-gray-200 transition-colors"
         >
           <Plus className="w-8 h-8" />
