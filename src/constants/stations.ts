@@ -14,6 +14,23 @@ export const STATIONS = {
   "33S": "33rd Street",
 } as const;
 
+// Station coordinates (latitude, longitude)
+export const STATION_COORDINATES = {
+  NWK: [40.7357, -74.1635], // Newark
+  HAR: [40.7394, -74.1555], // Harrison
+  JSQ: [40.7332, -74.0627], // Journal Square
+  GRV: [40.7195, -74.0434], // Grove Street
+  NEW: [40.7268, -74.0341], // Newport
+  EXP: [40.7167, -74.033], // Exchange Place
+  HOB: [40.7363, -74.0279], // Hoboken
+  WTC: [40.7126, -74.0113], // World Trade Center
+  CHR: [40.7338, -74.007], // Christopher St
+  "09S": [40.7344, -74.0048], // 9th Street
+  "14S": [40.7374, -74.0061], // 14th Street
+  "23S": [40.7429, -74.0067], // 23rd Street
+  "33S": [40.7489, -74.0063], // 33rd Street
+} as const;
+
 export const RAW_API_URL = "https://panynj.gov/bin/portauthority/ridepath.json";
 export const PROXY_API_URL = `https://corsproxy.io/?${RAW_API_URL}`;
 

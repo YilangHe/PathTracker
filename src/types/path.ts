@@ -60,3 +60,14 @@ export interface AlertsResponse {
   status: string;
   data: Alert[];
 }
+
+// Multi-station management types
+export interface StationConfig {
+  id: string;
+  stationCode: StationCode;
+  isClosest?: boolean;
+}
+
+export interface StationListState {
+  stations: StationConfig[];
+}
