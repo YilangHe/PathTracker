@@ -246,13 +246,6 @@ export default function PathTracker() {
         loading={false}
       />
 
-      <h1 className="text-3xl font-bold text-center">RidePATH Arrivals</h1>
-
-      <div className="text-center text-sm text-gray-500">
-        {stations.length === 1 ? "1 station" : `${stations.length} stations`} •
-        Drag cards to reorder • Click + to add more
-      </div>
-
       {/* Location Status */}
       {renderLocationStatus()}
 
