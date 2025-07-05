@@ -85,6 +85,9 @@ export function Navbar() {
                   >
                     Official PATH schedules and real-time data
                   </ListItem>
+                  <ListItem title="Disclaimer" href="/disclaimer">
+                    Important legal information and data sources
+                  </ListItem>
                   <ListItem title="Privacy" href="/">
                     Your data stays on your device
                   </ListItem>
