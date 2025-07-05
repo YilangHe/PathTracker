@@ -294,10 +294,6 @@ export default function PathTracker() {
         onAddStation={handleAddStation}
         existingStations={stationCodes}
       />
-
-      <footer className="text-center text-xs text-gray-500 pt-4">
-        Data © Port Authority of NY & NJ · updates every 10 s
-      </footer>
     </div>
   );
 }
