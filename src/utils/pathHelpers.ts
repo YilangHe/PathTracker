@@ -22,6 +22,14 @@ export const arrivalClass = (message: Message): string =>
     ? "text-red-500 font-semibold"
     : heat(parseInt(message.secondsToArrival, 10));
 
+export const formatArrivalTime = (arrivalTimeMessage: string): string => {
+  // Show "Due" instead of "0 min"
+  if (arrivalTimeMessage.trim() === "0 min") {
+    return "Due";
+  }
+  return arrivalTimeMessage;
+};
+
 // Data caching utilities
 const CACHE_KEYS = {
   STATION_DATA: "pathTracker_stationData",
