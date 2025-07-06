@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { MapPin, X, GripVertical } from "lucide-react";
+import { X, GripVertical, ChevronUp, ChevronDown } from "lucide-react";
 import { StationResult, StationCode } from "../types/path";
 import { STATIONS } from "../constants/stations";
 import { ArrivalsTable } from "./ArrivalsTable";
@@ -10,8 +10,9 @@ interface StationCardProps {
   data: StationResult | null;
   loading: boolean;
   error: string | null;
-  isClosest?: boolean;
   onRemove?: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
   isDragging?: boolean;
   dragHandleProps?: any;
 }
@@ -22,8 +23,9 @@ export const StationCard = memo(
     data,
     loading,
     error,
-    isClosest,
     onRemove,
+    onMoveUp,
+    onMoveDown,
     isDragging,
     dragHandleProps,
   }: StationCardProps) => {
@@ -49,25 +51,43 @@ export const StationCard = memo(
               <span className="text-xl font-semibold capitalize">
                 {STATIONS[stationCode] ?? stationCode}
               </span>
-
-              {isClosest && (
-                <div className="flex items-center gap-1 text-sm text-green-400">
-                  <MapPin className="w-4 h-4" />
-                  <span>Closest</span>
-                </div>
-              )}
             </div>
 
-            {/* Remove button */}
-            {onRemove && (
-              <button
-                onClick={onRemove}
-                className="text-gray-400 hover:text-red-400 transition-colors p-1 rounded-md hover:bg-red-900/20"
-                title="Remove station"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+            {/* Control buttons */}
+            <div className="flex items-center gap-1">
+              {/* Move up button */}
+              {onMoveUp && (
+                <button
+                  onClick={onMoveUp}
+                  className="text-gray-400 hover:text-blue-400 transition-colors p-1 rounded-md hover:bg-blue-900/20"
+                  title="Move station up"
+                >
+                  <ChevronUp className="w-4 h-4" />
+                </button>
+              )}
+
+              {/* Move down button */}
+              {onMoveDown && (
+                <button
+                  onClick={onMoveDown}
+                  className="text-gray-400 hover:text-blue-400 transition-colors p-1 rounded-md hover:bg-blue-900/20"
+                  title="Move station down"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              )}
+
+              {/* Remove button */}
+              {onRemove && (
+                <button
+                  onClick={onRemove}
+                  className="text-gray-400 hover:text-red-400 transition-colors p-1 rounded-md hover:bg-red-900/20"
+                  title="Remove station"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
         </CardHeader>
 

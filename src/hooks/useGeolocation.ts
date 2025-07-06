@@ -1,25 +1,59 @@
-import { useState, useEffect } from "react";
-import { StationCode } from "../types/path";
+import { useState, useEffect, useCallback } from "react";
+import { StationCode, StationResult } from "../types/path";
 import { findClosestStation } from "../utils/pathHelpers";
+import { fetchRidePath } from "../services/pathApi";
 
 interface GeolocationState {
   closestStation: StationCode | null;
+  closestStationData: StationResult | null;
   isLoading: boolean;
+  isLoadingData: boolean;
   error: string | null;
   hasPermission: boolean;
   userLocation: { lat: number; lon: number } | null;
 }
 
+const LOCATION_REFRESH_INTERVAL = 10000; // 10 seconds
+
 export const useGeolocation = () => {
   const [state, setState] = useState<GeolocationState>({
     closestStation: null,
+    closestStationData: null,
     isLoading: false,
+    isLoadingData: false,
     error: null,
     hasPermission: false,
     userLocation: null,
   });
 
-  const requestLocation = async () => {
+  const fetchClosestStationData = useCallback(
+    async (stationCode: StationCode) => {
+      setState((prev) => ({ ...prev, isLoadingData: true }));
+
+      try {
+        const response = await fetchRidePath();
+        const stationData = response.results.find(
+          (s) => s.consideredStation === stationCode
+        );
+
+        setState((prev) => ({
+          ...prev,
+          closestStationData: stationData || null,
+          isLoadingData: false,
+        }));
+      } catch (error) {
+        console.error("Error fetching closest station data:", error);
+        setState((prev) => ({
+          ...prev,
+          closestStationData: null,
+          isLoadingData: false,
+        }));
+      }
+    },
+    []
+  );
+
+  const requestLocation = useCallback(async () => {
     if (!navigator.geolocation) {
       setState((prev) => ({
         ...prev,
@@ -37,7 +71,7 @@ export const useGeolocation = () => {
           navigator.geolocation.getCurrentPosition(resolve, reject, {
             enableHighAccuracy: true,
             timeout: 10000,
-            maximumAge: 300000, // 5 minutes
+            maximumAge: 60000, // 1 minute cache for periodic updates
           });
         }
       );
@@ -53,6 +87,9 @@ export const useGeolocation = () => {
         isLoading: false,
         error: null,
       }));
+
+      // Fetch data for the closest station
+      await fetchClosestStationData(closest);
     } catch (error) {
       let errorMessage = "Unable to get your location";
 
@@ -74,14 +111,37 @@ export const useGeolocation = () => {
         ...prev,
         error: errorMessage,
         isLoading: false,
+        hasPermission: false,
       }));
     }
-  };
+  }, [fetchClosestStationData]);
 
   // Auto-request location on component mount
   useEffect(() => {
     requestLocation();
-  }, []);
+  }, [requestLocation]);
+
+  // Set up periodic location and data refresh when permission is granted
+  useEffect(() => {
+    if (!state.hasPermission) return;
+
+    const interval = setInterval(() => {
+      requestLocation();
+    }, LOCATION_REFRESH_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [state.hasPermission, requestLocation]);
+
+  // Fetch station data periodically for the closest station
+  useEffect(() => {
+    if (!state.closestStation || !state.hasPermission) return;
+
+    const interval = setInterval(() => {
+      fetchClosestStationData(state.closestStation!);
+    }, LOCATION_REFRESH_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [state.closestStation, state.hasPermission, fetchClosestStationData]);
 
   return {
     ...state,

@@ -10,8 +10,9 @@ interface DraggableStationCardProps {
   data: StationResult | null;
   loading: boolean;
   error: string | null;
-  isClosest?: boolean;
   onRemove?: (stationId: string) => void;
+  onMoveUp?: (stationId: string) => void;
+  onMoveDown?: (stationId: string) => void;
   stationId: string;
 }
 
@@ -21,8 +22,9 @@ const DraggableStationCardComponent = ({
   data,
   loading,
   error,
-  isClosest,
   onRemove,
+  onMoveUp,
+  onMoveDown,
   stationId,
 }: DraggableStationCardProps) => {
   const {
@@ -40,6 +42,8 @@ const DraggableStationCardComponent = ({
   };
 
   const handleRemove = onRemove ? () => onRemove(stationId) : undefined;
+  const handleMoveUp = onMoveUp ? () => onMoveUp(stationId) : undefined;
+  const handleMoveDown = onMoveDown ? () => onMoveDown(stationId) : undefined;
 
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
@@ -48,8 +52,9 @@ const DraggableStationCardComponent = ({
         data={data}
         loading={loading}
         error={error}
-        isClosest={isClosest}
         onRemove={handleRemove}
+        onMoveUp={handleMoveUp}
+        onMoveDown={handleMoveDown}
         isDragging={isDragging}
         dragHandleProps={listeners}
       />
@@ -68,8 +73,9 @@ const areEqual = (
     prevProps.data === nextProps.data && // This uses object reference equality from our hook optimization
     prevProps.loading === nextProps.loading &&
     prevProps.error === nextProps.error &&
-    prevProps.isClosest === nextProps.isClosest &&
     prevProps.onRemove === nextProps.onRemove &&
+    prevProps.onMoveUp === nextProps.onMoveUp &&
+    prevProps.onMoveDown === nextProps.onMoveDown &&
     prevProps.stationId === nextProps.stationId
   );
 };

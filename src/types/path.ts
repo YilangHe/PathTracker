@@ -65,7 +65,6 @@ export interface AlertsResponse {
 export interface StationConfig {
   id: string;
   stationCode: StationCode;
-  isClosest?: boolean;
 }
 
 export interface StationListState {
