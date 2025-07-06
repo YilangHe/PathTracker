@@ -54,16 +54,6 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
                       rx="2"
                     />
                   </svg>
-                  {/* Status dots */}
-                  <div className="absolute -top-1 -right-1 flex gap-1">
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{
-                        backgroundColor: getLineColor(message.lineColor),
-                      }}
-                    />
-                    <div className="w-2 h-2 rounded-full bg-gray-600" />
-                  </div>
                 </div>
 
                 {/* Arrow icon */}
@@ -100,7 +90,7 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
                       : ""}
                   </div>
                 </div>
-                <Radio className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <Radio className="w-5 h-5 text-gray-400 flex-shrink-0 animate-pulse" />
               </div>
             </motion.div>
           ))
