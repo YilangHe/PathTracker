@@ -10,6 +10,7 @@ interface StationCardProps {
   data: StationResult | null;
   loading: boolean;
   error: string | null;
+  hasCachedData?: boolean;
   onRemove?: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
@@ -23,6 +24,7 @@ export const StationCard = memo(
     data,
     loading,
     error,
+    hasCachedData = false,
     onRemove,
     onMoveUp,
     onMoveDown,
@@ -99,9 +101,30 @@ export const StationCard = memo(
             </div>
           )}
 
-          {error && <p className="text-red-400 text-sm mb-2">{error}</p>}
+          {error && hasCachedData && (
+            <div className="mb-4 p-3 bg-orange-800/50 border border-orange-600 rounded">
+              <div className="flex items-center gap-2 text-orange-100 text-sm">
+                <span>⚠️</span>
+                <span>
+                  Unable to get latest arrivals. Showing last known data.
+                </span>
+              </div>
+              <div className="text-xs text-orange-200 mt-1">{error}</div>
+            </div>
+          )}
+
+          {error && !hasCachedData && (
+            <div className="p-3 bg-red-800/50 border border-red-600 rounded text-sm">
+              <div className="flex items-center gap-2 text-red-100 mb-1">
+                <span>❌</span>
+                <span>Error loading arrivals:</span>
+              </div>
+              <div className="text-red-200">{error}</div>
+            </div>
+          )}
 
           {!error && !loading && data && <ArrivalsTable data={data} />}
+          {error && hasCachedData && data && <ArrivalsTable data={data} />}
 
           {!error && !loading && !data && (
             <p className="text-gray-400">
