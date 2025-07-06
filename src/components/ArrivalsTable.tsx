@@ -1,7 +1,11 @@
 import { Train } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { StationResult } from "../types/path";
-import { getLineColor, arrivalClass } from "../utils/pathHelpers";
+import {
+  getLineColor,
+  arrivalClass,
+  formatArrivalTime,
+} from "../utils/pathHelpers";
 
 interface ArrivalsTableProps {
   data: StationResult;
@@ -51,7 +55,7 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
                         message
                       )}`}
                     >
-                      {message.arrivalTimeMessage}
+                      {formatArrivalTime(message.arrivalTimeMessage)}
                     </td>
                   </motion.tr>
                 ))}

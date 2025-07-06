@@ -57,9 +57,12 @@ export const ClosestStationCard = memo(
           )}
 
           {error && (
-            <div className="flex items-center gap-2 text-amber-300 bg-amber-900/20 px-3 py-2 rounded-md text-sm">
-              <MapPin className="w-4 h-4" />
-              <span>{error}</span>
+            <div className="p-3 bg-red-800/50 border border-red-600 rounded text-sm">
+              <div className="flex items-center gap-2 text-red-100 mb-1">
+                <span>❌</span>
+                <span>Error loading arrivals:</span>
+              </div>
+              <div className="text-red-200">{error}</div>
             </div>
           )}
 

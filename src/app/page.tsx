@@ -103,11 +103,13 @@ export default function PathTracker() {
     [stations]
   );
 
-  const { stationData, lastUpdated } = useMultiStationData(stationCodes);
+  const { stationData, lastUpdated, lastSuccessfulUpdate } =
+    useMultiStationData(stationCodes);
   const {
     data: alerts,
     loading: alertsLoading,
     error: alertsError,
+    hasCachedData: alertsHasCachedData,
   } = useAlerts();
   const {
     closestStation,
@@ -181,7 +183,21 @@ export default function PathTracker() {
   }, []);
 
   const prettyTime = formatTime(lastUpdated);
-  const staleness = getStalenessStatus(lastUpdated, null);
+  const prettySuccessfulTime = formatTime(lastSuccessfulUpdate);
+
+  // Check if we have any station data with errors but cached data
+  const hasStationErrors = Object.values(stationData).some(
+    (station) => station.error
+  );
+  const hasStationCachedData = Object.values(stationData).some(
+    (station) => station.hasCachedData
+  );
+
+  const staleness = getStalenessStatus(
+    lastUpdated || lastSuccessfulUpdate,
+    hasStationErrors ? "Station data may be outdated" : null,
+    hasStationCachedData || alertsHasCachedData
+  );
 
   // Don't render until we've loaded from localStorage
   if (!isLoaded) {
@@ -199,12 +215,17 @@ export default function PathTracker() {
       {/* Prominent Last Updated Ribbon */}
       <StatusRibbon
         staleness={staleness}
-        prettyTime={prettyTime}
+        prettyTime={prettyTime || prettySuccessfulTime}
         loading={false}
       />
 
       {/* Alerts Card */}
-      <AlertsCard alerts={alerts} loading={alertsLoading} error={alertsError} />
+      <AlertsCard
+        alerts={alerts}
+        loading={alertsLoading}
+        error={alertsError}
+        hasCachedData={alertsHasCachedData}
+      />
 
       {/* Closest Station Card - Only show if user has granted location permission */}
       {hasPermission && closestStation && (
@@ -240,6 +261,7 @@ export default function PathTracker() {
                   data={data?.data || null}
                   loading={data?.loading || false}
                   error={data?.error || null}
+                  hasCachedData={data?.hasCachedData || false}
                   onRemove={
                     stations.length > 1 ? handleRemoveStation : undefined
                   }

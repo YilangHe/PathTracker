@@ -13,16 +13,95 @@ const heat = (seconds: number): string => {
   return "text-green-400";
 };
 
+export const formatMessage = (msg: Message): string => {
+  return `${msg.target} ${msg.secondsToArrival}"`;
+};
+
 export const arrivalClass = (message: Message): string =>
   message.arrivalTimeMessage.toLowerCase().includes("delay")
     ? "text-red-500 font-semibold"
     : heat(parseInt(message.secondsToArrival, 10));
 
+export const formatArrivalTime = (arrivalTimeMessage: string): string => {
+  // Show "Due" instead of "0 min"
+  if (arrivalTimeMessage.trim() === "0 min") {
+    return "Due";
+  }
+  return arrivalTimeMessage;
+};
+
+// Data caching utilities
+const CACHE_KEYS = {
+  STATION_DATA: "pathTracker_stationData",
+  ALERTS_DATA: "pathTracker_alertsData",
+  LAST_SUCCESSFUL_UPDATE: "pathTracker_lastSuccessfulUpdate",
+} as const;
+
+export const cacheData = (key: string, data: any, timestamp?: string) => {
+  try {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        key,
+        JSON.stringify({
+          data,
+          timestamp: timestamp || new Date().toISOString(),
+          cachedAt: new Date().toISOString(),
+        })
+      );
+    }
+  } catch (error) {
+    console.error("Error caching data:", error);
+  }
+};
+
+export const getCachedData = (key: string) => {
+  try {
+    if (typeof window !== "undefined") {
+      const cached = localStorage.getItem(key);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        return {
+          data: parsed.data,
+          timestamp: parsed.timestamp,
+          cachedAt: parsed.cachedAt,
+        };
+      }
+    }
+  } catch (error) {
+    console.error("Error loading cached data:", error);
+  }
+  return null;
+};
+
+export const cacheStationData = (stationData: any, timestamp: string) => {
+  cacheData(CACHE_KEYS.STATION_DATA, stationData, timestamp);
+};
+
+export const getCachedStationData = () => {
+  return getCachedData(CACHE_KEYS.STATION_DATA);
+};
+
+export const cacheAlertsData = (alertsData: any, timestamp: string) => {
+  cacheData(CACHE_KEYS.ALERTS_DATA, alertsData, timestamp);
+};
+
+export const getCachedAlertsData = () => {
+  return getCachedData(CACHE_KEYS.ALERTS_DATA);
+};
+
 export const getStalenessStatus = (
   lastUpdated: string | null,
-  error: string | null
+  error: string | null,
+  hasCachedData: boolean = false
 ): StalenessStatus => {
   if (error) {
+    if (hasCachedData) {
+      return {
+        status: "error",
+        color: "bg-orange-500",
+        text: "Using cached data",
+      };
+    }
     return {
       status: "error",
       color: "bg-red-500",
@@ -31,6 +110,13 @@ export const getStalenessStatus = (
   }
 
   if (!lastUpdated) {
+    if (hasCachedData) {
+      return {
+        status: "unknown",
+        color: "bg-orange-500",
+        text: "Using cached data",
+      };
+    }
     return {
       status: "unknown",
       color: "bg-gray-500",
@@ -73,29 +159,30 @@ export const getStalenessStatus = (
   };
 };
 
-export const formatTime = (timestamp: string | null): string => {
-  if (!timestamp) return "Unknown";
-  return new Date(timestamp).toLocaleTimeString();
+export const formatTime = (lastUpdated: string | null): string | null => {
+  if (!lastUpdated) return null;
+  const updated = new Date(lastUpdated);
+  return updated.toLocaleString();
 };
 
-// Geolocation utility functions
-export const calculateDistance = (
+// Calculate distance between two points using Haversine formula
+const calculateDistance = (
   lat1: number,
   lon1: number,
   lat2: number,
   lon2: number
 ): number => {
-  const R = 6371; // Earth's radius in kilometers
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const R = 3959; // Earth's radius in miles
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distance in kilometers
+  return R * c;
 };
 
 export const findClosestStation = (

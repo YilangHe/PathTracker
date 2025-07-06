@@ -6,9 +6,15 @@ interface AlertsCardProps {
   alerts: Alert[];
   loading: boolean;
   error: string | null;
+  hasCachedData?: boolean;
 }
 
-export const AlertsCard = ({ alerts, loading, error }: AlertsCardProps) => {
+export const AlertsCard = ({
+  alerts,
+  loading,
+  error,
+  hasCachedData = false,
+}: AlertsCardProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const formatAlertTime = (timestamp: string) => {
@@ -26,9 +32,27 @@ export const AlertsCard = ({ alerts, loading, error }: AlertsCardProps) => {
   const alertCount = alerts.length;
   const hasAlerts = alertCount > 0;
 
-  // Determine card color based on alerts presence
-  const cardBgColor = hasAlerts ? "bg-amber-900" : "bg-green-900";
-  const headerTextColor = hasAlerts ? "text-amber-100" : "text-green-100";
+  // Determine card styling based on error state and cached data
+  let cardBgColor = "bg-green-900";
+  let headerTextColor = "text-green-100";
+  let statusText = hasAlerts
+    ? `${alertCount} alert${alertCount !== 1 ? "s" : ""}`
+    : "No alerts";
+
+  if (hasAlerts) {
+    cardBgColor = "bg-amber-900";
+    headerTextColor = "text-amber-100";
+  }
+
+  if (error && hasCachedData) {
+    cardBgColor = "bg-orange-900";
+    headerTextColor = "text-orange-100";
+    statusText = "Using cached data";
+  } else if (error) {
+    cardBgColor = "bg-red-900";
+    headerTextColor = "text-red-100";
+    statusText = "Error";
+  }
 
   if (loading) {
     return (
@@ -51,27 +75,6 @@ export const AlertsCard = ({ alerts, loading, error }: AlertsCardProps) => {
     );
   }
 
-  if (error) {
-    return (
-      <Card className="bg-red-900 text-white">
-        <CardHeader
-          className="cursor-pointer"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">PATH Alerts</h2>
-            <span className="text-sm text-red-200">Error</span>
-          </div>
-        </CardHeader>
-        {isExpanded && (
-          <CardContent>
-            <p className="text-red-200">Error loading alerts: {error}</p>
-          </CardContent>
-        )}
-      </Card>
-    );
-  }
-
   return (
     <Card className={`${cardBgColor} text-white`}>
       <CardHeader
@@ -83,11 +86,7 @@ export const AlertsCard = ({ alerts, loading, error }: AlertsCardProps) => {
             PATH Alerts
           </h2>
           <div className="flex items-center gap-2">
-            <span className={`text-sm ${headerTextColor}`}>
-              {hasAlerts
-                ? `${alertCount} alert${alertCount !== 1 ? "s" : ""}`
-                : "No alerts"}
-            </span>
+            <span className={`text-sm ${headerTextColor}`}>{statusText}</span>
             <span
               className={`text-sm ${headerTextColor} transition-transform duration-200 ${
                 isExpanded ? "rotate-180" : ""
@@ -100,9 +99,33 @@ export const AlertsCard = ({ alerts, loading, error }: AlertsCardProps) => {
       </CardHeader>
       {isExpanded && (
         <CardContent>
-          {!hasAlerts ? (
+          {error && hasCachedData && (
+            <div className="mb-4 p-3 bg-orange-800/50 border border-orange-600 rounded">
+              <div className="flex items-center gap-2 text-orange-100 text-sm">
+                <span>⚠️</span>
+                <span>
+                  Unable to get latest alerts. Showing last known data.
+                </span>
+              </div>
+              <div className="text-xs text-orange-200 mt-1">{error}</div>
+            </div>
+          )}
+
+          {error && !hasCachedData && (
+            <div className="p-3 bg-red-800/50 border border-red-600 rounded">
+              <div className="flex items-center gap-2 text-red-100 text-sm">
+                <span>❌</span>
+                <span>Error loading alerts:</span>
+              </div>
+              <div className="text-red-200 mt-1 text-sm">{error}</div>
+            </div>
+          )}
+
+          {!error && !hasAlerts && (
             <p className="text-green-200">No active alerts at this time.</p>
-          ) : (
+          )}
+
+          {hasAlerts && (
             <div className="space-y-4">
               {alerts.map((alert, index) => {
                 const { subject, message } = extractAlertDescription(alert);
