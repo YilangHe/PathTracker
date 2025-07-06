@@ -9,7 +9,6 @@ interface ClosestStationCardProps {
   stationCode: StationCode;
   data: StationResult | null;
   loading: boolean;
-  isLoadingData: boolean;
   error: string | null;
   userLocation: { lat: number; lon: number } | null;
 }
@@ -19,7 +18,6 @@ export const ClosestStationCard = memo(
     stationCode,
     data,
     loading,
-    isLoadingData,
     error,
     userLocation,
   }: ClosestStationCardProps) => {
@@ -51,6 +49,13 @@ export const ClosestStationCard = memo(
         </CardHeader>
 
         <CardContent>
+          {loading && (
+            <div className="flex items-center gap-2 text-blue-300">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-300"></div>
+              <span>Loading arrivals...</span>
+            </div>
+          )}
+
           {error && (
             <div className="flex items-center gap-2 text-amber-300 bg-amber-900/20 px-3 py-2 rounded-md text-sm">
               <MapPin className="w-4 h-4" />
@@ -58,25 +63,9 @@ export const ClosestStationCard = memo(
             </div>
           )}
 
-          {loading && !error && (
-            <div className="flex items-center gap-2 text-blue-300">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-300"></div>
-              <span>Finding your closest station...</span>
-            </div>
-          )}
+          {!error && !loading && data && <ArrivalsTable data={data} />}
 
-          {!loading && !error && isLoadingData && (
-            <div className="flex items-center gap-2 text-blue-300">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-300"></div>
-              <span>Loading arrivals...</span>
-            </div>
-          )}
-
-          {!loading && !error && !isLoadingData && data && (
-            <ArrivalsTable data={data} />
-          )}
-
-          {!loading && !error && !isLoadingData && !data && (
+          {!error && !loading && !data && (
             <div className="text-blue-200">
               No arrivals scheduled for this station at the moment.
             </div>
