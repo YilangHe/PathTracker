@@ -1,5 +1,9 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePWAInstall } from "@/hooks/usePWAInstall";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,11 +17,26 @@ import {
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
+  const { isInstallable, isInstalled, installPWA } = usePWAInstall();
+
+  const handleInstallClick = async () => {
+    if (isInstallable) {
+      const success = await installPWA();
+      if (!success) {
+        // If programmatic install fails, redirect to instructions
+        window.location.href = "/add-to-home-screen";
+      }
+    } else {
+      // If not installable, show instructions
+      window.location.href = "/add-to-home-screen";
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-blue-600 shadow-lg">
       <div className="container max-w-4xl mx-auto flex h-14 items-center px-4">
         <div className="mr-4 flex">
-          <a href="/" className="mr-6 flex items-center space-x-2">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
             <Image
               src="/logo.png"
               alt="PATH Logo"
@@ -29,7 +48,7 @@ export function Navbar() {
             <span className="hidden font-bold sm:inline-block text-white">
               Path Tracker
             </span>
-          </a>
+          </Link>
         </div>
         <NavigationMenu>
           <NavigationMenuList>
@@ -41,7 +60,7 @@ export function Navbar() {
                 <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-white border shadow-lg rounded-md">
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
-                      <a
+                      <Link
                         className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-50 to-blue-100 p-6 no-underline outline-none focus:shadow-md hover:from-blue-100 hover:to-blue-200 transition-colors"
                         href="/"
                       >
@@ -52,7 +71,7 @@ export function Navbar() {
                           Track PATH train arrivals in real-time with our live
                           dashboard
                         </p>
-                      </a>
+                      </Link>
                     </NavigationMenuLink>
                   </li>
                   <ListItem href="/" title="Multi-Station View">
@@ -109,27 +128,51 @@ export function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="ml-auto">
-          <a
-            href="/add-to-home-screen"
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 hover:text-blue-700 transition-colors sm:px-4"
-          >
-            <svg
-              className="w-4 h-4 sm:mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+          {!isInstalled && (
+            <button
+              onClick={handleInstallClick}
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 hover:text-blue-700 transition-colors sm:px-4"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-            <span className="hidden sm:inline">Install App</span>
-            <span className="sm:hidden">Install</span>
-          </a>
+              <svg
+                className="w-4 h-4 sm:mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              <span className="hidden sm:inline">
+                {isInstallable ? "Install App" : "Install Guide"}
+              </span>
+              <span className="sm:hidden">
+                {isInstallable ? "Install" : "Guide"}
+              </span>
+            </button>
+          )}
+          {isInstalled && (
+            <div className="inline-flex items-center px-3 py-2 text-sm font-medium text-green-600 bg-green-50 border border-green-200 rounded-md sm:px-4">
+              <svg
+                className="w-4 h-4 sm:mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="hidden sm:inline">App Installed</span>
+              <span className="sm:hidden">Installed</span>
+            </div>
+          )}
         </div>
       </div>
     </header>
