@@ -38,10 +38,11 @@ export default function DisclaimerPage() {
             </h2>
             <p className="text-gray-800 leading-relaxed">
               While every effort is made to ensure the accuracy of the
-              information provided on MyPath, schedules and updates are subject
-              to change, and real-time data may vary. Users are encouraged to
-              verify critical travel details through official sources and use
-              MyPath as a complementary tool for trip planning.
+              information provided on Path Tracker, schedules and updates are
+              subject to change, and real-time data may vary. Users are
+              encouraged to verify critical travel details through official
+              sources and use Path Tracker as a complementary tool for trip
+              planning.
             </p>
           </div>
 
