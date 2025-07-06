@@ -22,7 +22,7 @@ export const ClosestStationCard = memo(
     userLocation,
   }: ClosestStationCardProps) => {
     return (
-      <Card className="bg-gradient-to-r from-blue-900 to-blue-800 text-white border-blue-700 sticky top-0 z-10 shadow-lg">
+      <Card className="bg-gradient-to-r from-blue-900 to-blue-800 text-white border-blue-700 shadow-lg">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
