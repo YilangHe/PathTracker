@@ -160,6 +160,26 @@ export default function PathTracker() {
     setStations((prev) => prev.filter((station) => station.id !== stationId));
   }, []);
 
+  const handleMoveStationUp = useCallback((stationId: string) => {
+    setStations((prev) => {
+      const index = prev.findIndex((station) => station.id === stationId);
+      if (index > 0) {
+        return arrayMove(prev, index, index - 1);
+      }
+      return prev;
+    });
+  }, []);
+
+  const handleMoveStationDown = useCallback((stationId: string) => {
+    setStations((prev) => {
+      const index = prev.findIndex((station) => station.id === stationId);
+      if (index < prev.length - 1) {
+        return arrayMove(prev, index, index + 1);
+      }
+      return prev;
+    });
+  }, []);
+
   const prettyTime = formatTime(lastUpdated);
   const staleness = getStalenessStatus(lastUpdated, null);
 
@@ -209,7 +229,7 @@ export default function PathTracker() {
           strategy={verticalListSortingStrategy}
         >
           <div className="space-y-4">
-            {stations.map((station) => {
+            {stations.map((station, index) => {
               const data = stationData[station.stationCode];
 
               return (
@@ -222,6 +242,12 @@ export default function PathTracker() {
                   error={data?.error || null}
                   onRemove={
                     stations.length > 1 ? handleRemoveStation : undefined
+                  }
+                  onMoveUp={index > 0 ? handleMoveStationUp : undefined}
+                  onMoveDown={
+                    index < stations.length - 1
+                      ? handleMoveStationDown
+                      : undefined
                   }
                   stationId={station.id}
                 />
