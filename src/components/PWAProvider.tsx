@@ -1,0 +1,50 @@
+"use client";
+
+import { useEffect } from "react";
+
+export function PWAProvider({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    // Register service worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((registration) => {
+          console.log(
+            "Service Worker registered with scope:",
+            registration.scope
+          );
+        })
+        .catch((error) => {
+          console.log("Service Worker registration failed:", error);
+        });
+    }
+
+    // Handle install prompt
+    let deferredPrompt: any;
+
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // You can show a custom install button here
+      console.log("PWA install prompt available");
+    };
+
+    const handleAppInstalled = () => {
+      console.log("PWA was installed");
+      deferredPrompt = null;
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
+
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+      window.removeEventListener("appinstalled", handleAppInstalled);
+    };
+  }, []);
+
+  return <>{children}</>;
+}
