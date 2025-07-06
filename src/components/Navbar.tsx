@@ -85,6 +85,12 @@ export function Navbar() {
                   >
                     Official PATH schedules and real-time data
                   </ListItem>
+                  <ListItem
+                    title="Add to Home Screen"
+                    href="/add-to-home-screen"
+                  >
+                    Install this app on your device for quick access
+                  </ListItem>
                   <ListItem title="Disclaimer" href="/disclaimer">
                     Important legal information and data sources
                   </ListItem>
