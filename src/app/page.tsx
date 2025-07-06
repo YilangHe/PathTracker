@@ -16,7 +16,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { MapPin, Navigation } from "lucide-react";
 import { StationCode, StationConfig } from "../types/path";
 import { useMultiStationData } from "../hooks/useMultiStationData";
 import { useAlerts } from "../hooks/useAlerts";
@@ -26,10 +25,10 @@ import { StatusRibbon } from "../components/StatusRibbon";
 import { AlertsCard } from "../components/AlertsCard";
 import { DraggableStationCard } from "../components/DraggableStationCard";
 import { AddStationCard } from "../components/AddStationCard";
+import { ClosestStationCard } from "../components/ClosestStationCard";
 
 // LocalStorage keys
 const STATIONS_STORAGE_KEY = "pathTracker_stations";
-const AUTO_SELECTED_STORAGE_KEY = "pathTracker_hasAutoSelected";
 
 // Default stations configuration
 const DEFAULT_STATIONS: StationConfig[] = [
@@ -71,14 +70,13 @@ const loadFromStorage = function <T>(key: string, defaultValue: T): T {
  *  — Row‑level refresh with cube‑rotation animation (no full card flicker)
  *  — **Enhanced: Prominent "Last updated" ribbon in the header** (priority #1)
  *  — **NEW: PATH Alerts from Port Authority API**
- *  — **NEW: Auto-select closest station based on user location**
+ *  — **NEW: Pinned closest station card with auto-refresh**
  *  — **NEW: Multi-station dashboard with drag-and-drop**
  *  — **NEW: Persistent station configuration across browser sessions**
  */
 
 export default function PathTracker() {
   const [stations, setStations] = useState<StationConfig[]>(DEFAULT_STATIONS);
-  const [hasAutoSelected, setHasAutoSelected] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load saved configuration on mount
@@ -87,13 +85,8 @@ export default function PathTracker() {
       STATIONS_STORAGE_KEY,
       DEFAULT_STATIONS
     );
-    const savedHasAutoSelected = loadFromStorage(
-      AUTO_SELECTED_STORAGE_KEY,
-      false
-    );
 
     setStations(savedStations);
-    setHasAutoSelected(savedHasAutoSelected);
     setIsLoaded(true);
   }, []);
 
@@ -103,13 +96,6 @@ export default function PathTracker() {
       saveToStorage(STATIONS_STORAGE_KEY, stations);
     }
   }, [stations, isLoaded]);
-
-  // Save hasAutoSelected to localStorage whenever it changes
-  useEffect(() => {
-    if (isLoaded) {
-      saveToStorage(AUTO_SELECTED_STORAGE_KEY, hasAutoSelected);
-    }
-  }, [hasAutoSelected, isLoaded]);
 
   // Memoize stationCodes to prevent infinite re-renders
   const stationCodes = useMemo(
@@ -125,25 +111,13 @@ export default function PathTracker() {
   } = useAlerts();
   const {
     closestStation,
+    closestStationData,
     isLoading: locationLoading,
+    isLoadingData: locationDataLoading,
     error: locationError,
     hasPermission,
-    requestLocation,
+    userLocation,
   } = useGeolocation();
-
-  // Auto-select closest station when detected (only once)
-  useEffect(() => {
-    if (closestStation && !hasAutoSelected && isLoaded) {
-      setStations((prev) =>
-        prev.map((station) =>
-          station.id === "default-1"
-            ? { ...station, stationCode: closestStation, isClosest: true }
-            : station
-        )
-      );
-      setHasAutoSelected(true);
-    }
-  }, [closestStation, hasAutoSelected, isLoaded]);
 
   // Sensors for drag and drop
   const sensors = useSensors(
@@ -189,43 +163,6 @@ export default function PathTracker() {
   const prettyTime = formatTime(lastUpdated);
   const staleness = getStalenessStatus(lastUpdated, null);
 
-  const renderLocationStatus = () => {
-    if (locationLoading) {
-      return (
-        <div className="flex items-center gap-2 text-sm text-blue-400 bg-blue-900/20 px-3 py-2 rounded-md">
-          <Navigation className="w-4 h-4 animate-spin" />
-          <span>Finding your closest station...</span>
-        </div>
-      );
-    }
-
-    if (locationError) {
-      return (
-        <div className="flex items-center gap-2 text-sm text-amber-400 bg-amber-900/20 px-3 py-2 rounded-md">
-          <MapPin className="w-4 h-4" />
-          <span>Unable to detect location</span>
-          <button
-            onClick={requestLocation}
-            className="text-amber-300 hover:text-amber-100 underline ml-2"
-          >
-            Try again
-          </button>
-        </div>
-      );
-    }
-
-    if (hasPermission && hasAutoSelected) {
-      return (
-        <div className="flex items-center gap-2 text-sm text-green-400 bg-green-900/20 px-3 py-2 rounded-md">
-          <MapPin className="w-4 h-4" />
-          <span>Auto-selected closest station to your location</span>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
   // Don't render until we've loaded from localStorage
   if (!isLoaded) {
     return (
@@ -246,8 +183,17 @@ export default function PathTracker() {
         loading={false}
       />
 
-      {/* Location Status */}
-      {renderLocationStatus()}
+      {/* Closest Station Card - Only show if user has granted location permission */}
+      {hasPermission && closestStation && (
+        <ClosestStationCard
+          stationCode={closestStation}
+          data={closestStationData}
+          loading={locationLoading}
+          isLoadingData={locationDataLoading}
+          error={locationError}
+          userLocation={userLocation}
+        />
+      )}
 
       {/* Alerts Card */}
       <AlertsCard alerts={alerts} loading={alertsLoading} error={alertsError} />
@@ -266,8 +212,6 @@ export default function PathTracker() {
           <div className="space-y-4">
             {stations.map((station) => {
               const data = stationData[station.stationCode];
-              const isClosest =
-                closestStation === station.stationCode && hasPermission;
 
               return (
                 <DraggableStationCard
@@ -277,7 +221,6 @@ export default function PathTracker() {
                   data={data?.data || null}
                   loading={data?.loading || false}
                   error={data?.error || null}
-                  isClosest={isClosest}
                   onRemove={
                     stations.length > 1 ? handleRemoveStation : undefined
                   }

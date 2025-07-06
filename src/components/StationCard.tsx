@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { MapPin, X, GripVertical } from "lucide-react";
+import { X, GripVertical } from "lucide-react";
 import { StationResult, StationCode } from "../types/path";
 import { STATIONS } from "../constants/stations";
 import { ArrivalsTable } from "./ArrivalsTable";
@@ -10,7 +10,6 @@ interface StationCardProps {
   data: StationResult | null;
   loading: boolean;
   error: string | null;
-  isClosest?: boolean;
   onRemove?: () => void;
   isDragging?: boolean;
   dragHandleProps?: any;
@@ -22,7 +21,6 @@ export const StationCard = memo(
     data,
     loading,
     error,
-    isClosest,
     onRemove,
     isDragging,
     dragHandleProps,
@@ -49,13 +47,6 @@ export const StationCard = memo(
               <span className="text-xl font-semibold capitalize">
                 {STATIONS[stationCode] ?? stationCode}
               </span>
-
-              {isClosest && (
-                <div className="flex items-center gap-1 text-sm text-green-400">
-                  <MapPin className="w-4 h-4" />
-                  <span>Closest</span>
-                </div>
-              )}
             </div>
 
             {/* Remove button */}

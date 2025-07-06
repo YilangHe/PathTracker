@@ -10,7 +10,6 @@ interface DraggableStationCardProps {
   data: StationResult | null;
   loading: boolean;
   error: string | null;
-  isClosest?: boolean;
   onRemove?: (stationId: string) => void;
   stationId: string;
 }
@@ -21,7 +20,6 @@ const DraggableStationCardComponent = ({
   data,
   loading,
   error,
-  isClosest,
   onRemove,
   stationId,
 }: DraggableStationCardProps) => {
@@ -48,7 +46,6 @@ const DraggableStationCardComponent = ({
         data={data}
         loading={loading}
         error={error}
-        isClosest={isClosest}
         onRemove={handleRemove}
         isDragging={isDragging}
         dragHandleProps={listeners}
@@ -68,7 +65,6 @@ const areEqual = (
     prevProps.data === nextProps.data && // This uses object reference equality from our hook optimization
     prevProps.loading === nextProps.loading &&
     prevProps.error === nextProps.error &&
-    prevProps.isClosest === nextProps.isClosest &&
     prevProps.onRemove === nextProps.onRemove &&
     prevProps.stationId === nextProps.stationId
   );
