@@ -183,20 +183,19 @@ export default function PathTracker() {
         loading={false}
       />
 
+      {/* Alerts Card */}
+      <AlertsCard alerts={alerts} loading={alertsLoading} error={alertsError} />
+
       {/* Closest Station Card - Only show if user has granted location permission */}
       {hasPermission && closestStation && (
         <ClosestStationCard
           stationCode={closestStation}
           data={closestStationData}
           loading={locationLoading}
-          isLoadingData={locationDataLoading}
           error={locationError}
           userLocation={userLocation}
         />
       )}
-
-      {/* Alerts Card */}
-      <AlertsCard alerts={alerts} loading={alertsLoading} error={alertsError} />
 
       {/* Draggable Station Cards */}
       <DndContext
