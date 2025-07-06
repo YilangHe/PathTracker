@@ -55,7 +55,3 @@ npm start
 ## Data Source
 
 Train arrival data is provided by the Port Authority of NY & NJ via their public API.
-
-## License
-
-MIT License
