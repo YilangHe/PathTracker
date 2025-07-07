@@ -186,21 +186,18 @@ export default function PathTracker() {
   const prettyTime = formatTime(lastUpdated);
   const prettySuccessfulTime = formatTime(lastSuccessfulUpdate);
 
-  // For SSR/crawling, force neutral states to prevent soft 404 errors
-  const isSSR = typeof window === "undefined";
-
   // Check if we have any station data with errors but cached data
-  const hasStationErrors = isSSR
-    ? false
-    : Object.values(stationData).some((station) => station.error);
-  const hasStationCachedData = isSSR
-    ? false
-    : Object.values(stationData).some((station) => station.hasCachedData);
+  const hasStationErrors = Object.values(stationData).some(
+    (station) => station.error
+  );
+  const hasStationCachedData = Object.values(stationData).some(
+    (station) => station.hasCachedData
+  );
 
   const staleness = getStalenessStatus(
-    isSSR ? new Date().toISOString() : lastUpdated || lastSuccessfulUpdate,
+    lastUpdated || lastSuccessfulUpdate,
     hasStationErrors ? "Station data may be outdated" : null,
-    hasStationCachedData || (isSSR ? false : alertsHasCachedData)
+    hasStationCachedData || alertsHasCachedData
   );
 
   // Don't render until we've loaded from localStorage
@@ -216,40 +213,6 @@ export default function PathTracker() {
 
   return (
     <div className="mx-auto max-w-4xl p-4 space-y-4">
-      {/* SEO-friendly description for crawlers */}
-      {isSSR && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-          <h1 className="text-2xl font-bold text-blue-900 mb-3">
-            Real-time PATH Train Arrivals
-          </h1>
-          <p className="text-blue-800 mb-4">
-            Track live PATH train arrivals across New York and New Jersey. Get
-            real-time updates for all PATH stations including Newark, Jersey
-            City, Hoboken, and Manhattan destinations.
-          </p>
-          <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-700">
-            <div>
-              <h3 className="font-semibold mb-2">Features:</h3>
-              <ul className="space-y-1">
-                <li>• Real-time train arrival information</li>
-                <li>• All PATH stations supported</li>
-                <li>• Live service alerts and updates</li>
-                <li>• Location-based closest station finder</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Stations Covered:</h3>
-              <ul className="space-y-1">
-                <li>• Newark, Harrison, Journal Square</li>
-                <li>• Grove Street, Exchange Place, Newport</li>
-                <li>• Hoboken, Christopher Street, 9th Street</li>
-                <li>• 14th Street, 23rd Street, 33rd Street, WTC</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Prominent Last Updated Ribbon */}
       <StatusRibbon
         staleness={staleness}
@@ -260,18 +223,18 @@ export default function PathTracker() {
       {/* Alerts Card */}
       <AlertsCard
         alerts={alerts}
-        loading={isSSR ? false : alertsLoading}
-        error={isSSR ? null : alertsError}
-        hasCachedData={isSSR ? false : alertsHasCachedData}
+        loading={alertsLoading}
+        error={alertsError}
+        hasCachedData={alertsHasCachedData}
       />
 
       {/* Weather Widget - Only show if user has granted location permission */}
-      {!isSSR && hasPermission && userLocation && (
+      {hasPermission && userLocation && (
         <WeatherWidget userLocation={userLocation} />
       )}
 
       {/* Closest Station Card - Only show if user has granted location permission */}
-      {!isSSR && hasPermission && closestStation && (
+      {hasPermission && closestStation && (
         <ClosestStationCard
           stationCode={closestStation}
           data={closestStationData}
@@ -302,9 +265,9 @@ export default function PathTracker() {
                   id={station.id}
                   stationCode={station.stationCode}
                   data={data?.data || null}
-                  loading={isSSR ? false : data?.loading || false}
-                  error={isSSR ? null : data?.error || null}
-                  hasCachedData={isSSR ? false : data?.hasCachedData || false}
+                  loading={data?.loading || false}
+                  error={data?.error || null}
+                  hasCachedData={data?.hasCachedData || false}
                   onRemove={
                     stations.length > 1 ? handleRemoveStation : undefined
                   }
