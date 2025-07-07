@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "NEXT_PUBLIC_APP_VERSION=$(date +%s) NEXT_PUBLIC_BUILD_TIME=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\") next build",
+    "build:production": "npm run build && npm run start",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
