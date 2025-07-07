@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
+import { isCrawlerCached } from "../utils/crawlerDetection";
 
 export function PWAProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    // Only run for real users, not during SSR or crawling
+    if (isCrawlerCached()) return;
+
     // Register service worker
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
