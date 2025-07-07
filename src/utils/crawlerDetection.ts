@@ -25,7 +25,7 @@ export const isCrawler = (): boolean => {
   const userAgent = navigator.userAgent?.toLowerCase() || "";
   console.log("🔍 User Agent:", userAgent);
 
-  // Known crawler user agents
+  // Known crawler user agents - keep this as the primary detection method
   const crawlerPatterns = [
     "googlebot",
     "bingbot",
@@ -85,19 +85,13 @@ export const isCrawler = (): boolean => {
     return true;
   }
 
-  // Check for missing properties that real browsers have
-  if (!navigator.languages || navigator.languages.length === 0) {
-    console.log("🤖 Crawler detected: No languages array");
-    return true;
-  }
-
-  // Check for webdriver (automated browsers)
+  // Check for webdriver (automated browsers) - keep this as it's reliable
   if ("webdriver" in navigator || (window as any).webdriver) {
     console.log("🤖 Crawler detected: WebDriver detected");
     return true;
   }
 
-  // Check for phantom/headless indicators
+  // Check for phantom/headless indicators - keep this as it's reliable
   if (
     (window as any).phantom ||
     (window as any)._phantom ||
@@ -107,47 +101,57 @@ export const isCrawler = (): boolean => {
     return true;
   }
 
-  // Check for automated testing tools
-  if ((window as any).Buffer || (window as any).emit || (window as any).spawn) {
-    console.log("🤖 Crawler detected: Node.js globals detected");
-    return true;
-  }
-
-  // Additional checks for crawler behavior
+  // More conservative checks for crawler behavior
   try {
-    // Real browsers usually have these properties
-    if (
-      !("plugins" in navigator) ||
-      !(navigator as any).plugins ||
-      (navigator as any).plugins.length === 0
-    ) {
-      // This is too aggressive - many legitimate browsers have no plugins
-      console.log("⚠️  No plugins detected, but not marking as crawler");
-    }
-
-    // Check screen properties (crawlers often have unusual screen settings)
+    // Only check for extremely obvious crawler indicators
     if (screen.width === 0 || screen.height === 0) {
       console.log("🤖 Crawler detected: Zero screen dimensions");
       return true;
     }
 
-    // Check for minimal viewport (common in crawlers) - but be less aggressive
-    if (window.innerWidth <= 50 || window.innerHeight <= 50) {
+    // Only flag extremely small viewports (likely headless browsers)
+    if (window.innerWidth <= 10 || window.innerHeight <= 10) {
       console.log("🤖 Crawler detected: Extremely small viewport");
       return true;
     }
   } catch (e) {
-    // If we can't access these properties, likely a crawler
-    console.log("🤖 Crawler detected: Cannot access screen properties");
-    return true;
+    // If we can't access screen properties, be more conservative
+    console.log(
+      "⚠️  Cannot access screen properties, but not marking as crawler"
+    );
   }
 
-  // Additional behavioral check: real users typically have interaction capabilities
-  // This is a lightweight check that doesn't affect performance
+  // Additional safety check: only flag if multiple suspicious indicators are present
+  let suspiciousIndicators = 0;
+
+  // Check for missing languages (but don't make it a hard fail)
+  if (
+    !(navigator as any).languages ||
+    (navigator as any).languages.length === 0
+  ) {
+    console.log("⚠️  No languages array detected");
+    suspiciousIndicators++;
+  }
+
+  // Check for Node.js globals (but don't make it a hard fail)
+  if ((window as any).Buffer || (window as any).emit || (window as any).spawn) {
+    console.log("⚠️  Node.js globals detected");
+    suspiciousIndicators++;
+  }
+
+  // Check for missing interaction capabilities (but don't make it a hard fail)
   const hasInteractionCapabilities =
-    "ontouchstart" in window || "onmousedown" in window;
+    "ontouchstart" in window || "onmousedown" in window || "onclick" in window;
   if (!hasInteractionCapabilities) {
-    console.log("🤖 Crawler detected: No interaction capabilities");
+    console.log("⚠️  No interaction capabilities detected");
+    suspiciousIndicators++;
+  }
+
+  // Only flag as crawler if we have multiple suspicious indicators
+  if (suspiciousIndicators >= 2) {
+    console.log(
+      `🤖 Crawler detected: Multiple suspicious indicators (${suspiciousIndicators})`
+    );
     return true;
   }
 
