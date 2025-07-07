@@ -1,7 +1,6 @@
 // Robust crawler detection utility
 export const isCrawler = (): boolean => {
-  // TEMPORARY: Force disable crawler detection for testing
-  // Remove this line once you've verified the fix works
+  // Disable crawler detection for localhost testing only
   if (
     typeof window !== "undefined" &&
     window.location.hostname === "localhost"
@@ -110,7 +109,7 @@ export const isCrawler = (): boolean => {
     }
 
     // Only flag extremely small viewports (likely headless browsers)
-    if (window.innerWidth <= 10 || window.innerHeight <= 10) {
+    if ((window as any).innerWidth <= 10 || (window as any).innerHeight <= 10) {
       console.log("🤖 Crawler detected: Extremely small viewport");
       return true;
     }
@@ -168,3 +167,37 @@ export const isCrawlerCached = (): boolean => {
   }
   return cachedResult;
 };
+
+// Function to reset the cache (useful for testing)
+export const resetCrawlerCache = (): void => {
+  cachedResult = null;
+};
+
+// Debug function to test crawler detection from browser console
+// Usage: window.testCrawlerDetection()
+export const testCrawlerDetection = (): void => {
+  console.log("=== Crawler Detection Test ===");
+  console.log(
+    "Current hostname:",
+    typeof window !== "undefined" ? window.location.hostname : "SSR"
+  );
+  console.log(
+    "User Agent:",
+    typeof navigator !== "undefined" ? navigator.userAgent : "None"
+  );
+
+  resetCrawlerCache();
+  const result = isCrawler();
+
+  console.log("Result:", result ? "🤖 CRAWLER" : "👤 REAL USER");
+  console.log(
+    "This means the app will:",
+    result ? "show STATIC content" : "make API calls for LIVE data"
+  );
+  console.log("===============================");
+};
+
+// Make it available globally for testing
+if (typeof window !== "undefined") {
+  (window as any).testCrawlerDetection = testCrawlerDetection;
+}
