@@ -62,7 +62,15 @@ export const useAlerts = () => {
   // Initial load and polling
   useEffect(() => {
     // Only run in browser environment, not during SSR or crawling
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      // For SSR/crawling, initialize with neutral state and recent timestamp
+      setLoading(false);
+      setError(null);
+      setData([]);
+      setLastUpdated(new Date().toISOString());
+      setLastSuccessfulUpdate(new Date().toISOString());
+      return;
+    }
 
     setLoading(true);
     load();

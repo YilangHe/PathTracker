@@ -206,7 +206,27 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
   // Initial polling setup - only runs once
   useEffect(() => {
     // Only run in browser environment, not during SSR or crawling
-    if (typeof window === "undefined" || stationCodes.length === 0) return;
+    if (typeof window === "undefined" || stationCodes.length === 0) {
+      // For SSR/crawling, initialize with non-error states and a recent timestamp
+      if (stationCodes.length > 0) {
+        setStationData((prev) => {
+          const updated = { ...prev };
+          stationCodes.forEach((code) => {
+            updated[code] = {
+              data: null,
+              loading: false,
+              error: null,
+              hasCachedData: false,
+            };
+          });
+          return updated;
+        });
+        // Set a recent timestamp for SSR to show "Live" status instead of "Unknown"
+        setLastUpdated(new Date().toISOString());
+        setLastSuccessfulUpdate(new Date().toISOString());
+      }
+      return;
+    }
 
     console.log("Setting up initial polling for stations:", stationCodes);
 
