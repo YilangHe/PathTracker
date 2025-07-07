@@ -182,11 +182,12 @@ export const useWeather = (
   }, [latitude, longitude]);
 
   useEffect(() => {
-    if (latitude && longitude) {
-      fetchWeatherData();
-      const interval = setInterval(fetchWeatherData, WEATHER_REFRESH_INTERVAL);
-      return () => clearInterval(interval);
-    }
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined" || !latitude || !longitude) return;
+
+    fetchWeatherData();
+    const interval = setInterval(fetchWeatherData, WEATHER_REFRESH_INTERVAL);
+    return () => clearInterval(interval);
   }, [fetchWeatherData, latitude, longitude]);
 
   return {
