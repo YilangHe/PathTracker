@@ -117,6 +117,11 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
         />
+        <script
+          defer
+          data-domain="livepathtracker.com"
+          src="https://plausible.io/js/script.js"
+        ></script>
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <script
