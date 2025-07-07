@@ -21,7 +21,6 @@ import { useMultiStationData } from "../hooks/useMultiStationData";
 import { useAlerts } from "../hooks/useAlerts";
 import { useGeolocation } from "../hooks/useGeolocation";
 import { getStalenessStatus, formatTime } from "../utils/pathHelpers";
-import { isCrawlerCached } from "../utils/crawlerDetection";
 import { StatusRibbon } from "../components/StatusRibbon";
 import { AlertsCard } from "../components/AlertsCard";
 import { DraggableStationCard } from "../components/DraggableStationCard";
@@ -188,22 +187,20 @@ export default function PathTracker() {
   const prettySuccessfulTime = formatTime(lastSuccessfulUpdate);
 
   // For SSR/crawling, force neutral states to prevent soft 404 errors
-  const isCrawlerEnv = isCrawlerCached();
+  const isSSR = typeof window === "undefined";
 
   // Check if we have any station data with errors but cached data
-  const hasStationErrors = isCrawlerEnv
+  const hasStationErrors = isSSR
     ? false
     : Object.values(stationData).some((station) => station.error);
-  const hasStationCachedData = isCrawlerEnv
+  const hasStationCachedData = isSSR
     ? false
     : Object.values(stationData).some((station) => station.hasCachedData);
 
   const staleness = getStalenessStatus(
-    isCrawlerEnv
-      ? new Date().toISOString()
-      : lastUpdated || lastSuccessfulUpdate,
+    isSSR ? new Date().toISOString() : lastUpdated || lastSuccessfulUpdate,
     hasStationErrors ? "Station data may be outdated" : null,
-    hasStationCachedData || (isCrawlerEnv ? false : alertsHasCachedData)
+    hasStationCachedData || (isSSR ? false : alertsHasCachedData)
   );
 
   // Don't render until we've loaded from localStorage
@@ -220,7 +217,7 @@ export default function PathTracker() {
   return (
     <div className="mx-auto max-w-4xl p-4 space-y-4">
       {/* SEO-friendly description for crawlers */}
-      {isCrawlerEnv && (
+      {isSSR && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
           <h1 className="text-2xl font-bold text-blue-900 mb-3">
             Real-time PATH Train Arrivals
@@ -263,18 +260,18 @@ export default function PathTracker() {
       {/* Alerts Card */}
       <AlertsCard
         alerts={alerts}
-        loading={isCrawlerEnv ? false : alertsLoading}
-        error={isCrawlerEnv ? null : alertsError}
-        hasCachedData={isCrawlerEnv ? false : alertsHasCachedData}
+        loading={isSSR ? false : alertsLoading}
+        error={isSSR ? null : alertsError}
+        hasCachedData={isSSR ? false : alertsHasCachedData}
       />
 
       {/* Weather Widget - Only show if user has granted location permission */}
-      {!isCrawlerEnv && hasPermission && userLocation && (
+      {!isSSR && hasPermission && userLocation && (
         <WeatherWidget userLocation={userLocation} />
       )}
 
       {/* Closest Station Card - Only show if user has granted location permission */}
-      {!isCrawlerEnv && hasPermission && closestStation && (
+      {!isSSR && hasPermission && closestStation && (
         <ClosestStationCard
           stationCode={closestStation}
           data={closestStationData}
@@ -305,11 +302,9 @@ export default function PathTracker() {
                   id={station.id}
                   stationCode={station.stationCode}
                   data={data?.data || null}
-                  loading={isCrawlerEnv ? false : data?.loading || false}
-                  error={isCrawlerEnv ? null : data?.error || null}
-                  hasCachedData={
-                    isCrawlerEnv ? false : data?.hasCachedData || false
-                  }
+                  loading={isSSR ? false : data?.loading || false}
+                  error={isSSR ? null : data?.error || null}
+                  hasCachedData={isSSR ? false : data?.hasCachedData || false}
                   onRemove={
                     stations.length > 1 ? handleRemoveStation : undefined
                   }

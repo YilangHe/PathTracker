@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { isCrawlerCached } from "../utils/crawlerDetection";
 
 interface WeatherData {
   temperature: number;
@@ -183,8 +182,8 @@ export const useWeather = (
   }, [latitude, longitude]);
 
   useEffect(() => {
-    // Only run for real users, not during SSR or crawling
-    if (isCrawlerCached() || !latitude || !longitude) return;
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined" || !latitude || !longitude) return;
 
     fetchWeatherData();
     const interval = setInterval(fetchWeatherData, WEATHER_REFRESH_INTERVAL);
