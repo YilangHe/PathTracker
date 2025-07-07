@@ -61,6 +61,9 @@ export const useAlerts = () => {
 
   // Initial load and polling
   useEffect(() => {
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined") return;
+
     setLoading(true);
     load();
     const id = setInterval(load, POLLING_INTERVAL);

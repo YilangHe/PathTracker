@@ -188,8 +188,10 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
           });
           return updated;
         });
-        // Trigger a fetch for the new stations
-        load();
+        // Trigger a fetch for the new stations - only in browser environment
+        if (typeof window !== "undefined") {
+          load();
+        }
       } else {
         console.log(
           "Stations were only removed, no fetch needed:",
@@ -203,7 +205,8 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
 
   // Initial polling setup - only runs once
   useEffect(() => {
-    if (stationCodes.length === 0) return;
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined" || stationCodes.length === 0) return;
 
     console.log("Setting up initial polling for stations:", stationCodes);
 

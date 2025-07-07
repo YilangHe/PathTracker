@@ -118,12 +118,16 @@ export const useGeolocation = () => {
 
   // Auto-request location on component mount
   useEffect(() => {
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined") return;
+
     requestLocation();
   }, [requestLocation]);
 
   // Set up periodic location and data refresh when permission is granted
   useEffect(() => {
-    if (!state.hasPermission) return;
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined" || !state.hasPermission) return;
 
     const interval = setInterval(() => {
       requestLocation();
@@ -134,7 +138,13 @@ export const useGeolocation = () => {
 
   // Fetch station data periodically for the closest station
   useEffect(() => {
-    if (!state.closestStation || !state.hasPermission) return;
+    // Only run in browser environment, not during SSR or crawling
+    if (
+      typeof window === "undefined" ||
+      !state.closestStation ||
+      !state.hasPermission
+    )
+      return;
 
     const interval = setInterval(() => {
       fetchClosestStationData(state.closestStation!);
