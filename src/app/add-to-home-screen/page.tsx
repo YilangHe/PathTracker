@@ -1,10 +1,90 @@
 import React from "react";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Add to Home Screen - Path Tracker",
+  description:
+    "Learn how to add Path Tracker to your home screen for quick access to real-time PATH train arrivals. Step-by-step installation guide for iOS and Android.",
+  alternates: {
+    canonical: "/add-to-home-screen",
+  },
+  openGraph: {
+    title: "Add Path Tracker to Home Screen",
+    description:
+      "Get quick access to PATH train arrivals - Add to your home screen in 3 easy steps",
+    url: "https://www.livepathtracker.com/add-to-home-screen",
+    images: [
+      {
+        url: "/AddToHomeScreenInstructions/step_1.jpg",
+        width: 250,
+        height: 400,
+        alt: "Add to Home Screen Instructions",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Add Path Tracker to Home Screen",
+    description:
+      "Get quick access to PATH train arrivals - Add to your home screen in 3 easy steps",
+    images: ["/AddToHomeScreenInstructions/step_1.jpg"],
+  },
+};
 
 export default function AddToHomeScreenPage() {
   return (
     <div className="container max-w-4xl mx-auto px-4 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "How to Add Path Tracker to Your Home Screen",
+            description:
+              "Step-by-step guide to install Path Tracker as a PWA on your mobile device for quick access to real-time PATH train arrivals",
+            image:
+              "https://www.livepathtracker.com/AddToHomeScreenInstructions/step_1.jpg",
+            totalTime: "PT2M",
+            estimatedCost: {
+              "@type": "MonetaryAmount",
+              currency: "USD",
+              value: "0",
+            },
+            tool: [
+              {
+                "@type": "HowToTool",
+                name: "Mobile web browser (Safari, Chrome, Firefox)",
+              },
+            ],
+            step: [
+              {
+                "@type": "HowToStep",
+                name: "Open the Share Menu",
+                text: "While viewing Path Tracker in your browser, tap the share button at the bottom of your screen (Safari) or in the browser menu.",
+                image:
+                  "https://www.livepathtracker.com/AddToHomeScreenInstructions/step_1.jpg",
+              },
+              {
+                "@type": "HowToStep",
+                name: "Find Add to Home Screen",
+                text: "Look for the 'Add to Home Screen' option in the share menu. You may need to scroll down to find it.",
+                image:
+                  "https://www.livepathtracker.com/AddToHomeScreenInstructions/step_2.jpg",
+              },
+              {
+                "@type": "HowToStep",
+                name: "Confirm Installation",
+                text: "Tap 'Add to Home Screen' and then confirm by tapping 'Add' in the popup dialog. The app will now appear on your home screen!",
+                image:
+                  "https://www.livepathtracker.com/AddToHomeScreenInstructions/step_3.jpg",
+              },
+            ],
+          }),
+        }}
+      />
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
           Add Path Tracker to Your Home Screen

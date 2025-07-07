@@ -4,7 +4,22 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Disclaimer - Path Tracker",
   description:
-    "Important legal information and data sources for Path Tracker app",
+    "Important legal information and data sources for Path Tracker app. Learn about our data sources and terms of use.",
+  alternates: {
+    canonical: "/disclaimer",
+  },
+  openGraph: {
+    title: "Disclaimer - Path Tracker",
+    description:
+      "Important legal information and data sources for Path Tracker app",
+    url: "https://www.livepathtracker.com/disclaimer",
+  },
+  twitter: {
+    card: "summary",
+    title: "Disclaimer - Path Tracker",
+    description:
+      "Important legal information and data sources for Path Tracker app",
+  },
 };
 
 export default function DisclaimerPage() {

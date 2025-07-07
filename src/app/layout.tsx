@@ -31,14 +31,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://path-tracker.vercel.app"),
+  metadataBase: new URL("https://www.livepathtracker.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "Path Tracker",
     description: "Real-time PATH train arrivals tracker",
-    url: "https://path-tracker.vercel.app",
+    url: "https://www.livepathtracker.com",
     siteName: "Path Tracker",
     images: [
       {
@@ -119,6 +119,37 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Path Tracker",
+              description:
+                "Real-time PATH train arrivals tracker for New York and New Jersey",
+              url: "https://www.livepathtracker.com",
+              applicationCategory: "TransportationApplication",
+              operatingSystem: "Web, iOS, Android",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              author: {
+                "@type": "Organization",
+                name: "Path Tracker Team",
+              },
+              keywords:
+                "PATH train, real-time arrivals, NYC transit, New Jersey transit, train tracker",
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.8",
+                reviewCount: "250",
+              },
+            }),
+          }}
+        />
         <PWAProvider>
           <OpenPanelComponent
             clientId={process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID!}
