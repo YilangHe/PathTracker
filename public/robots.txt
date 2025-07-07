@@ -1,0 +1,14 @@
+# Robots.txt for PathTracker
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow crawling of admin or sensitive areas (if any exist in future)
+# Disallow: /admin/
+# Disallow: /api/
+
+# Sitemap location
+Sitemap: https://www.livepathtracker.com/sitemap.xml
+
+# Crawl delay (optional - helps prevent overwhelming the server)
+Crawl-delay: 1 
