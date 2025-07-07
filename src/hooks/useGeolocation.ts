@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { StationCode, StationResult } from "../types/path";
 import { findClosestStation } from "../utils/pathHelpers";
 import { fetchRidePath } from "../services/pathApi";
-import { isCrawlerCached } from "../utils/crawlerDetection";
 
 interface GeolocationState {
   closestStation: StationCode | null;
@@ -119,16 +118,16 @@ export const useGeolocation = () => {
 
   // Auto-request location on component mount
   useEffect(() => {
-    // Only run for real users, not during SSR or crawling
-    if (isCrawlerCached()) return;
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined") return;
 
     requestLocation();
   }, [requestLocation]);
 
   // Set up periodic location and data refresh when permission is granted
   useEffect(() => {
-    // Only run for real users, not during SSR or crawling
-    if (isCrawlerCached() || !state.hasPermission) return;
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined" || !state.hasPermission) return;
 
     const interval = setInterval(() => {
       requestLocation();
@@ -139,8 +138,12 @@ export const useGeolocation = () => {
 
   // Fetch station data periodically for the closest station
   useEffect(() => {
-    // Only run for real users, not during SSR or crawling
-    if (isCrawlerCached() || !state.closestStation || !state.hasPermission)
+    // Only run in browser environment, not during SSR or crawling
+    if (
+      typeof window === "undefined" ||
+      !state.closestStation ||
+      !state.hasPermission
+    )
       return;
 
     const interval = setInterval(() => {

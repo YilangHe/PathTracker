@@ -1,6 +1,4 @@
-const CACHE_VERSION = "v1.1";
-const CACHE_NAME = `path-tracker-${CACHE_VERSION}`;
-const CACHE_TIMESTAMP = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
+const CACHE_NAME = "path-tracker-v1";
 const urlsToCache = [
   "/",
   "/add-to-home-screen",
@@ -92,29 +90,3 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   event.waitUntil(clients.openWindow("/"));
 });
-
-// Handle messages from client
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "CLEAR_CACHE") {
-    event.waitUntil(clearAllCaches());
-  }
-});
-
-// Function to clear all caches
-async function clearAllCaches() {
-  try {
-    const cacheNames = await caches.keys();
-    console.log(`Clearing ${cacheNames.length} caches:`, cacheNames);
-
-    await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName)));
-
-    // Create a new cache with fresh timestamp
-    const newCacheName = `path-tracker-${CACHE_VERSION}-${Date.now()}`;
-    const cache = await caches.open(newCacheName);
-    await cache.addAll(urlsToCache);
-
-    console.log(`All caches cleared and new cache created: ${newCacheName}`);
-  } catch (error) {
-    console.error("Failed to clear caches:", error);
-  }
-}

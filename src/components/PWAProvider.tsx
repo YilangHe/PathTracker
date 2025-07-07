@@ -1,17 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { isCrawlerCached } from "../utils/crawlerDetection";
-import { useDailyCacheRefresh } from "../hooks/useDailyCacheRefresh";
 
 export function PWAProvider({ children }: { children: React.ReactNode }) {
-  // Initialize daily cache refresh functionality
-  useDailyCacheRefresh();
-
   useEffect(() => {
-    // Only run for real users, not during SSR or crawling
-    if (isCrawlerCached()) return;
-
     // Register service worker
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker

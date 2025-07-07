@@ -3,7 +3,6 @@ import { Alert } from "../types/path";
 import { fetchAlerts } from "../services/pathApi";
 import { POLLING_INTERVAL } from "../constants/stations";
 import { cacheAlertsData, getCachedAlertsData } from "../utils/pathHelpers";
-import { isCrawlerCached } from "../utils/crawlerDetection";
 
 export const useAlerts = () => {
   const [data, setData] = useState<Alert[]>([]);
@@ -62,8 +61,8 @@ export const useAlerts = () => {
 
   // Initial load and polling
   useEffect(() => {
-    // Only run for real users, not during SSR or crawling
-    if (isCrawlerCached()) {
+    // Only run in browser environment, not during SSR or crawling
+    if (typeof window === "undefined") {
       // For SSR/crawling, initialize with neutral state and recent timestamp
       setLoading(false);
       setError(null);
