@@ -1,6 +1,7 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { MapPin, Navigation } from "lucide-react";
+import { MapPin, Navigation, ChevronDown, ChevronUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { StationResult, StationCode } from "../types/path";
 import { STATIONS } from "../constants/stations";
 import { ArrivalsTable } from "./ArrivalsTable";
@@ -21,9 +22,18 @@ export const ClosestStationCard = memo(
     error,
     userLocation,
   }: ClosestStationCardProps) => {
+    const [isExpanded, setIsExpanded] = useState(true); // Expanded by default
+
+    const toggleExpanded = () => {
+      setIsExpanded(!isExpanded);
+    };
+
     return (
       <Card className="bg-gradient-to-r from-blue-900 to-blue-800 text-white border-blue-700 shadow-lg">
-        <CardHeader>
+        <CardHeader
+          className="cursor-pointer hover:bg-blue-800/50 transition-colors"
+          onClick={toggleExpanded}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
@@ -41,46 +51,66 @@ export const ClosestStationCard = memo(
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-sm text-blue-200">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span>Auto-updating</span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 text-sm text-blue-200">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span>Auto-updating</span>
+              </div>
+
+              <motion.div
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ChevronDown className="w-5 h-5 text-blue-300" />
+              </motion.div>
             </div>
           </div>
         </CardHeader>
 
-        <CardContent>
-          {loading && (
-            <div className="flex items-center gap-2 text-blue-300">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-300"></div>
-              <span>Loading arrivals...</span>
-            </div>
-          )}
+        <AnimatePresence initial={false}>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <CardContent>
+                {loading && (
+                  <div className="flex items-center gap-2 text-blue-300">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-300"></div>
+                    <span>Loading arrivals...</span>
+                  </div>
+                )}
 
-          {error && (
-            <div className="p-3 bg-red-800/50 border border-red-600 rounded text-sm">
-              <div className="flex items-center gap-2 text-red-100 mb-1">
-                <span>❌</span>
-                <span>Error loading arrivals:</span>
-              </div>
-              <div className="text-red-200">{error}</div>
-            </div>
-          )}
+                {error && (
+                  <div className="p-3 bg-red-800/50 border border-red-600 rounded text-sm">
+                    <div className="flex items-center gap-2 text-red-100 mb-1">
+                      <span>❌</span>
+                      <span>Error loading arrivals:</span>
+                    </div>
+                    <div className="text-red-200">{error}</div>
+                  </div>
+                )}
 
-          {!error && !loading && data && <ArrivalsTable data={data} />}
+                {!error && !loading && data && <ArrivalsTable data={data} />}
 
-          {!error && !loading && !data && (
-            <div className="text-blue-200">
-              No arrivals scheduled for this station at the moment.
-            </div>
-          )}
+                {!error && !loading && !data && (
+                  <div className="text-blue-200">
+                    No arrivals scheduled for this station at the moment.
+                  </div>
+                )}
 
-          {userLocation && (
-            <div className="mt-3 text-xs text-blue-300 opacity-75">
-              Based on your location: {userLocation.lat.toFixed(4)},{" "}
-              {userLocation.lon.toFixed(4)}
-            </div>
+                {userLocation && (
+                  <div className="mt-3 text-xs text-blue-300 opacity-75">
+                    Based on your location: {userLocation.lat.toFixed(4)},{" "}
+                    {userLocation.lon.toFixed(4)}
+                  </div>
+                )}
+              </CardContent>
+            </motion.div>
           )}
-        </CardContent>
+        </AnimatePresence>
       </Card>
     );
   }

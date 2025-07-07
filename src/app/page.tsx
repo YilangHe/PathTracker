@@ -26,6 +26,7 @@ import { AlertsCard } from "../components/AlertsCard";
 import { DraggableStationCard } from "../components/DraggableStationCard";
 import { AddStationCard } from "../components/AddStationCard";
 import { ClosestStationCard } from "../components/ClosestStationCard";
+import { WeatherWidget } from "../components/WeatherWidget";
 
 // LocalStorage keys
 const STATIONS_STORAGE_KEY = "pathTracker_stations";
@@ -226,6 +227,11 @@ export default function PathTracker() {
         error={alertsError}
         hasCachedData={alertsHasCachedData}
       />
+
+      {/* Weather Widget - Only show if user has granted location permission */}
+      {hasPermission && userLocation && (
+        <WeatherWidget userLocation={userLocation} />
+      )}
 
       {/* Closest Station Card - Only show if user has granted location permission */}
       {hasPermission && closestStation && (
