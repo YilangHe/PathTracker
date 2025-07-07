@@ -49,7 +49,10 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
 
                 {/* Destination info */}
                 <div className="flex flex-col">
-                  <div className="text-white text-lg font-medium capitalize">
+                  <div
+                    className="text-lg font-medium capitalize"
+                    style={{ color: getLineColor(message.lineColor) }}
+                  >
                     {message.headSign}
                   </div>
                   <div className="text-gray-400 text-sm capitalize">
