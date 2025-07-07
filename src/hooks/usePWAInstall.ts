@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { isCrawlerCached } from "../utils/crawlerDetection";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -17,6 +18,9 @@ export function usePWAInstall() {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
+    // Only run for real users, not during SSR or crawling
+    if (isCrawlerCached()) return;
+
     // Check if app is already installed
     const checkInstalled = () => {
       if (window.matchMedia("(display-mode: standalone)").matches) {

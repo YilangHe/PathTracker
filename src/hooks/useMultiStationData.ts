@@ -3,6 +3,7 @@ import { StationResult, StationCode } from "../types/path";
 import { fetchRidePath } from "../services/pathApi";
 import { POLLING_INTERVAL } from "../constants/stations";
 import { cacheStationData, getCachedStationData } from "../utils/pathHelpers";
+import { isCrawlerCached } from "../utils/crawlerDetection";
 
 interface StationData {
   data: StationResult | null;
@@ -188,8 +189,8 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
           });
           return updated;
         });
-        // Trigger a fetch for the new stations - only in browser environment
-        if (typeof window !== "undefined") {
+        // Trigger a fetch for the new stations - only for real users
+        if (!isCrawlerCached()) {
           load();
         }
       } else {
@@ -205,8 +206,8 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
 
   // Initial polling setup - only runs once
   useEffect(() => {
-    // Only run in browser environment, not during SSR or crawling
-    if (typeof window === "undefined" || stationCodes.length === 0) {
+    // Only run for real users, not during SSR or crawling
+    if (isCrawlerCached() || stationCodes.length === 0) {
       // For SSR/crawling, initialize with non-error states and a recent timestamp
       if (stationCodes.length > 0) {
         setStationData((prev) => {
