@@ -64,16 +64,16 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
               </div>
 
               {/* Right side - Time and Signal icon */}
-              <div className="flex items-center gap-2">
-                <div className="text-right">
+              <div className="flex items-center gap-4">
+                <div className="text-center">
                   <div
-                    className={`text-2xl font-bold ${arrivalClass(message)}`}
+                    className={`text-3xl font-bold ${arrivalClass(message)}`}
                   >
                     {formatArrivalTime(message.arrivalTimeMessage)
                       .replace(" min", "")
                       .replace("min", "")}
                   </div>
-                  <div className="text-gray-400 text-sm">
+                  <div className={`text-sm ${arrivalClass(message)}`}>
                     {formatArrivalTime(message.arrivalTimeMessage).includes(
                       "min"
                     )
@@ -81,7 +81,11 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
                       : ""}
                   </div>
                 </div>
-                <Radio className="w-5 h-5 text-gray-400 flex-shrink-0 animate-pulse" />
+                <div className="relative flex-shrink-0">
+                  <Radio className="w-5 h-5 text-gray-400 relative z-10" />
+                  <div className="absolute inset-0 w-5 h-5 rounded-full bg-gray-400 opacity-20 animate-ping"></div>
+                  <div className="absolute inset-0 w-5 h-5 rounded-full bg-gray-400 opacity-10 animate-ping animation-delay-150"></div>
+                </div>
               </div>
             </motion.div>
           ))
