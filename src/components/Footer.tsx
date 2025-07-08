@@ -13,6 +13,9 @@ export function Footer() {
             <p className="text-sm text-gray-600">
               © {currentYear} Path Tracker. All rights reserved.
             </p>
+            <p className="text-sm text-gray-500 italic">
+              By the Path rider, for the path rider
+            </p>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <span>Made with</span>
               <Heart className="h-4 w-4 text-red-500" />
