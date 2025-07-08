@@ -13,6 +13,11 @@ interface ArrivalsTableProps {
 }
 
 export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
+  const isUrgent = (message: any) => {
+    const seconds = parseInt(message.secondsToArrival, 10);
+    return seconds < 120 && seconds > 0; // <2 min band, but not "Now"
+  };
+
   return (
     <div className="space-y-3">
       <AnimatePresence initial={false} mode="popLayout">
@@ -25,7 +30,9 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
               animate={{ opacity: 1, rotateX: 0 }}
               exit={{ opacity: 0, rotateX: -90 }}
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="bg-gray-800 rounded-xl p-4 flex items-center justify-between origin-top border-l-4 border-l-current"
+              className={`bg-gray-800 rounded-xl p-4 flex items-center justify-between origin-top border-l-4 border-l-current ${
+                isUrgent(message) ? "animate-urgent-pulse" : ""
+              }`}
               style={{ borderLeftColor: getLineColor(message.lineColor) }}
             >
               {/* Left side - Logo, Arrow, and Destination */}
