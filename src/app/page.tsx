@@ -16,6 +16,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { motion, AnimatePresence } from "framer-motion";
 import { StationCode, StationConfig } from "../types/path";
 import { useMultiStationData } from "../hooks/useMultiStationData";
 import { useAlerts } from "../hooks/useAlerts";
@@ -79,6 +80,7 @@ const loadFromStorage = function <T>(key: string, defaultValue: T): T {
 export default function PathTracker() {
   const [stations, setStations] = useState<StationConfig[]>(DEFAULT_STATIONS);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showAlertsCard, setShowAlertsCard] = useState(true);
 
   // Load saved configuration on mount
   useEffect(() => {
@@ -112,6 +114,25 @@ export default function PathTracker() {
     error: alertsError,
     hasCachedData: alertsHasCachedData,
   } = useAlerts();
+
+  // Manage alerts card visibility with better UX workflow
+  useEffect(() => {
+    if (alertsLoading) {
+      // Always show when loading
+      setShowAlertsCard(true);
+    } else if (alertsError || alerts.length > 0) {
+      // Always show when there are alerts or errors
+      setShowAlertsCard(true);
+    } else {
+      // No alerts - show "no alerts" status briefly, then hide
+      setShowAlertsCard(true);
+      const timer = setTimeout(() => {
+        setShowAlertsCard(false);
+      }, 1000); // Show "no alerts" for 3 seconds before hiding
+
+      return () => clearTimeout(timer);
+    }
+  }, [alertsLoading, alertsError, alerts.length]);
   const {
     closestStation,
     closestStationData,
@@ -221,12 +242,24 @@ export default function PathTracker() {
       />
 
       {/* Alerts Card */}
-      <AlertsCard
-        alerts={alerts}
-        loading={alertsLoading}
-        error={alertsError}
-        hasCachedData={alertsHasCachedData}
-      />
+      <AnimatePresence>
+        {showAlertsCard && (
+          <motion.div
+            key="alerts-card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            <AlertsCard
+              alerts={alerts}
+              loading={alertsLoading}
+              error={alertsError}
+              hasCachedData={alertsHasCachedData}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Weather Widget - Only show if user has granted location permission */}
       {hasPermission && userLocation && (
