@@ -25,7 +25,8 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
               animate={{ opacity: 1, rotateX: 0 }}
               exit={{ opacity: 0, rotateX: -90 }}
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="bg-gray-800 rounded-xl p-4 flex items-center justify-between origin-top"
+              className="bg-gray-800 rounded-xl p-4 flex items-center justify-between origin-top border-l-4 border-l-current"
+              style={{ borderLeftColor: getLineColor(message.lineColor) }}
             >
               {/* Left side - Logo, Arrow, and Destination */}
               <div className="flex items-center gap-3">
