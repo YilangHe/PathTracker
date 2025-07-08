@@ -34,31 +34,16 @@ export const ClosestStationCard = memo(
           className="cursor-pointer hover:bg-blue-800/50 transition-colors"
           onClick={toggleExpanded}
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="space-y-2">
+            {/* Top row - Title and expand/collapse */}
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-blue-300" />
                 <span className="text-lg font-semibold">Closest Station</span>
                 <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-medium flex items-center justify-center gap-1">
-                  <span>Nearby</span>
+                  <span className="hidden sm:inline">Nearby</span>
                   <span className="text-sm">🚉</span>
                 </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                {loading && (
-                  <Navigation className="w-4 h-4 animate-spin text-blue-300" />
-                )}
-                <span className="text-xl font-bold capitalize">
-                  {STATIONS[stationCode] ?? stationCode}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-sm text-blue-200">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span>Auto-updating</span>
               </div>
 
               <motion.div
@@ -67,6 +52,24 @@ export const ClosestStationCard = memo(
               >
                 <ChevronDown className="w-5 h-5 text-blue-300" />
               </motion.div>
+            </div>
+
+            {/* Bottom row - Station name and status */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {loading && (
+                  <Navigation className="w-4 h-4 animate-spin text-blue-300" />
+                )}
+                <span className="text-xl font-bold capitalize">
+                  {STATIONS[stationCode] ?? stationCode}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 text-sm text-blue-200">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="hidden sm:inline">Auto-updating</span>
+                <span className="sm:hidden">Live</span>
+              </div>
             </div>
           </div>
         </CardHeader>

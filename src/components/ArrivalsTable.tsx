@@ -21,8 +21,8 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
   // Helper function to get direction section style
   const getDirectionSectionStyle = (direction: "ToNY" | "ToNJ") => {
     return direction === "ToNY"
-      ? "text-blue-400 border-blue-400/30"
-      : "text-orange-400 border-orange-400/30";
+      ? "text-slate-300 border-slate-300/30"
+      : "text-neutral-300 border-neutral-300/30";
   };
 
   // Helper function to format direction label
@@ -31,7 +31,7 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-7">
       <AnimatePresence initial={false} mode="popLayout">
         {data.destinations.map((dest) => (
           <motion.div
@@ -50,7 +50,6 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
               )}`}
             >
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-current"></div>
                 <h3 className="font-semibold text-sm uppercase tracking-wider">
                   {formatDirectionLabel(dest.label)}
                 </h3>
