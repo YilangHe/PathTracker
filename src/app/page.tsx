@@ -16,6 +16,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { motion, AnimatePresence } from "framer-motion";
 import { StationCode, StationConfig } from "../types/path";
 import { useMultiStationData } from "../hooks/useMultiStationData";
 import { useAlerts } from "../hooks/useAlerts";
@@ -241,14 +242,24 @@ export default function PathTracker() {
       />
 
       {/* Alerts Card */}
-      {showAlertsCard && (
-        <AlertsCard
-          alerts={alerts}
-          loading={alertsLoading}
-          error={alertsError}
-          hasCachedData={alertsHasCachedData}
-        />
-      )}
+      <AnimatePresence>
+        {showAlertsCard && (
+          <motion.div
+            key="alerts-card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            <AlertsCard
+              alerts={alerts}
+              loading={alertsLoading}
+              error={alertsError}
+              hasCachedData={alertsHasCachedData}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Weather Widget - Only show if user has granted location permission */}
       {hasPermission && userLocation && (
