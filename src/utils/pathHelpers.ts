@@ -23,9 +23,12 @@ export const arrivalClass = (message: Message): string =>
     : heat(parseInt(message.secondsToArrival, 10));
 
 export const formatArrivalTime = (arrivalTimeMessage: string): string => {
-  // Show "Due" instead of "0 min"
-  if (arrivalTimeMessage.trim() === "0 min") {
-    return "Due";
+  // Show "Now" instead of "0 min"
+  if (
+    arrivalTimeMessage.trim() === "0 min" ||
+    arrivalTimeMessage.trim() === "0"
+  ) {
+    return "Now";
   }
   return arrivalTimeMessage;
 };

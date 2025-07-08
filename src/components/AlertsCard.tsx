@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert } from "../types/path";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, AlertTriangle } from "lucide-react";
 
 interface AlertsCardProps {
   alerts: Alert[];
@@ -17,7 +17,18 @@ export const AlertsCard = ({
   error,
   hasCachedData = false,
 }: AlertsCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const alertCount = alerts.length;
+  const hasAlerts = alertCount > 0;
+
+  // Auto-collapse when there are no alerts, expand when there are alerts
+  const [isExpanded, setIsExpanded] = useState(hasAlerts);
+
+  // Update expansion state when alerts change
+  useEffect(() => {
+    if (!loading) {
+      setIsExpanded(hasAlerts);
+    }
+  }, [hasAlerts, loading]);
 
   const formatAlertTime = (timestamp: string) => {
     const date = new Date(parseInt(timestamp));
@@ -30,9 +41,6 @@ export const AlertsCard = ({
     const message = alert.incidentMessage.preMessage;
     return { subject, message };
   };
-
-  const alertCount = alerts.length;
-  const hasAlerts = alertCount > 0;
 
   // Determine card styling based on error state and cached data
   let cardBgColor = "bg-green-900";
@@ -64,7 +72,10 @@ export const AlertsCard = ({
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">PATH Alerts</h2>
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-blue-300" />
+              <h2 className="text-xl font-semibold">PATH Alerts</h2>
+            </div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-blue-200">Loading...</span>
               <motion.div
@@ -101,9 +112,14 @@ export const AlertsCard = ({
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center justify-between">
-          <h2 className={`text-xl font-semibold ${headerTextColor}`}>
-            PATH Alerts
-          </h2>
+          <div className="flex items-center gap-2">
+            <AlertTriangle
+              className={`w-5 h-5 ${headerTextColor} opacity-70`}
+            />
+            <h2 className={`text-xl font-semibold ${headerTextColor}`}>
+              PATH Alerts
+            </h2>
+          </div>
           <div className="flex items-center gap-2">
             <span className={`text-sm ${headerTextColor}`}>{statusText}</span>
             <motion.div

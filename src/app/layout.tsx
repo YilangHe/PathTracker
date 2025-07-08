@@ -10,7 +10,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Path Tracker",
-  description: "Real-time PATH train arrivals tracker",
+  description:
+    "Real-time PATH train arrivals tracker. By the Path Rider, for the Path Rider",
   generator: "Next.js",
   manifest: "/manifest.json",
   keywords: [

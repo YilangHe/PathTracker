@@ -67,3 +67,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .animation-delay-150 {
+    animation-delay: 150ms;
+  }
+
+  .animate-urgent-pulse {
+    animation: urgent-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes urgent-pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.005);
+    }
+  }
+}
