@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Radio } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { StationResult } from "../types/path";
 import { STATIONS } from "../constants/stations";
@@ -64,17 +64,28 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
               </div>
 
               {/* Right side - Time */}
-              <div className="text-center">
-                <div className={`text-3xl font-bold ${arrivalClass(message)}`}>
-                  {formatArrivalTime(message.arrivalTimeMessage)
-                    .replace(" min", "")
-                    .replace("min", "")}
+              <div className="flex items-start gap-1">
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`text-3xl font-bold ${arrivalClass(message)}`}
+                  >
+                    {formatArrivalTime(message.arrivalTimeMessage)
+                      .replace(" min", "")
+                      .replace("min", "")}
+                  </div>
+                  <div className={`text-sm ${arrivalClass(message)}`}>
+                    {formatArrivalTime(message.arrivalTimeMessage).includes(
+                      "min"
+                    )
+                      ? "minutes"
+                      : ""}
+                  </div>
                 </div>
-                <div className={`text-sm ${arrivalClass(message)}`}>
-                  {formatArrivalTime(message.arrivalTimeMessage).includes("min")
-                    ? "minutes"
-                    : ""}
-                </div>
+                <Radio
+                  className={`w-3 h-3 ${arrivalClass(
+                    message
+                  )} animate-pulse flex-shrink-0`}
+                />
               </div>
             </motion.div>
           ))
