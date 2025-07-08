@@ -24,7 +24,10 @@ export const arrivalClass = (message: Message): string =>
 
 export const formatArrivalTime = (arrivalTimeMessage: string): string => {
   // Show "Now" instead of "0 min"
-  if (arrivalTimeMessage.trim() === "0 min") {
+  if (
+    arrivalTimeMessage.trim() === "0 min" ||
+    arrivalTimeMessage.trim() === "0"
+  ) {
     return "Now";
   }
   return arrivalTimeMessage;
