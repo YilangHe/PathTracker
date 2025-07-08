@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert } from "../types/path";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,7 +17,18 @@ export const AlertsCard = ({
   error,
   hasCachedData = false,
 }: AlertsCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const alertCount = alerts.length;
+  const hasAlerts = alertCount > 0;
+
+  // Auto-collapse when there are no alerts, expand when there are alerts
+  const [isExpanded, setIsExpanded] = useState(hasAlerts);
+
+  // Update expansion state when alerts change
+  useEffect(() => {
+    if (!loading) {
+      setIsExpanded(hasAlerts);
+    }
+  }, [hasAlerts, loading]);
 
   const formatAlertTime = (timestamp: string) => {
     const date = new Date(parseInt(timestamp));
@@ -30,9 +41,6 @@ export const AlertsCard = ({
     const message = alert.incidentMessage.preMessage;
     return { subject, message };
   };
-
-  const alertCount = alerts.length;
-  const hasAlerts = alertCount > 0;
 
   // Determine card styling based on error state and cached data
   let cardBgColor = "bg-green-900";
