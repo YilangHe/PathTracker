@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Alert } from "../types/path";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, AlertTriangle } from "lucide-react";
 
 interface AlertsCardProps {
   alerts: Alert[];
@@ -64,7 +64,10 @@ export const AlertsCard = ({
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">PATH Alerts</h2>
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-blue-300" />
+              <h2 className="text-xl font-semibold">PATH Alerts</h2>
+            </div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-blue-200">Loading...</span>
               <motion.div
@@ -101,9 +104,14 @@ export const AlertsCard = ({
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center justify-between">
-          <h2 className={`text-xl font-semibold ${headerTextColor}`}>
-            PATH Alerts
-          </h2>
+          <div className="flex items-center gap-2">
+            <AlertTriangle
+              className={`w-5 h-5 ${headerTextColor} opacity-70`}
+            />
+            <h2 className={`text-xl font-semibold ${headerTextColor}`}>
+              PATH Alerts
+            </h2>
+          </div>
           <div className="flex items-center gap-2">
             <span className={`text-sm ${headerTextColor}`}>{statusText}</span>
             <motion.div
