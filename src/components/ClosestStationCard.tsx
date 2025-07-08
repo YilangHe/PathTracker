@@ -39,6 +39,10 @@ export const ClosestStationCard = memo(
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-blue-300" />
                 <span className="text-lg font-semibold">Closest Station</span>
+                <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-medium flex items-center justify-center gap-1">
+                  <span>Nearby</span>
+                  <span className="text-sm">🚉</span>
+                </span>
               </div>
 
               <div className="flex items-center gap-2">
