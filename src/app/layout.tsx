@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PWAProvider } from "@/components/PWAProvider";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { OpenPanelComponent } from "@openpanel/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -156,17 +157,19 @@ export default function RootLayout({
             }),
           }}
         />
-        <PWAProvider>
-          <OpenPanelComponent
-            clientId={process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID!}
-            trackScreenViews={true}
-            trackOutgoingLinks={true}
-            trackAttributes={true}
-          />
-          <Navbar />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </PWAProvider>
+        <ThemeProvider>
+          <PWAProvider>
+            <OpenPanelComponent
+              clientId={process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID!}
+              trackScreenViews={true}
+              trackOutgoingLinks={true}
+              trackAttributes={true}
+            />
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </PWAProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
