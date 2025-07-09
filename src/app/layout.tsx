@@ -5,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PWAProvider } from "@/components/PWAProvider";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 import { OpenPanelComponent } from "@openpanel/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -159,18 +160,20 @@ export default function RootLayout({
           }}
         />
         <ThemeProvider>
-          <PWAProvider>
-            <OpenPanelComponent
-              clientId={process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID!}
-              trackScreenViews={true}
-              trackOutgoingLinks={true}
-              trackAttributes={true}
-            />
-            <Navbar />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-            <Analytics />
-          </PWAProvider>
+          <UserPreferencesProvider>
+            <PWAProvider>
+              <OpenPanelComponent
+                clientId={process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID!}
+                trackScreenViews={true}
+                trackOutgoingLinks={true}
+                trackAttributes={true}
+              />
+              <Navbar />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+              <Analytics />
+            </PWAProvider>
+          </UserPreferencesProvider>
         </ThemeProvider>
       </body>
     </html>
