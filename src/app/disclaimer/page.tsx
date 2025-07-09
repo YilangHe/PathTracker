@@ -28,18 +28,20 @@ export default function DisclaimerPage() {
       <div className="max-w-3xl mx-auto py-8">
         <Link
           href="/"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors"
+          className="inline-flex items-center text-primary hover:text-primary/80 mb-6 transition-colors"
         >
           ← Back to Home
         </Link>
-        <h1 className="text-3xl font-bold text-center mb-8">Disclaimer</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 text-foreground">
+          Disclaimer
+        </h1>
 
         <div className="prose prose-lg max-w-none space-y-6">
-          <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
-            <h2 className="text-xl font-semibold text-blue-900 mb-4">
+          <div className="bg-primary/5 border-l-4 border-primary p-6 rounded-r-lg dark:bg-primary/10">
+            <h2 className="text-xl font-semibold text-primary mb-4">
               Important Notice
             </h2>
-            <p className="text-gray-800 leading-relaxed">
+            <p className="text-foreground leading-relaxed">
               Path Tracker is an independent platform developed to help PATH
               train riders access real-time schedules and updates conveniently.
               This site is not affiliated with or endorsed by the Port Authority
@@ -47,11 +49,11 @@ export default function DisclaimerPage() {
             </p>
           </div>
 
-          <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg">
-            <h2 className="text-xl font-semibold text-amber-900 mb-4">
+          <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg dark:bg-amber-950/20 dark:border-amber-400">
+            <h2 className="text-xl font-semibold text-amber-900 dark:text-amber-100 mb-4">
               Accuracy of Information
             </h2>
-            <p className="text-gray-800 leading-relaxed">
+            <p className="text-foreground leading-relaxed">
               While every effort is made to ensure the accuracy of the
               information provided on Path Tracker, schedules and updates are
               subject to change, and real-time data may vary. Users are
@@ -61,19 +63,19 @@ export default function DisclaimerPage() {
             </p>
           </div>
 
-          <div className="bg-gray-50 border-l-4 border-gray-500 p-6 rounded-r-lg">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <div className="bg-muted/30 border-l-4 border-muted-foreground/50 p-6 rounded-r-lg">
+            <h2 className="text-xl font-semibold text-foreground mb-4">
               Official PATH Resources
             </h2>
-            <p className="text-gray-800 leading-relaxed mb-4">
+            <p className="text-foreground leading-relaxed mb-4">
               For the most up-to-date and official information, please visit:
             </p>
-            <ul className="space-y-2 text-gray-800">
+            <ul className="space-y-2 text-foreground">
               <li>
                 •{" "}
                 <a
                   href="https://www.panynj.gov/path"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="text-primary hover:text-primary/80 underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -84,7 +86,7 @@ export default function DisclaimerPage() {
                 •{" "}
                 <a
                   href="https://www.panynj.gov/path/en/schedules-maps.html"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="text-primary hover:text-primary/80 underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -97,7 +99,7 @@ export default function DisclaimerPage() {
           </div>
 
           <div className="text-center pt-8">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Last updated: {new Date().toLocaleDateString()}
             </p>
           </div>
