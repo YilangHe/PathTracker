@@ -1,7 +1,8 @@
 import { memo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { CloudRain, Wind, Droplets, MapPin } from "lucide-react";
+import { CloudRain, Wind, Droplets, MapPin, X } from "lucide-react";
 import { useWeather } from "../hooks/useWeather";
+import { useUserPreferences } from "../contexts/UserPreferencesContext";
 
 interface WeatherWidgetProps {
   userLocation: { lat: number; lon: number } | null;
@@ -10,13 +11,24 @@ interface WeatherWidgetProps {
 export const WeatherWidget = memo(({ userLocation }: WeatherWidgetProps) => {
   const { data, loading, error, getWeatherDescription, getWeatherIcon } =
     useWeather(userLocation?.lat || null, userLocation?.lon || null);
+  const { toggleWeatherWidget } = useUserPreferences();
 
   if (!userLocation) {
     return null;
   }
 
   return (
-    <Card className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white border-indigo-700 shadow-lg">
+    <Card className="relative bg-gradient-to-r from-indigo-900 to-purple-900 text-white border-indigo-700 shadow-lg">
+      {/* Close button */}
+      <button
+        onClick={toggleWeatherWidget}
+        className="absolute top-2 right-2 z-10 p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors opacity-60 hover:opacity-100"
+        aria-label="Hide weather widget"
+        title="Hide weather widget"
+      >
+        <X className="w-3 h-3 text-white" />
+      </button>
+
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
