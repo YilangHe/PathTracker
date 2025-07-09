@@ -84,7 +84,7 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
           >
             {/* Direction Header - Now clickable */}
             <div
-              className={`flex items-center justify-between cursor-pointer hover:bg-gray-800/50 rounded-lg p-2 -m-2 transition-colors border-b ${getDirectionSectionStyle(
+              className={`flex items-center justify-between cursor-pointer hover:bg-gray-800/50 rounded-lg p-2 -m-2 transition-colors ${getDirectionSectionStyle(
                 dest.label
               )}`}
               onClick={() => toggleSection(dest.label)}
@@ -117,7 +117,7 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="space-y-2 overflow-hidden"
+                  className="space-y-2 overflow-hidden pt-2"
                 >
                   {dest.messages.map((message) => (
                     <motion.div
