@@ -30,10 +30,32 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
     return direction === "ToNY" ? "To New York" : "To New Jersey";
   };
 
+  // Helper function to reorder destinations based on station
+  const getOrderedDestinations = () => {
+    const stationCode = data.consideredStation;
+    const specificNYStations = ["CHR", "09S", "23S", "33S"];
+
+    // For specific NY stations, show ToNJ first, then ToNY
+    if (specificNYStations.includes(stationCode)) {
+      return data.destinations.sort((a, b) => {
+        if (a.label === "ToNJ" && b.label === "ToNY") return -1;
+        if (a.label === "ToNY" && b.label === "ToNJ") return 1;
+        return 0;
+      });
+    }
+
+    // For all other stations, show ToNY first, then ToNJ
+    return data.destinations.sort((a, b) => {
+      if (a.label === "ToNY" && b.label === "ToNJ") return -1;
+      if (a.label === "ToNJ" && b.label === "ToNY") return 1;
+      return 0;
+    });
+  };
+
   return (
     <div className="space-y-7">
       <AnimatePresence initial={false} mode="popLayout">
-        {data.destinations.map((dest) => (
+        {getOrderedDestinations().map((dest) => (
           <motion.div
             key={dest.label}
             layout

@@ -23,13 +23,30 @@ export const arrivalClass = (message: Message): string =>
     : heat(parseInt(message.secondsToArrival, 10));
 
 export const formatArrivalTime = (arrivalTimeMessage: string): string => {
-  // Show "Now" instead of "0 min"
-  if (
-    arrivalTimeMessage.trim() === "0 min" ||
-    arrivalTimeMessage.trim() === "0"
-  ) {
-    return "Now";
+  // Parse the numeric value from the arrival time message
+  const timeMatch = arrivalTimeMessage.match(/(\d+)/);
+
+  if (timeMatch) {
+    const minutes = parseInt(timeMatch[1], 10);
+
+    // If it's 0 minutes, show "Now"
+    if (minutes === 0) {
+      return "Now";
+    }
+
+    // Apply -1 offset for times greater than 0
+    const adjustedMinutes = Math.max(0, minutes - 1);
+
+    // If after adjustment it becomes 0, show "Now"
+    if (adjustedMinutes === 0) {
+      return "Now";
+    }
+
+    // Return the adjusted time with the same format
+    return arrivalTimeMessage.replace(/\d+/, adjustedMinutes.toString());
   }
+
+  // If no numeric value found, return original message
   return arrivalTimeMessage;
 };
 
