@@ -30,6 +30,29 @@ export function Footer() {
                 <span>@Noodles</span>
               </a>
             </div>
+            {/* Custom Buy Me A Coffee Button */}
+            <div className="mt-3">
+              <a
+                href="https://www.buymeacoffee.com/himrnoodles"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center font-medium text-sm px-4 py-2 rounded-lg transition-all duration-300 hover:opacity-90 hover:scale-105"
+                style={{
+                  backgroundColor: "rgb(95, 127, 255)",
+                  color: "rgb(255, 255, 255)",
+                }}
+              >
+                <div className="flex">
+                  <span
+                    className="inline-block"
+                    style={{ transform: "scale(0.8)", marginTop: "-2px" }}
+                  >
+                    🚆
+                  </span>
+                  <span className="ml-2">Buy me a PATH ride</span>
+                </div>
+              </a>
+            </div>
           </div>
 
           {/* Divider */}
