@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { PWAProvider } from "@/components/PWAProvider";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { OpenPanelComponent } from "@openpanel/nextjs";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -168,6 +169,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-grow">{children}</main>
             <Footer />
+            <Analytics />
           </PWAProvider>
         </ThemeProvider>
       </body>
