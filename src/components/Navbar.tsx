@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -57,17 +58,17 @@ export function Navbar() {
                 Features
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-white border shadow-lg rounded-md">
+                <ul className="grid gap-3 p-4 w-[320px] sm:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-popover border border-border shadow-lg rounded-md">
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
                       <Link
-                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-50 to-blue-100 p-6 no-underline outline-none focus:shadow-md hover:from-blue-100 hover:to-blue-200 transition-colors"
+                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-6 no-underline outline-none focus:shadow-md hover:from-primary/10 hover:to-primary/20 dark:hover:from-primary/20 dark:hover:to-primary/30 transition-colors"
                         href="/"
                       >
-                        <div className="mb-2 mt-4 text-lg font-medium text-blue-900">
+                        <div className="mb-2 mt-4 text-lg font-medium text-primary">
                           Real-time Arrivals
                         </div>
-                        <p className="text-sm leading-tight text-blue-700">
+                        <p className="text-sm leading-tight text-muted-foreground">
                           Track PATH train arrivals in real-time with our live
                           dashboard
                         </p>
@@ -91,7 +92,7 @@ export function Navbar() {
                 About
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white border shadow-lg rounded-md">
+                <ul className="grid w-[320px] gap-3 p-4 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover border border-border shadow-lg rounded-md">
                   <ListItem
                     title="About PATH"
                     href="https://www.panynj.gov/path"
@@ -127,7 +128,8 @@ export function Navbar() {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
           {!isInstalled && (
             <button
               onClick={handleInstallClick}
@@ -189,13 +191,13 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 text-gray-900",
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-foreground",
             className
           )}
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-gray-600">
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
         </a>
