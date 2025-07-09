@@ -86,10 +86,10 @@ export default function AddToHomeScreenPage() {
         }}
       />
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl font-bold text-foreground mb-4">
           Add Path Tracker to Your Home Screen
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Get quick access to real-time PATH train arrivals by adding this app
           to your home screen. Follow these simple steps to install the app on
           your device.
@@ -101,14 +101,14 @@ export default function AddToHomeScreenPage() {
         <Card className="p-6">
           <div className="grid md:grid-cols-2 gap-6 items-center">
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">
                 Step 1: Open the Share Menu
               </h2>
-              <p className="text-gray-600 mb-4">
+              <p className="text-foreground mb-4">
                 While viewing Path Tracker in your browser, tap the share button
                 at the bottom of your screen (Safari) or in the browser menu.
               </p>
-              <ul className="text-sm text-gray-500 space-y-1">
+              <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• On Safari: Tap the share icon at the bottom center</li>
                 <li>• On Chrome: Tap the three-dot menu, then "Share"</li>
               </ul>
@@ -129,14 +129,14 @@ export default function AddToHomeScreenPage() {
         <Card className="p-6">
           <div className="grid md:grid-cols-2 gap-6 items-center">
             <div className="md:order-2">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">
                 Step 2: Find "Add to Home Screen"
               </h2>
-              <p className="text-gray-600 mb-4">
+              <p className="text-foreground mb-4">
                 Look for the "Add to Home Screen" option in the share menu. You
                 may need to scroll down to find it.
               </p>
-              <ul className="text-sm text-gray-500 space-y-1">
+              <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• The option shows a plus (+) icon next to it</li>
                 <li>• If you don't see it, try scrolling down in the menu</li>
               </ul>
@@ -157,14 +157,14 @@ export default function AddToHomeScreenPage() {
         <Card className="p-6">
           <div className="grid md:grid-cols-2 gap-6 items-center">
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">
                 Step 3: Confirm Installation
               </h2>
-              <p className="text-gray-600 mb-4">
+              <p className="text-foreground mb-4">
                 Tap "Add to Home Screen" and then confirm by tapping "Add" in
                 the popup dialog. The app will now appear on your home screen!
               </p>
-              <ul className="text-sm text-gray-500 space-y-1">
+              <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• You can customize the app name before adding</li>
                 <li>• The app will work like a native app once installed</li>
                 <li>• Access it anytime from your home screen</li>
@@ -183,25 +183,25 @@ export default function AddToHomeScreenPage() {
         </Card>
       </div>
 
-      <div className="mt-12 p-6 bg-blue-50 rounded-lg">
-        <h3 className="text-xl font-semibold text-blue-900 mb-3">
+      <div className="mt-12 p-6 bg-primary/5 dark:bg-primary/10 rounded-lg">
+        <h3 className="text-xl font-semibold text-primary mb-3">
           Why Add to Home Screen?
         </h3>
-        <ul className="text-blue-800 space-y-2">
+        <ul className="text-foreground space-y-2">
           <li className="flex items-start">
-            <span className="text-blue-600 mr-2">✓</span>
+            <span className="text-primary mr-2">✓</span>
             <span>Instant access to real-time PATH arrivals</span>
           </li>
           <li className="flex items-start">
-            <span className="text-blue-600 mr-2">✓</span>
+            <span className="text-primary mr-2">✓</span>
             <span>No need to remember the website URL</span>
           </li>
           <li className="flex items-start">
-            <span className="text-blue-600 mr-2">✓</span>
+            <span className="text-primary mr-2">✓</span>
             <span>Faster loading and better performance</span>
           </li>
           <li className="flex items-start">
-            <span className="text-blue-600 mr-2">✓</span>
+            <span className="text-primary mr-2">✓</span>
             <span>Works offline for previously viewed stations</span>
           </li>
         </ul>
@@ -210,7 +210,7 @@ export default function AddToHomeScreenPage() {
       <div className="mt-8 text-center">
         <a
           href="/"
-          className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium"
         >
           Back to Path Tracker
         </a>
