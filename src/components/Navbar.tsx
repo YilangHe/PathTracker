@@ -4,7 +4,9 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
+import { useGeolocation } from "@/hooks/useGeolocation";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { WeatherToggle } from "@/components/WeatherToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -19,6 +21,7 @@ import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const { isInstallable, isInstalled, installPWA } = usePWAInstall();
+  const { hasPermission } = useGeolocation();
 
   const handleInstallClick = async () => {
     if (isInstallable) {
@@ -129,6 +132,7 @@ export function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="ml-auto flex items-center gap-2">
+          {hasPermission && <WeatherToggle />}
           <ThemeToggle />
           {!isInstalled && (
             <button

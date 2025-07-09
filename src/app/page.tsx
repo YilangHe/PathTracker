@@ -21,6 +21,7 @@ import { StationCode, StationConfig } from "../types/path";
 import { useMultiStationData } from "../hooks/useMultiStationData";
 import { useAlerts } from "../hooks/useAlerts";
 import { useGeolocation } from "../hooks/useGeolocation";
+import { useUserPreferences } from "../contexts/UserPreferencesContext";
 import { getStalenessStatus, formatTime } from "../utils/pathHelpers";
 import { StatusRibbon } from "../components/StatusRibbon";
 import { AlertsCard } from "../components/AlertsCard";
@@ -143,6 +144,8 @@ export default function PathTracker() {
     userLocation,
   } = useGeolocation();
 
+  const { preferences } = useUserPreferences();
+
   // Sensors for drag and drop
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -261,8 +264,8 @@ export default function PathTracker() {
         )}
       </AnimatePresence>
 
-      {/* Weather Widget - Only show if user has granted location permission */}
-      {hasPermission && userLocation && (
+      {/* Weather Widget - Only show if user has granted location permission and enabled it in preferences */}
+      {hasPermission && userLocation && preferences.showWeatherWidget && (
         <WeatherWidget userLocation={userLocation} />
       )}
 
