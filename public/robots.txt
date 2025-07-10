@@ -1,14 +1,28 @@
-# Robots.txt for PathTracker
+# Robots.txt for PATH Train Tracker
 # Allow all search engines to crawl the site
 User-agent: *
 Allow: /
 
-# Disallow crawling of admin or sensitive areas (if any exist in future)
+# Explicitly allow important pages
+Allow: /disclaimer
+Allow: /add-to-home-screen
+
+# Disallow crawling of potential future admin or sensitive areas
 # Disallow: /admin/
 # Disallow: /api/
+
+# Special instructions for Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Special instructions for Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
 
 # Sitemap location
 Sitemap: https://www.livepathtracker.com/sitemap.xml
 
-# Crawl delay (optional - helps prevent overwhelming the server)
-Crawl-delay: 1 
+# Host declaration
+Host: https://www.livepathtracker.com 

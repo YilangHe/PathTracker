@@ -61,6 +61,74 @@ const loadFromStorage = function <T>(key: string, defaultValue: T): T {
   return defaultValue;
 };
 
+// Static content component for SEO and crawlers
+const StaticContent = () => (
+  <div className="mx-auto max-w-4xl p-4 space-y-6">
+    <div className="text-center space-y-4">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        PATH Train Tracker
+      </h1>
+      <p className="text-lg text-gray-600 dark:text-gray-300">
+        Real-time PATH train arrivals for New York and New Jersey
+      </p>
+      <div className="text-sm text-gray-500 dark:text-gray-400">
+        Track live train arrivals • Multiple stations • Real-time updates
+      </div>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+          Features
+        </h2>
+        <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+          <li className="flex items-center">
+            <span className="mr-2">🚊</span>
+            Real-time train arrivals
+          </li>
+          <li className="flex items-center">
+            <span className="mr-2">📍</span>
+            Multiple station tracking
+          </li>
+          <li className="flex items-center">
+            <span className="mr-2">🔄</span>
+            Live updates every 30 seconds
+          </li>
+          <li className="flex items-center">
+            <span className="mr-2">📱</span>
+            Mobile-friendly design
+          </li>
+          <li className="flex items-center">
+            <span className="mr-2">🌍</span>
+            Location-based closest station
+          </li>
+        </ul>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+          PATH System
+        </h2>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">
+          The PATH system connects New York City and New Jersey with 13 stations
+          across 4 lines.
+        </p>
+        <div className="text-sm text-gray-500 dark:text-gray-400">
+          <p>• 24/7 service between NYC and NJ</p>
+          <p>• Connects to NYC subway system</p>
+          <p>• Serves over 80 million riders annually</p>
+        </div>
+      </div>
+    </div>
+
+    <div className="text-center">
+      <div className="text-sm text-gray-500 dark:text-gray-400">
+        Loading your personalized train tracker...
+      </div>
+    </div>
+  </div>
+);
+
 /**
  * PATH realtime feed UI
  *  — Multi-station support with drag-and-drop reordering
@@ -129,11 +197,12 @@ export default function PathTracker() {
       setShowAlertsCard(true);
       const timer = setTimeout(() => {
         setShowAlertsCard(false);
-      }, 1000); // Show "no alerts" for 3 seconds before hiding
+      }, 1000); // Show "no alerts" for 1 second before hiding
 
       return () => clearTimeout(timer);
     }
   }, [alertsLoading, alertsError, alerts.length]);
+
   const {
     closestStation,
     closestStationData,
@@ -224,15 +293,9 @@ export default function PathTracker() {
     hasStationCachedData || alertsHasCachedData
   );
 
-  // Don't render until we've loaded from localStorage
+  // Show static content until JavaScript loads and data is available
   if (!isLoaded) {
-    return (
-      <div className="mx-auto max-w-4xl p-4 space-y-4">
-        <div className="text-center text-gray-500">
-          Loading your saved stations...
-        </div>
-      </div>
-    );
+    return <StaticContent />;
   }
 
   return (

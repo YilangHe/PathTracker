@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   // Generate build ID for cache busting
   generateBuildId: async () => {
     // Use timestamp for build ID to ensure unique builds
