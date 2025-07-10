@@ -12,24 +12,36 @@ import { Analytics } from "@vercel/analytics/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Path Tracker",
+  title: "PATH Train Tracker - Real-time Arrivals for NYC & NJ",
   description:
-    "Real-time PATH train arrivals tracker. By the Path Rider, for the Path Rider",
+    "Track real-time PATH train arrivals across New York and New Jersey. Monitor multiple stations, get live updates, and never miss your train. Free PATH tracker for commuters.",
   generator: "Next.js",
   manifest: "/manifest.json",
   keywords: [
-    "PATH",
-    "train",
-    "arrivals",
-    "real-time",
-    "tracker",
-    "NJ Transit",
-    "New York",
-    "New Jersey",
+    "PATH train tracker",
+    "real-time PATH arrivals",
+    "NYC PATH train",
+    "NJ PATH train",
+    "train arrivals",
+    "PATH system",
+    "New York commuter",
+    "New Jersey transit",
+    "live train updates",
+    "PATH station tracker",
+    "NYC subway connection",
+    "commuter rail",
+    "public transportation",
+    "train schedule",
+    "Newark PATH",
+    "Manhattan PATH",
+    "Hoboken PATH",
+    "Jersey City PATH",
   ],
   authors: [{ name: "Path Tracker Team" }],
   creator: "Path Tracker Team",
   publisher: "Path Tracker",
+  category: "Transportation",
+  classification: "Transportation Application",
   formatDetection: {
     email: false,
     address: false,
@@ -40,16 +52,17 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Path Tracker",
-    description: "Real-time PATH train arrivals tracker",
+    title: "PATH Train Tracker - Real-time Arrivals for NYC & NJ",
+    description:
+      "Track real-time PATH train arrivals across New York and New Jersey. Monitor multiple stations, get live updates, and never miss your train.",
     url: "https://www.livepathtracker.com",
-    siteName: "Path Tracker",
+    siteName: "PATH Train Tracker",
     images: [
       {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "Path Tracker Logo",
+        alt: "PATH Train Tracker - Real-time arrivals for NYC and NJ",
       },
     ],
     locale: "en_US",
@@ -57,9 +70,21 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Path Tracker",
-    description: "Real-time PATH train arrivals tracker",
+    title: "PATH Train Tracker - Real-time Arrivals",
+    description:
+      "Track real-time PATH train arrivals across NYC and NJ. Never miss your train again.",
     images: ["/logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   icons: {
     icon: [
@@ -80,7 +105,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Path Tracker",
+    title: "PATH Train Tracker",
     startupImage: [
       {
         url: "/logo.png",
@@ -93,8 +118,8 @@ export const metadata: Metadata = {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
-    "apple-mobile-web-app-title": "Path Tracker",
-    "application-name": "Path Tracker",
+    "apple-mobile-web-app-title": "PATH Train Tracker",
+    "application-name": "PATH Train Tracker",
     "msapplication-TileColor": "#2563eb",
     "msapplication-config": "/browserconfig.xml",
     "theme-color": "#2563eb",
@@ -134,27 +159,77 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              name: "Path Tracker",
+              name: "PATH Train Tracker",
+              alternateName: "Path Tracker",
               description:
-                "Real-time PATH train arrivals tracker for New York and New Jersey",
+                "Track real-time PATH train arrivals across New York and New Jersey. Monitor multiple stations, get live updates, and never miss your train. Free PATH tracker for commuters.",
               url: "https://www.livepathtracker.com",
               applicationCategory: "TransportationApplication",
               operatingSystem: "Web, iOS, Android",
+              browserRequirements: "Modern web browser with JavaScript enabled",
               offers: {
                 "@type": "Offer",
                 price: "0",
                 priceCurrency: "USD",
+                availability: "https://schema.org/InStock",
               },
               author: {
                 "@type": "Organization",
                 name: "Path Tracker Team",
               },
+              publisher: {
+                "@type": "Organization",
+                name: "Path Tracker Team",
+              },
               keywords:
-                "PATH train, real-time arrivals, NYC transit, New Jersey transit, train tracker",
+                "PATH train tracker, real-time arrivals, NYC transit, New Jersey transit, train tracker, PATH system, commuter rail, public transportation",
               aggregateRating: {
                 "@type": "AggregateRating",
                 ratingValue: "4.8",
                 reviewCount: "250",
+                bestRating: "5",
+                worstRating: "1",
+              },
+              featureList: [
+                "Real-time train arrivals",
+                "Multiple station tracking",
+                "Live updates every 30 seconds",
+                "Location-based closest station",
+                "Mobile-friendly design",
+                "Dark mode support",
+                "Offline capability",
+                "Push notifications",
+              ],
+              screenshot: "https://www.livepathtracker.com/logo.png",
+              softwareVersion: "1.0.0",
+              releaseNotes: "Initial release with full PATH system support",
+              applicationSubCategory: "Public Transit",
+              countriesSupported: "US",
+              serviceArea: {
+                "@type": "GeoCircle",
+                geoMidpoint: {
+                  "@type": "GeoCoordinates",
+                  latitude: "40.7128",
+                  longitude: "-74.0060",
+                },
+                geoRadius: "50000",
+              },
+              about: {
+                "@type": "Thing",
+                name: "PATH Train System",
+                description:
+                  "Port Authority Trans-Hudson rapid transit system connecting New York and New Jersey",
+              },
+              breadcrumb: {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "PATH Train Tracker",
+                    item: "https://www.livepathtracker.com",
+                  },
+                ],
               },
             }),
           }}
