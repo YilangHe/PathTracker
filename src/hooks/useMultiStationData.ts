@@ -228,6 +228,37 @@ export const useMultiStationData = (stationCodes: StationCode[]) => {
       return;
     }
 
+    // Additional check for web crawlers and bots that might have window defined
+    // but should not trigger API calls
+    if (typeof navigator !== "undefined" && navigator.userAgent) {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isCrawler =
+        /googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com\/\+\/web\/snippet\//i.test(
+          userAgent
+        );
+
+      if (isCrawler) {
+        // For crawlers, set up non-error states with recent timestamps
+        if (stationCodes.length > 0) {
+          setStationData((prev) => {
+            const updated = { ...prev };
+            stationCodes.forEach((code) => {
+              updated[code] = {
+                data: null,
+                loading: false,
+                error: null,
+                hasCachedData: false,
+              };
+            });
+            return updated;
+          });
+          setLastUpdated(new Date().toISOString());
+          setLastSuccessfulUpdate(new Date().toISOString());
+        }
+        return;
+      }
+    }
+
     console.log("Setting up initial polling for stations:", stationCodes);
 
     // Initial load

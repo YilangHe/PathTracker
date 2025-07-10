@@ -129,6 +129,126 @@ const StaticContent = () => (
   </div>
 );
 
+// Content for when APIs are unavailable but we want to show meaningful content
+const ServiceUnavailableContent = () => (
+  <div className="mx-auto max-w-4xl p-4 space-y-6">
+    <div className="text-center space-y-4">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        PATH Train Tracker
+      </h1>
+      <p className="text-lg text-gray-600 dark:text-gray-300">
+        Real-time PATH train arrivals for New York and New Jersey
+      </p>
+    </div>
+
+    <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+      <div className="flex items-center space-x-3">
+        <div className="text-blue-600 dark:text-blue-400">
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
+            Service Temporarily Unavailable
+          </h3>
+          <p className="text-blue-800 dark:text-blue-200 mt-1">
+            We're currently unable to connect to the PATH data service. This may
+            be due to maintenance or temporary network issues.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+          PATH System Information
+        </h2>
+        <div className="space-y-3 text-gray-600 dark:text-gray-300">
+          <div>
+            <h3 className="font-medium text-gray-900 dark:text-white">
+              Operating Hours
+            </h3>
+            <p className="text-sm">24/7 service between NYC and NJ</p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900 dark:text-white">Lines</h3>
+            <p className="text-sm">
+              Newark-World Trade Center, Hoboken-World Trade Center, Journal
+              Square-33rd Street, Newark-33rd Street
+            </p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900 dark:text-white">
+              Stations
+            </h3>
+            <p className="text-sm">
+              13 stations across Manhattan, Hoboken, Jersey City, and Newark
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+          What You Can Do
+        </h2>
+        <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+          <li className="flex items-center">
+            <span className="mr-2">🔄</span>
+            Refresh the page to try again
+          </li>
+          <li className="flex items-center">
+            <span className="mr-2">📱</span>
+            Add this page to your home screen
+          </li>
+          <li className="flex items-center">
+            <span className="mr-2">⏰</span>
+            Check back in a few minutes
+          </li>
+          <li className="flex items-center">
+            <span className="mr-2">🌐</span>
+            Visit the official PATH website
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div className="text-center">
+      <button
+        onClick={() => window.location.reload()}
+        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+      >
+        <svg
+          className="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
+        </svg>
+        Try Again
+      </button>
+    </div>
+  </div>
+);
+
 /**
  * PATH realtime feed UI
  *  — Multi-station support with drag-and-drop reordering
@@ -296,6 +416,20 @@ export default function PathTracker() {
   // Show static content until JavaScript loads and data is available
   if (!isLoaded) {
     return <StaticContent />;
+  }
+
+  // Check if all services are unavailable (no cached data and all have errors)
+  const allStationsHaveErrors =
+    Object.values(stationData).length > 0 &&
+    Object.values(stationData).every(
+      (station) => station.error && !station.hasCachedData
+    );
+  const alertsHaveError = alertsError && !alertsHasCachedData;
+  const shouldShowServiceUnavailable = allStationsHaveErrors && alertsHaveError;
+
+  // Show service unavailable content if all APIs are failing and there's no cached data
+  if (shouldShowServiceUnavailable && typeof window !== "undefined") {
+    return <ServiceUnavailableContent />;
   }
 
   return (
