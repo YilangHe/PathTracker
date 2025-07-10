@@ -121,6 +121,21 @@ export const useGeolocation = () => {
     // Only run in browser environment, not during SSR or crawling
     if (typeof window === "undefined") return;
 
+    // Additional check for web crawlers and bots that might have window defined
+    // but should not trigger geolocation requests
+    if (typeof navigator !== "undefined" && navigator.userAgent) {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isCrawler =
+        /googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com\/\+\/web\/snippet\//i.test(
+          userAgent
+        );
+
+      if (isCrawler) {
+        // For crawlers, don't request location
+        return;
+      }
+    }
+
     requestLocation();
   }, [requestLocation]);
 

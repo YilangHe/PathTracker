@@ -72,6 +72,26 @@ export const useAlerts = () => {
       return;
     }
 
+    // Additional check for web crawlers and bots that might have window defined
+    // but should not trigger API calls
+    if (typeof navigator !== "undefined" && navigator.userAgent) {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isCrawler =
+        /googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com\/\+\/web\/snippet\//i.test(
+          userAgent
+        );
+
+      if (isCrawler) {
+        // For crawlers, set up non-error states with recent timestamps
+        setLoading(false);
+        setError(null);
+        setData([]);
+        setLastUpdated(new Date().toISOString());
+        setLastSuccessfulUpdate(new Date().toISOString());
+        return;
+      }
+    }
+
     setLoading(true);
     load();
     const id = setInterval(load, POLLING_INTERVAL);
