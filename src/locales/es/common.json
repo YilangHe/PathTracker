@@ -142,5 +142,16 @@
     "error": "Error al cargar llegadas:",
     "noArrivals": "No hay llegadas programadas para esta estación en este momento.",
     "basedOnLocation": "Basado en tu ubicación: {{lat}}, {{lon}}"
+  },
+  "status": {
+    "live": "En vivo",
+    "recent": "Reciente",
+    "stale": "Desactualizado",
+    "veryStale": "Muy Desactualizado",
+    "error": "Error",
+    "unknown": "Desconocido",
+    "usingCachedData": "Usando datos en caché",
+    "lastUpdated": "Última actualización",
+    "never": "Nunca"
   }
 }

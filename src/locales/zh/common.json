@@ -142,5 +142,16 @@
     "error": "加载到站信息时出错：",
     "noArrivals": "此站点目前没有预定的到站列车。",
     "basedOnLocation": "基于您的位置：{{lat}}, {{lon}}"
+  },
+  "status": {
+    "live": "实时",
+    "recent": "最近",
+    "stale": "过时",
+    "veryStale": "非常过时",
+    "error": "错误",
+    "unknown": "未知",
+    "usingCachedData": "使用缓存数据",
+    "lastUpdated": "最后更新",
+    "never": "从未"
   }
 }

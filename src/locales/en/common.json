@@ -142,5 +142,16 @@
     "error": "Error loading arrivals:",
     "noArrivals": "No arrivals scheduled for this station at the moment.",
     "basedOnLocation": "Based on your location: {{lat}}, {{lon}}"
+  },
+  "status": {
+    "live": "Live",
+    "recent": "Recent",
+    "stale": "Stale",
+    "veryStale": "Very Stale",
+    "error": "Error",
+    "unknown": "Unknown",
+    "usingCachedData": "Using cached data",
+    "lastUpdated": "Last updated",
+    "never": "Never"
   }
 }
