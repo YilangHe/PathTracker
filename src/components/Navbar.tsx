@@ -7,6 +7,7 @@ import { usePWAInstall } from "@/hooks/usePWAInstall";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WeatherToggle } from "@/components/WeatherToggle";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -18,10 +19,12 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { useTranslations } from 'next-intl';
 
 export function Navbar() {
   const { isInstallable, isInstalled, installPWA } = usePWAInstall();
   const { hasPermission } = useGeolocation();
+  const t = useTranslations();
 
   const handleInstallClick = async () => {
     if (isInstallable) {
@@ -50,7 +53,7 @@ export function Navbar() {
               priority
             />
             <span className="hidden font-bold sm:inline-block text-white">
-              Path Tracker
+              {t('nav.title')}
             </span>
           </Link>
         </div>
@@ -58,7 +61,7 @@ export function Navbar() {
           <NavigationMenuList>
             <NavigationMenuItem className="hidden sm:block">
               <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors">
-                Features
+                {t('nav.features')}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 w-[320px] sm:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-popover border border-border shadow-lg rounded-md">
@@ -69,22 +72,21 @@ export function Navbar() {
                         href="/"
                       >
                         <div className="mb-2 mt-4 text-lg font-medium text-primary">
-                          Real-time Arrivals
+                          {t('nav.realTimeArrivals')}
                         </div>
                         <p className="text-sm leading-tight text-muted-foreground">
-                          Track PATH train arrivals in real-time with our live
-                          dashboard
+                          {t('nav.realTimeArrivalsDesc')}
                         </p>
                       </Link>
                     </NavigationMenuLink>
                   </li>
-                  <ListItem href="/" title="Multi-Station View">
+                  <ListItem href="/" title={t('nav.multiStationView')}>
                     Monitor multiple stations simultaneously
                   </ListItem>
-                  <ListItem href="/" title="Drag & Drop">
+                  <ListItem href="/" title={t('nav.dragAndDrop')}>
                     Reorder stations by dragging cards
                   </ListItem>
-                  <ListItem href="/" title="Service Alerts">
+                  <ListItem href="/" title={t('nav.serviceAlerts')}>
                     Stay informed about service disruptions
                   </ListItem>
                 </ul>
@@ -92,36 +94,36 @@ export function Navbar() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors">
-                About
+                {t('nav.about')}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[320px] gap-3 p-4 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover border border-border shadow-lg rounded-md">
                   <ListItem
-                    title="About PATH"
+                    title={t('nav.aboutPath')}
                     href="https://www.panynj.gov/path"
                   >
                     Learn more about the PATH train system
                   </ListItem>
                   <ListItem
-                    title="Data Source"
+                    title={t('nav.dataSource')}
                     href="https://www.panynj.gov/path/en/schedules-maps.html"
                   >
                     Official PATH schedules and real-time data
                   </ListItem>
                   <ListItem
-                    title="Add to Home Screen"
+                    title={t('nav.addToHomeScreen')}
                     href="/add-to-home-screen"
                   >
                     Install this app on your device for quick access
                   </ListItem>
-                  <ListItem title="Disclaimer" href="/disclaimer">
+                  <ListItem title={t('nav.disclaimer')} href="/disclaimer">
                     Important legal information and data sources
                   </ListItem>
-                  <ListItem title="Privacy" href="/">
+                  <ListItem title={t('nav.privacy')} href="/">
                     Your data stays on your device
                   </ListItem>
                   <ListItem
-                    title="Contact"
+                    title={t('nav.contact')}
                     href="mailto:livepathtracker@gmail.com"
                   >
                     Questions or feedback about this app
@@ -134,6 +136,7 @@ export function Navbar() {
         <div className="ml-auto flex items-center gap-2">
           {hasPermission && <WeatherToggle />}
           <ThemeToggle />
+          <LanguageSwitcher />
           {!isInstalled && (
             <button
               onClick={handleInstallClick}
@@ -154,7 +157,7 @@ export function Navbar() {
                 />
               </svg>
               <span className="hidden sm:inline">
-                {isInstallable ? "Install App" : "Install Guide"}
+                {isInstallable ? t('nav.installApp') : t('nav.installGuide')}
               </span>
               <span className="sm:hidden">
                 {isInstallable ? "Install" : "Guide"}
@@ -175,7 +178,7 @@ export function Navbar() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="hidden sm:inline">App Installed</span>
+              <span className="hidden sm:inline">{t('nav.appInstalled')}</span>
               <span className="sm:hidden">Installed</span>
             </div>
           )}

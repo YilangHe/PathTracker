@@ -1,0 +1,118 @@
+{
+  "app": {
+    "title": "PATH Train Tracker",
+    "description": "Real-time PATH train arrivals for New York and New Jersey",
+    "tagline": "Track live train arrivals • Multiple stations • Real-time updates"
+  },
+  "nav": {
+    "title": "Path Tracker",
+    "features": "Features",
+    "about": "About",
+    "installApp": "Install App",
+    "installGuide": "Install Guide",
+    "appInstalled": "App Installed",
+    "realTimeArrivals": "Real-time Arrivals",
+    "realTimeArrivalsDesc": "Track PATH train arrivals in real-time with our live dashboard",
+    "multiStationView": "Multi-Station View",
+    "dragAndDrop": "Drag & Drop",
+    "serviceAlerts": "Service Alerts",
+    "aboutPath": "About PATH",
+    "dataSource": "Data Source",
+    "addToHomeScreen": "Add to Home Screen",
+    "disclaimer": "Disclaimer",
+    "privacy": "Privacy",
+    "contact": "Contact"
+  },
+  "footer": {
+    "copyright": "© {year} Path Tracker. All rights reserved.",
+    "tagline": "By the Path rider, for the path rider",
+    "madeBy": "Made with ❤️ by @Noodles",
+    "buyMeCoffee": "Buy me a PATH ride",
+    "dataSource": "Data © Port Authority of NY & NJ • Updates every 10s",
+    "disclaimer": "Disclaimer",
+    "contact": "Contact"
+  },
+  "home": {
+    "features": "Features",
+    "realTimeArrivals": "Real-time train arrivals",
+    "multiStation": "Multiple station tracking",
+    "liveUpdates": "Live updates every 30 seconds",
+    "mobileDesign": "Mobile-friendly design",
+    "locationBased": "Location-based closest station",
+    "pathSystem": "PATH System",
+    "pathSystemDesc": "The PATH system connects New York City and New Jersey with 13 stations across 4 lines.",
+    "service247": "24/7 service between NYC and NJ",
+    "connectsSubway": "Connects to NYC subway system",
+    "ridersAnnually": "Serves over 80 million riders annually",
+    "loading": "Loading your personalized train tracker...",
+    "serviceUnavailable": "Service Temporarily Unavailable",
+    "serviceUnavailableDesc": "We're currently unable to connect to the PATH data service...",
+    "tryAgain": "Try Again"
+  },
+  "station": {
+    "loadingArrivals": "Loading arrivals...",
+    "errorLatest": "Unable to get latest arrivals. Showing last known data.",
+    "errorLoading": "Error loading arrivals:",
+    "noArrivals": "No arrivals scheduled for this station at the moment.",
+    "moveStation": "Move station up/down",
+    "removeStation": "Remove station"
+  },
+  "addStation": {
+    "title": "Add New Station",
+    "selected": "Selected:",
+    "alreadyAdded": "Already Added",
+    "add": "Add Station",
+    "cancel": "Cancel"
+  },
+  "alerts": {
+    "title": "PATH Alerts",
+    "loading": "Loading...",
+    "loadingAlerts": "Loading alerts...",
+    "alertCount": "{count, plural, =0 {No alerts} =1 {# alert} other {# alerts}}",
+    "usingCached": "Using cached data",
+    "error": "Error",
+    "errorLatest": "Unable to get latest alerts. Showing last known data.",
+    "errorLoading": "Error loading alerts:",
+    "noAlerts": "No active alerts at this time.",
+    "updated": "Updated:"
+  },
+  "weather": {
+    "title": "Current Weather",
+    "loading": "Loading...",
+    "error": "Unable to load weather data",
+    "unavailable": "Weather data unavailable",
+    "temperature": "{temp}°F",
+    "wind": "{windSpeed} mph",
+    "humidity": "{humidity}%"
+  },
+  "update": {
+    "title": "New Update Available!",
+    "fresh": "Fresh",
+    "description": "Get the latest features, improvements, and bug fixes.",
+    "version": "Version:",
+    "updateNow": "Update Now",
+    "later": "Later"
+  },
+  "disclaimer": {
+    "title": "Disclaimer",
+    "importantNotice": "Important Notice",
+    "independentPlatform": "Path Tracker is an independent platform...",
+    "accuracyTitle": "Accuracy of Information",
+    "officialResources": "Official PATH Resources",
+    "officialInfo": "For the most up-to-date and official information...",
+    "lastUpdated": "Last updated:"
+  },
+  "addToHomeScreen": {
+    "title": "Add Path Tracker to Your Home Screen",
+    "description": "Get quick access to real-time PATH train arrivals...",
+    "step1": "Step 1: Open the Share Menu",
+    "step2": "Step 2: Find 'Add to Home Screen'",
+    "step3": "Step 3: Confirm Installation",
+    "whyAdd": "Why Add to Home Screen?",
+    "benefit1": "Instant access to real-time PATH arrivals",
+    "benefit2": "No need to remember the website URL",
+    "benefit3": "Faster loading and better performance",
+    "benefit4": "Works offline for previously viewed stations",
+    "backToTracker": "Back to Path Tracker"
+  }
+}

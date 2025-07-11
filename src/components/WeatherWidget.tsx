@@ -1,8 +1,11 @@
+"use client";
+
 import { memo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { CloudRain, Wind, Droplets, MapPin, X } from "lucide-react";
 import { useWeather } from "../hooks/useWeather";
 import { useUserPreferences } from "../contexts/UserPreferencesContext";
+import { useTranslations } from 'next-intl';
 
 interface WeatherWidgetProps {
   userLocation: { lat: number; lon: number } | null;
@@ -12,6 +15,7 @@ export const WeatherWidget = memo(({ userLocation }: WeatherWidgetProps) => {
   const { data, loading, error, getWeatherDescription, getWeatherIcon } =
     useWeather(userLocation?.lat || null, userLocation?.lon || null);
   const { toggleWeatherWidget } = useUserPreferences();
+  const t = useTranslations();
 
   if (!userLocation) {
     return null;
@@ -34,14 +38,14 @@ export const WeatherWidget = memo(({ userLocation }: WeatherWidgetProps) => {
           <div className="flex items-center gap-3">
             <MapPin className="w-4 h-4 text-indigo-300" />
             <span className="text-sm font-medium text-indigo-100">
-              Current Weather
+              {t('weather.title')}
             </span>
           </div>
 
           {loading && (
             <div className="flex items-center gap-2 text-indigo-300">
               <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-indigo-300"></div>
-              <span className="text-xs">Loading...</span>
+              <span className="text-xs">{t('weather.loading')}</span>
             </div>
           )}
         </div>
@@ -50,7 +54,7 @@ export const WeatherWidget = memo(({ userLocation }: WeatherWidgetProps) => {
           <div className="mt-3 p-2 bg-red-800/50 border border-red-600 rounded text-xs">
             <div className="flex items-center gap-1 text-red-100">
               <CloudRain className="w-3 h-3" />
-              <span>Unable to load weather data</span>
+              <span>{t('weather.error')}</span>
             </div>
           </div>
         )}
@@ -63,7 +67,7 @@ export const WeatherWidget = memo(({ userLocation }: WeatherWidgetProps) => {
               </div>
               <div>
                 <div className="text-lg font-semibold">
-                  {data.temperature}°F
+                  {t('weather.temperature', { temp: data.temperature })}
                 </div>
                 <div className="text-xs text-indigo-200">
                   {getWeatherDescription(data.weatherCode)}
@@ -74,11 +78,11 @@ export const WeatherWidget = memo(({ userLocation }: WeatherWidgetProps) => {
             <div className="flex items-center gap-4 text-xs text-indigo-200">
               <div className="flex items-center gap-1">
                 <Wind className="w-3 h-3" />
-                <span>{data.windSpeed} mph</span>
+                <span>{t('weather.wind', { windSpeed: data.windSpeed })}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Droplets className="w-3 h-3" />
-                <span>{data.humidity}%</span>
+                <span>{t('weather.humidity', { humidity: data.humidity })}</span>
               </div>
             </div>
           </div>
@@ -86,7 +90,7 @@ export const WeatherWidget = memo(({ userLocation }: WeatherWidgetProps) => {
 
         {!error && !loading && !data && (
           <div className="mt-3 text-xs text-indigo-200">
-            Weather data unavailable
+            {t('weather.unavailable')}
           </div>
         )}
       </CardContent>
