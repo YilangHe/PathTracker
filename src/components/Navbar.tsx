@@ -19,23 +19,24 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 export function Navbar() {
   const { isInstallable, isInstalled, installPWA } = usePWAInstall();
   const { hasPermission } = useGeolocation();
   const t = useTranslations();
+  const locale = useLocale();
 
   const handleInstallClick = async () => {
     if (isInstallable) {
       const success = await installPWA();
       if (!success) {
         // If programmatic install fails, redirect to instructions
-        window.location.href = "/add-to-home-screen";
+        window.location.href = `/${locale}/add-to-home-screen`;
       }
     } else {
       // If not installable, show instructions
-      window.location.href = "/add-to-home-screen";
+      window.location.href = `/${locale}/add-to-home-screen`;
     }
   };
 
@@ -43,7 +44,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-blue-600 shadow-lg">
       <div className="container max-w-4xl mx-auto flex h-14 items-center px-4">
         <div className="mr-4 flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Link href={`/${locale}`} className="mr-6 flex items-center space-x-2">
             <Image
               src="/logo.png"
               alt="PATH Logo"
@@ -69,7 +70,7 @@ export function Navbar() {
                     <NavigationMenuLink asChild>
                       <Link
                         className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-6 no-underline outline-none focus:shadow-md hover:from-primary/10 hover:to-primary/20 dark:hover:from-primary/20 dark:hover:to-primary/30 transition-colors"
-                        href="/"
+                        href={`/${locale}`}
                       >
                         <div className="mb-2 mt-4 text-lg font-medium text-primary">
                           {t('nav.realTimeArrivals')}
@@ -80,13 +81,13 @@ export function Navbar() {
                       </Link>
                     </NavigationMenuLink>
                   </li>
-                  <ListItem href="/" title={t('nav.multiStationView')}>
+                  <ListItem href={`/${locale}`} title={t('nav.multiStationView')}>
                     Monitor multiple stations simultaneously
                   </ListItem>
-                  <ListItem href="/" title={t('nav.dragAndDrop')}>
+                  <ListItem href={`/${locale}`} title={t('nav.dragAndDrop')}>
                     Reorder stations by dragging cards
                   </ListItem>
-                  <ListItem href="/" title={t('nav.serviceAlerts')}>
+                  <ListItem href={`/${locale}`} title={t('nav.serviceAlerts')}>
                     Stay informed about service disruptions
                   </ListItem>
                 </ul>
@@ -112,14 +113,14 @@ export function Navbar() {
                   </ListItem>
                   <ListItem
                     title={t('nav.addToHomeScreen')}
-                    href="/add-to-home-screen"
+                    href={`/${locale}/add-to-home-screen`}
                   >
                     Install this app on your device for quick access
                   </ListItem>
-                  <ListItem title={t('nav.disclaimer')} href="/disclaimer">
+                  <ListItem title={t('nav.disclaimer')} href={`/${locale}/disclaimer`}>
                     Important legal information and data sources
                   </ListItem>
-                  <ListItem title={t('nav.privacy')} href="/">
+                  <ListItem title={t('nav.privacy')} href={`/${locale}`}>
                     Your data stays on your device
                   </ListItem>
                   <ListItem

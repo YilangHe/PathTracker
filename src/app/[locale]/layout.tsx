@@ -25,7 +25,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
-  const messages = await getMessages();
+  const messages = await getMessages({ locale });
   
   return {
     title: messages.app?.title || "PATH Train Tracker - Real-time Arrivals for NYC & NJ",
@@ -153,7 +153,7 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  const messages = await getMessages();
+  const messages = await getMessages({ locale });
 
   return (
     <html lang={locale}>
@@ -258,7 +258,7 @@ export default async function LocaleLayout({
             }),
           }}
         />
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider>
             <UserPreferencesProvider>
               <PWAProvider>

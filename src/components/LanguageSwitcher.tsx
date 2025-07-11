@@ -12,8 +12,17 @@ export function LanguageSwitcher() {
   const pathname = usePathname();
 
   const handleLocaleChange = (newLocale: string) => {
-    const currentPathname = pathname.replace(`/${locale}`, '');
-    router.push(`/${newLocale}${currentPathname}`);
+    // Get the current pathname segments
+    const segments = pathname.split('/').filter(Boolean);
+    
+    // Remove the locale segment if it exists
+    if (locales.includes(segments[0] as any)) {
+      segments.shift();
+    }
+    
+    // Build the new path with the new locale
+    const newPath = `/${newLocale}${segments.length > 0 ? '/' + segments.join('/') : ''}`;
+    router.push(newPath);
   };
 
   return (

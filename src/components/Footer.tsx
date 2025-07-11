@@ -2,11 +2,12 @@
 
 import React from "react";
 import { Github, Heart } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <footer className="border-t bg-muted/30 mt-auto">
@@ -58,7 +59,7 @@ export function Footer() {
             </div>
             <div className="flex items-center space-x-4 text-xs text-muted-foreground">
               <a
-                href="/disclaimer"
+                href={`/${locale}/disclaimer`}
                 className="hover:text-foreground transition-colors"
               >
                 {t('footer.disclaimer')}
