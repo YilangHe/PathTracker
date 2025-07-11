@@ -70,3 +70,39 @@ export interface StationConfig {
 export interface StationListState {
   stations: StationConfig[];
 }
+
+// Commute feature types
+export interface CommutePair {
+  homeStation: StationCode;
+  workStation: StationCode;
+}
+
+export interface CommuteRoute {
+  segments: RouteSegment[];
+  totalStations: number;
+  requiresTransfer: boolean;
+  estimatedDuration: number; // minutes
+}
+
+export interface RouteSegment {
+  line: PathLine;
+  fromStation: StationCode;
+  toStation: StationCode;
+  stations: StationCode[];
+  color: string;
+  isTransfer?: boolean;
+}
+
+export interface PathLine {
+  id: string;
+  name: string;
+  color: string;
+  stations: StationCode[];
+  frequency: number; // typical minutes between trains
+}
+
+export interface CommuteDirection {
+  label: "Morning Commute" | "Evening Commute";
+  route: CommuteRoute;
+  timeRange: string;
+}

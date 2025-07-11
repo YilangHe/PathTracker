@@ -81,6 +81,9 @@ export function Navbar() {
                   <ListItem href="/" title="Multi-Station View">
                     Monitor multiple stations simultaneously
                   </ListItem>
+                  <ListItem href="/commute" title="Commute Planner">
+                    Set up daily home-to-work routes with smart timing
+                  </ListItem>
                   <ListItem href="/" title="Drag & Drop">
                     Reorder stations by dragging cards
                   </ListItem>

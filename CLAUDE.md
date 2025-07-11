@@ -98,3 +98,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Console removal in production builds
 - Service worker caching strategies
 - Optimized bundle with Next.js 14 features
+
+### Commute Feature
+- **CommuteContext**: Manages home/work station preferences with localStorage persistence
+- **Time-based Direction**: Automatically shows morning (2AM-2PM) or evening (2PM-2AM) commute
+- **Route Calculation**: Smart routing with transfer detection using `routeCalculator.ts`
+- **Home Integration**: CommuteHomeCard shows real-time arrivals for starting and transfer stations
+- **Visual Design**: Color-coded stations (blue for morning start, purple for evening start, orange for transfers)
+- **Data Consistency**: Uses shared `formatArrivalTime` utility for -1 minute offset across all components

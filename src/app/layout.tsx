@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { PWAProvider } from "@/components/PWAProvider";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
+import { CommuteProvider } from "@/contexts/CommuteContext";
 import { OpenPanelComponent } from "@openpanel/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -236,7 +237,8 @@ export default function RootLayout({
         />
         <ThemeProvider>
           <UserPreferencesProvider>
-            <PWAProvider>
+            <CommuteProvider>
+              <PWAProvider>
               <OpenPanelComponent
                 clientId={process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID!}
                 trackScreenViews={true}
@@ -248,6 +250,7 @@ export default function RootLayout({
               <Footer />
               <Analytics />
             </PWAProvider>
+            </CommuteProvider>
           </UserPreferencesProvider>
         </ThemeProvider>
       </body>

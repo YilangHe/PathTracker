@@ -41,3 +41,46 @@ export const ALERTS_PROXY_URL = `https://corsproxy.io/?${encodeURIComponent(
 )}`;
 
 export const POLLING_INTERVAL = 10_000; // 10 seconds
+
+// PATH Line Definitions
+export const PATH_LINES = {
+  "NWK-WTC": {
+    id: "NWK-WTC",
+    name: "Newark - World Trade Center",
+    color: "#0066CC",
+    stations: ["NWK", "HAR", "JSQ", "GRV", "EXP", "WTC"],
+    frequency: 5,
+  },
+  "JSQ-33S": {
+    id: "JSQ-33S", 
+    name: "Journal Square - 33rd Street",
+    color: "#FF6600",
+    stations: ["JSQ", "GRV", "EXP", "NEW", "CHR", "09S", "14S", "23S", "33S"],
+    frequency: 5,
+  },
+  "HOB-33S": {
+    id: "HOB-33S",
+    name: "Hoboken - 33rd Street", 
+    color: "#0066CC",
+    stations: ["HOB", "CHR", "09S", "14S", "23S", "33S"],
+    frequency: 7,
+  },
+  "HOB-WTC": {
+    id: "HOB-WTC",
+    name: "Hoboken - World Trade Center",
+    color: "#009900", 
+    stations: ["HOB", "NEW", "EXP", "WTC"],
+    frequency: 7,
+  },
+} as const;
+
+// Transfer stations - stations that serve multiple lines
+export const TRANSFER_STATIONS = {
+  EXP: ["NWK-WTC", "JSQ-33S", "HOB-WTC"], // Exchange Place
+  JSQ: ["NWK-WTC", "JSQ-33S"], // Journal Square
+  GRV: ["NWK-WTC", "JSQ-33S"], // Grove Street  
+  NEW: ["JSQ-33S", "HOB-WTC"], // Newport
+  CHR: ["JSQ-33S", "HOB-33S"], // Christopher Street
+  "33S": ["JSQ-33S", "HOB-33S"], // 33rd Street
+  WTC: ["NWK-WTC", "HOB-WTC"], // World Trade Center
+} as const;

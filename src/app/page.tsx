@@ -29,6 +29,7 @@ import { DraggableStationCard } from "../components/DraggableStationCard";
 import { AddStationCard } from "../components/AddStationCard";
 import { ClosestStationCard } from "../components/ClosestStationCard";
 import { WeatherWidget } from "../components/WeatherWidget";
+import { CommuteHomeCard } from "../components/CommuteHomeCard";
 
 // LocalStorage keys
 const STATIONS_STORAGE_KEY = "pathTracker_stations";
@@ -465,6 +466,9 @@ export default function PathTracker() {
       {hasPermission && userLocation && preferences.showWeatherWidget && (
         <WeatherWidget userLocation={userLocation} />
       )}
+
+      {/* Commute Card - Always show, handles its own empty state */}
+      <CommuteHomeCard />
 
       {/* Closest Station Card - Only show if user has granted location permission */}
       {hasPermission && closestStation && (
