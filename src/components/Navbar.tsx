@@ -82,13 +82,13 @@ export function Navbar() {
                     </NavigationMenuLink>
                   </li>
                   <ListItem href={`/${locale}`} title={t('nav.multiStationView')}>
-                    Monitor multiple stations simultaneously
+                    {t('nav.multiStationViewDesc')}
                   </ListItem>
                   <ListItem href={`/${locale}`} title={t('nav.dragAndDrop')}>
-                    Reorder stations by dragging cards
+                    {t('nav.dragAndDropDesc')}
                   </ListItem>
                   <ListItem href={`/${locale}`} title={t('nav.serviceAlerts')}>
-                    Stay informed about service disruptions
+                    {t('nav.serviceAlertsDesc')}
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
@@ -103,31 +103,31 @@ export function Navbar() {
                     title={t('nav.aboutPath')}
                     href="https://www.panynj.gov/path"
                   >
-                    Learn more about the PATH train system
+                    {t('nav.aboutPathDesc')}
                   </ListItem>
                   <ListItem
                     title={t('nav.dataSource')}
                     href="https://www.panynj.gov/path/en/schedules-maps.html"
                   >
-                    Official PATH schedules and real-time data
+                    {t('nav.dataSourceDesc')}
                   </ListItem>
                   <ListItem
                     title={t('nav.addToHomeScreen')}
                     href={`/${locale}/add-to-home-screen`}
                   >
-                    Install this app on your device for quick access
+                    {t('nav.addToHomeScreenDesc')}
                   </ListItem>
                   <ListItem title={t('nav.disclaimer')} href={`/${locale}/disclaimer`}>
-                    Important legal information and data sources
+                    {t('nav.disclaimerDesc')}
                   </ListItem>
                   <ListItem title={t('nav.privacy')} href={`/${locale}`}>
-                    Your data stays on your device
+                    {t('nav.privacyDesc')}
                   </ListItem>
                   <ListItem
                     title={t('nav.contact')}
                     href="mailto:livepathtracker@gmail.com"
                   >
-                    Questions or feedback about this app
+                    {t('nav.contactDesc')}
                   </ListItem>
                 </ul>
               </NavigationMenuContent>

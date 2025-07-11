@@ -121,8 +121,7 @@ export default async function AddToHomeScreenPage({ params: { locale } }: Props)
                 </h2>
               </div>
               <p className="text-muted-foreground pl-13">
-                While viewing Path Tracker in your browser, tap the share button
-                at the bottom of your screen (Safari) or in the browser menu.
+                {t('addToHomeScreen.step1Desc')}
               </p>
             </div>
             <div className="flex items-center justify-center">
@@ -153,8 +152,7 @@ export default async function AddToHomeScreenPage({ params: { locale } }: Props)
                 </h2>
               </div>
               <p className="text-muted-foreground pl-13">
-                Look for the "Add to Home Screen" option in the share menu. You
-                may need to scroll down to find it.
+                {t('addToHomeScreen.step2Desc')}
               </p>
             </div>
             <div className="flex items-center justify-center">
@@ -184,8 +182,7 @@ export default async function AddToHomeScreenPage({ params: { locale } }: Props)
                 </h2>
               </div>
               <p className="text-muted-foreground pl-13">
-                Tap "Add to Home Screen" and then confirm by tapping "Add" in
-                the popup dialog. The app will now appear on your home screen!
+                {t('addToHomeScreen.step3Desc')}
               </p>
             </div>
             <div className="flex items-center justify-center">

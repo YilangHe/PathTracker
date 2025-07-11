@@ -14,14 +14,23 @@
     "realTimeArrivals": "Real-time Arrivals",
     "realTimeArrivalsDesc": "Track PATH train arrivals in real-time with our live dashboard",
     "multiStationView": "Multi-Station View",
+    "multiStationViewDesc": "Monitor multiple stations simultaneously",
     "dragAndDrop": "Drag & Drop",
+    "dragAndDropDesc": "Reorder stations by dragging cards",
     "serviceAlerts": "Service Alerts",
+    "serviceAlertsDesc": "Stay informed about service disruptions",
     "aboutPath": "About PATH",
+    "aboutPathDesc": "Learn more about the PATH train system",
     "dataSource": "Data Source",
+    "dataSourceDesc": "Official PATH schedules and real-time data",
     "addToHomeScreen": "Add to Home Screen",
+    "addToHomeScreenDesc": "Install this app on your device for quick access",
     "disclaimer": "Disclaimer",
+    "disclaimerDesc": "Important legal information and data sources",
     "privacy": "Privacy",
-    "contact": "Contact"
+    "privacyDesc": "Your data stays on your device",
+    "contact": "Contact",
+    "contactDesc": "Questions or feedback about this app"
   },
   "footer": {
     "copyright": "© {year} Path Tracker. All rights reserved.",
@@ -96,23 +105,42 @@
   "disclaimer": {
     "title": "Disclaimer",
     "importantNotice": "Important Notice",
-    "independentPlatform": "Path Tracker is an independent platform...",
+    "independentPlatform": "Path Tracker is an independent platform and is not affiliated with, endorsed by, or officially connected to the Port Authority of New York and New Jersey (PANYNJ). All data provided on this platform is sourced from publicly available information and is intended for informational purposes only.",
     "accuracyTitle": "Accuracy of Information",
+    "accuracyDesc": "While every effort is made to ensure the accuracy of the information provided on Path Tracker, schedules and updates are subject to change, and real-time data may vary. Users are encouraged to verify critical travel details through official sources and use Path Tracker as a complementary tool for trip planning.",
     "officialResources": "Official PATH Resources",
-    "officialInfo": "For the most up-to-date and official information...",
-    "lastUpdated": "Last updated:"
+    "officialInfo": "For the most up-to-date and official information, please refer to:",
+    "officialWebsite": "Official PATH Website",
+    "schedulesAndMaps": "PATH Schedules and Maps",
+    "officialApp": "Official PATH mobile app",
+    "stationAnnouncements": "Station announcements and displays",
+    "lastUpdated": "Last updated:",
+    "backToHome": "Back to Home"
   },
   "addToHomeScreen": {
     "title": "Add Path Tracker to Your Home Screen",
-    "description": "Get quick access to real-time PATH train arrivals...",
+    "description": "Get quick access to real-time PATH train arrivals by installing Path Tracker as a web app on your device.",
     "step1": "Step 1: Open the Share Menu",
+    "step1Desc": "While viewing Path Tracker in your browser, tap the share button at the bottom of your screen (Safari) or in the browser menu.",
     "step2": "Step 2: Find 'Add to Home Screen'",
+    "step2Desc": "Look for the \"Add to Home Screen\" option in the share menu. You may need to scroll down to find it.",
     "step3": "Step 3: Confirm Installation",
+    "step3Desc": "Tap \"Add to Home Screen\" and then confirm by tapping \"Add\" in the popup dialog. The app will now appear on your home screen!",
     "whyAdd": "Why Add to Home Screen?",
     "benefit1": "Instant access to real-time PATH arrivals",
     "benefit2": "No need to remember the website URL",
     "benefit3": "Faster loading and better performance",
     "benefit4": "Works offline for previously viewed stations",
     "backToTracker": "Back to Path Tracker"
+  },
+  "closestStation": {
+    "title": "Closest Station",
+    "nearby": "Nearby",
+    "autoUpdating": "Auto-updating",
+    "live": "Live",
+    "loading": "Loading arrivals...",
+    "error": "Error loading arrivals:",
+    "noArrivals": "No arrivals scheduled for this station at the moment.",
+    "basedOnLocation": "Based on your location: {{lat}}, {{lon}}"
   }
 }

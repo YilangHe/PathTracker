@@ -14,14 +14,23 @@
     "realTimeArrivals": "实时到站",
     "realTimeArrivalsDesc": "通过我们的实时仪表板追踪 PATH 列车到站信息",
     "multiStationView": "多站点视图",
+    "multiStationViewDesc": "同时监控多个站点",
     "dragAndDrop": "拖放排序",
+    "dragAndDropDesc": "通过拖动卡片重新排列站点",
     "serviceAlerts": "服务警报",
+    "serviceAlertsDesc": "及时了解服务中断信息",
     "aboutPath": "关于 PATH",
+    "aboutPathDesc": "了解更多关于 PATH 列车系统的信息",
     "dataSource": "数据来源",
+    "dataSourceDesc": "官方 PATH 时刻表和实时数据",
     "addToHomeScreen": "添加到主屏幕",
+    "addToHomeScreenDesc": "在您的设备上安装此应用以便快速访问",
     "disclaimer": "免责声明",
+    "disclaimerDesc": "重要的法律信息和数据来源",
     "privacy": "隐私",
-    "contact": "联系我们"
+    "privacyDesc": "您的数据保留在您的设备上",
+    "contact": "联系我们",
+    "contactDesc": "关于此应用的问题或反馈"
   },
   "footer": {
     "copyright": "© {year} Path Tracker. 保留所有权利。",
@@ -96,23 +105,42 @@
   "disclaimer": {
     "title": "免责声明",
     "importantNotice": "重要通知",
-    "independentPlatform": "Path Tracker 是一个独立平台...",
+    "independentPlatform": "Path Tracker 是一个独立平台，与纽约和新泽西港务局 (PANYNJ) 没有关联、认可或官方连接。该平台上提供的所有数据均来源于公开可用信息，仅供参考。",
     "accuracyTitle": "信息准确性",
+    "accuracyDesc": "虽然我们努力确保 Path Tracker 上提供的信息准确无误，但时刻表和更新可能会发生变化，实时数据可能会有所不同。建议用户通过官方来源验证重要的旅行详情，并将 Path Tracker 作为旅行计划的辅助工具。",
     "officialResources": "官方 PATH 资源",
-    "officialInfo": "如需最新和官方信息...",
-    "lastUpdated": "最后更新："
+    "officialInfo": "如需最新和官方信息，请参考：",
+    "officialWebsite": "官方 PATH 网站",
+    "schedulesAndMaps": "PATH 时刻表和地图",
+    "officialApp": "官方 PATH 移动应用",
+    "stationAnnouncements": "车站公告和显示屏",
+    "lastUpdated": "最后更新：",
+    "backToHome": "返回首页"
   },
   "addToHomeScreen": {
     "title": "将 Path Tracker 添加到您的主屏幕",
-    "description": "快速访问实时 PATH 列车到站信息...",
+    "description": "通过将 Path Tracker 安装为您设备上的网络应用，快速访问实时 PATH 列车到站信息。",
     "step1": "步骤 1：打开分享菜单",
+    "step1Desc": "在浏览器中查看 Path Tracker 时，点击屏幕底部的分享按钮（Safari）或浏览器菜单中的分享按钮。",
     "step2": "步骤 2：找到'添加到主屏幕'",
+    "step2Desc": "在分享菜单中查找\"添加到主屏幕\"选项。您可能需要向下滚动才能找到它。",
     "step3": "步骤 3：确认安装",
+    "step3Desc": "点击\"添加到主屏幕\"，然后在弹出对话框中点击\"添加\"进行确认。该应用现在将出现在您的主屏幕上！",
     "whyAdd": "为什么要添加到主屏幕？",
     "benefit1": "即时访问实时 PATH 到站信息",
     "benefit2": "无需记住网站地址",
     "benefit3": "更快的加载速度和更好的性能",
     "benefit4": "离线查看之前浏览过的站点",
     "backToTracker": "返回 Path Tracker"
+  },
+  "closestStation": {
+    "title": "最近站点",
+    "nearby": "附近",
+    "autoUpdating": "自动更新",
+    "live": "实时",
+    "loading": "正在加载到站信息...",
+    "error": "加载到站信息时出错：",
+    "noArrivals": "此站点目前没有预定的到站列车。",
+    "basedOnLocation": "基于您的位置：{{lat}}, {{lon}}"
   }
 }

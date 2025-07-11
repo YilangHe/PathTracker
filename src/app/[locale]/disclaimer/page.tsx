@@ -43,7 +43,7 @@ export default async function DisclaimerPage({ params: { locale } }: Props) {
           href={`/${locale}`}
           className="inline-flex items-center text-primary hover:text-primary/80 mb-6 transition-colors"
         >
-          ← Back to Home
+          ← {t('disclaimer.backToHome')}
         </Link>
         <h1 className="text-3xl font-bold text-center mb-8 text-foreground">
           {t('disclaimer.title')}
@@ -64,12 +64,7 @@ export default async function DisclaimerPage({ params: { locale } }: Props) {
               {t('disclaimer.accuracyTitle')}
             </h2>
             <p className="text-foreground leading-relaxed">
-              While every effort is made to ensure the accuracy of the
-              information provided on Path Tracker, schedules and updates are
-              subject to change, and real-time data may vary. Users are
-              encouraged to verify critical travel details through official
-              sources and use Path Tracker as a complementary tool for trip
-              planning.
+              {t('disclaimer.accuracyDesc')}
             </p>
           </div>
 
@@ -89,7 +84,7 @@ export default async function DisclaimerPage({ params: { locale } }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Official PATH Website
+                  {t('disclaimer.officialWebsite')}
                 </a>
               </li>
               <li>
@@ -100,11 +95,11 @@ export default async function DisclaimerPage({ params: { locale } }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  PATH Schedules and Maps
+                  {t('disclaimer.schedulesAndMaps')}
                 </a>
               </li>
-              <li>• Official PATH mobile app</li>
-              <li>• Station announcements and displays</li>
+              <li>• {t('disclaimer.officialApp')}</li>
+              <li>• {t('disclaimer.stationAnnouncements')}</li>
             </ul>
           </div>
 

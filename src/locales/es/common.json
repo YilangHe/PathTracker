@@ -14,14 +14,23 @@
     "realTimeArrivals": "Llegadas en Tiempo Real",
     "realTimeArrivalsDesc": "Rastrea las llegadas de trenes PATH en tiempo real con nuestro panel en vivo",
     "multiStationView": "Vista Multi-Estación",
+    "multiStationViewDesc": "Monitorea múltiples estaciones simultáneamente",
     "dragAndDrop": "Arrastrar y Soltar",
+    "dragAndDropDesc": "Reordena las estaciones arrastrando las tarjetas",
     "serviceAlerts": "Alertas de Servicio",
+    "serviceAlertsDesc": "Manténte informado sobre interrupciones del servicio",
     "aboutPath": "Acerca de PATH",
+    "aboutPathDesc": "Aprende más sobre el sistema de trenes PATH",
     "dataSource": "Fuente de Datos",
+    "dataSourceDesc": "Horarios oficiales de PATH y datos en tiempo real",
     "addToHomeScreen": "Agregar a Pantalla de Inicio",
+    "addToHomeScreenDesc": "Instala esta app en tu dispositivo para acceso rápido",
     "disclaimer": "Aviso Legal",
+    "disclaimerDesc": "Información legal importante y fuentes de datos",
     "privacy": "Privacidad",
-    "contact": "Contacto"
+    "privacyDesc": "Tus datos permanecen en tu dispositivo",
+    "contact": "Contacto",
+    "contactDesc": "Preguntas o comentarios sobre esta app"
   },
   "footer": {
     "copyright": "© {year} Path Tracker. Todos los derechos reservados.",
@@ -96,23 +105,42 @@
   "disclaimer": {
     "title": "Aviso Legal",
     "importantNotice": "Aviso Importante",
-    "independentPlatform": "Path Tracker es una plataforma independiente...",
+    "independentPlatform": "Path Tracker es una plataforma independiente y no está afiliada, respaldada o conectada oficialmente con la Autoridad Portuaria de Nueva York y Nueva Jersey (PANYNJ). Todos los datos proporcionados en esta plataforma provienen de información disponible públicamente y están destinados solo para fines informativos.",
     "accuracyTitle": "Precisión de la Información",
+    "accuracyDesc": "Aunque hacemos todo lo posible para garantizar la precisión de la información proporcionada en Path Tracker, los horarios y actualizaciones están sujetos a cambios, y los datos en tiempo real pueden variar. Se recomienda a los usuarios verificar los detalles críticos del viaje a través de fuentes oficiales y usar Path Tracker como una herramienta complementaria para la planificación de viajes.",
     "officialResources": "Recursos Oficiales PATH",
-    "officialInfo": "Para la información más actualizada y oficial...",
-    "lastUpdated": "Última actualización:"
+    "officialInfo": "Para la información más actualizada y oficial, consulte:",
+    "officialWebsite": "Sitio Web Oficial de PATH",
+    "schedulesAndMaps": "Horarios y Mapas de PATH",
+    "officialApp": "Aplicación móvil oficial de PATH",
+    "stationAnnouncements": "Anuncios y pantallas de la estación",
+    "lastUpdated": "Última actualización:",
+    "backToHome": "Volver al Inicio"
   },
   "addToHomeScreen": {
     "title": "Agregar Path Tracker a tu Pantalla de Inicio",
-    "description": "Obtén acceso rápido a las llegadas de trenes PATH en tiempo real...",
+    "description": "Obtén acceso rápido a las llegadas de trenes PATH en tiempo real instalando Path Tracker como una aplicación web en tu dispositivo.",
     "step1": "Paso 1: Abre el Menú de Compartir",
+    "step1Desc": "Mientras ves Path Tracker en tu navegador, toca el botón de compartir en la parte inferior de tu pantalla (Safari) o en el menú del navegador.",
     "step2": "Paso 2: Encuentra 'Agregar a Pantalla de Inicio'",
+    "step2Desc": "Busca la opción \"Agregar a Pantalla de Inicio\" en el menú de compartir. Es posible que necesites desplazarte hacia abajo para encontrarla.",
     "step3": "Paso 3: Confirma la Instalación",
+    "step3Desc": "Toca \"Agregar a Pantalla de Inicio\" y luego confirma tocando \"Agregar\" en el cuadro de diálogo emergente. ¡La aplicación ahora aparecerá en tu pantalla de inicio!",
     "whyAdd": "¿Por qué Agregar a la Pantalla de Inicio?",
     "benefit1": "Acceso instantáneo a las llegadas PATH en tiempo real",
     "benefit2": "No necesitas recordar la URL del sitio web",
     "benefit3": "Carga más rápida y mejor rendimiento",
     "benefit4": "Funciona sin conexión para estaciones vistas anteriormente",
     "backToTracker": "Volver a Path Tracker"
+  },
+  "closestStation": {
+    "title": "Estación Más Cercana",
+    "nearby": "Cercana",
+    "autoUpdating": "Actualización automática",
+    "live": "En vivo",
+    "loading": "Cargando llegadas...",
+    "error": "Error al cargar llegadas:",
+    "noArrivals": "No hay llegadas programadas para esta estación en este momento.",
+    "basedOnLocation": "Basado en tu ubicación: {{lat}}, {{lon}}"
   }
 }
