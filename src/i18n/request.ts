@@ -3,8 +3,8 @@ import { messages } from './messages';
 import { locales } from '@/config/i18n';
 
 export default getRequestConfig(async ({ locale }) => {
-  // Ensure we have a valid locale
-  const validLocale = locales.includes(locale as any) ? locale : 'en';
+  // Ensure we have a valid locale, handling undefined case
+  const validLocale = locale && locales.includes(locale as any) ? locale : 'en';
   
   return {
     locale: validLocale,
