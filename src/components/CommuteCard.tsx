@@ -7,7 +7,7 @@ import { STATIONS } from "@/constants/stations";
 import { useCommute } from "@/contexts/CommuteContext";
 import { useMultiStationData } from "@/hooks/useMultiStationData";
 import { getAllRouteStations, getTimeRangeLabel } from "@/utils/routeCalculator";
-import { formatArrivalTime, arrivalClass } from "@/utils/pathHelpers";
+import { formatArrivalTime, arrivalClass, getLineColor } from "@/utils/pathHelpers";
 import { 
   Home, 
   Briefcase, 
@@ -43,7 +43,7 @@ export function CommuteCard() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"
+      className="bg-gray-900 text-white rounded-lg shadow-sm border border-gray-700"
     >
       {/* Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
