@@ -1,0 +1,166 @@
+{
+  "app": {
+    "title": "PATH 列车追踪器",
+    "description": "纽约和新泽西 PATH 列车实时到站信息",
+    "tagline": "实时追踪列车到站 • 多站点监控 • 实时更新"
+  },
+  "nav": {
+    "title": "Path Tracker",
+    "features": "功能",
+    "about": "关于",
+    "installApp": "安装应用",
+    "installGuide": "安装指南",
+    "appInstalled": "已安装应用",
+    "realTimeArrivals": "实时到站",
+    "realTimeArrivalsDesc": "通过我们的实时仪表板追踪 PATH 列车到站信息",
+    "multiStationView": "多站点视图",
+    "multiStationViewDesc": "同时监控多个站点",
+    "dragAndDrop": "拖放排序",
+    "dragAndDropDesc": "通过拖动卡片重新排列站点",
+    "serviceAlerts": "服务警报",
+    "serviceAlertsDesc": "及时了解服务中断信息",
+    "aboutPath": "关于 PATH",
+    "aboutPathDesc": "了解更多关于 PATH 列车系统的信息",
+    "dataSource": "数据来源",
+    "dataSourceDesc": "官方 PATH 时刻表和实时数据",
+    "addToHomeScreen": "添加到主屏幕",
+    "addToHomeScreenDesc": "在您的设备上安装此应用以便快速访问",
+    "disclaimer": "免责声明",
+    "disclaimerDesc": "重要的法律信息和数据来源",
+    "privacy": "隐私",
+    "privacyDesc": "您的数据保留在您的设备上",
+    "contact": "联系我们",
+    "contactDesc": "关于此应用的问题或反馈"
+  },
+  "footer": {
+    "copyright": "© {year} Path Tracker. 保留所有权利。",
+    "tagline": "由 Path 乘客制作，为 Path 乘客服务",
+    "madeBy": "由 @Noodles 用 ❤️ 制作",
+    "buyMeCoffee": "请我坐一次 PATH",
+    "dataSource": "数据 © 纽约和新泽西港务局 • 每10秒更新",
+    "disclaimer": "免责声明",
+    "contact": "联系我们"
+  },
+  "home": {
+    "features": "功能特点",
+    "realTimeArrivals": "实时列车到站信息",
+    "multiStation": "多站点追踪",
+    "liveUpdates": "每30秒实时更新",
+    "mobileDesign": "移动友好设计",
+    "locationBased": "基于位置的最近站点",
+    "pathSystem": "PATH 系统",
+    "pathSystemDesc": "PATH 系统通过4条线路的13个站点连接纽约市和新泽西。",
+    "service247": "纽约市和新泽西之间24/7服务",
+    "connectsSubway": "连接纽约市地铁系统",
+    "ridersAnnually": "每年服务超过8000万乘客",
+    "loading": "正在加载您的个性化列车追踪器...",
+    "serviceUnavailable": "服务暂时不可用",
+    "serviceUnavailableDesc": "我们目前无法连接到 PATH 数据服务...",
+    "tryAgain": "重试"
+  },
+  "station": {
+    "loadingArrivals": "正在加载到站信息...",
+    "errorLatest": "无法获取最新到站信息。显示最后已知数据。",
+    "errorLoading": "加载到站信息时出错：",
+    "noArrivals": "此站点目前没有计划到站的列车。",
+    "moveStation": "上下移动站点",
+    "removeStation": "移除站点"
+  },
+  "addStation": {
+    "title": "添加新站点",
+    "selected": "已选择：",
+    "alreadyAdded": "已添加",
+    "add": "添加站点",
+    "cancel": "取消"
+  },
+  "alerts": {
+    "title": "PATH 警报",
+    "loading": "加载中...",
+    "loadingAlerts": "正在加载警报...",
+    "alertCount": "{count, plural, =0 {无警报} other {# 个警报}}",
+    "usingCached": "使用缓存数据",
+    "error": "错误",
+    "errorLatest": "无法获取最新警报。显示最后已知数据。",
+    "errorLoading": "加载警报时出错：",
+    "noAlerts": "目前没有活动警报。",
+    "updated": "更新时间："
+  },
+  "weather": {
+    "title": "当前天气",
+    "loading": "加载中...",
+    "error": "无法加载天气数据",
+    "unavailable": "天气数据不可用",
+    "temperature": "{temp}°F",
+    "wind": "{windSpeed} mph",
+    "humidity": "{humidity}%"
+  },
+  "update": {
+    "title": "有新更新可用！",
+    "fresh": "新鲜",
+    "description": "获取最新功能、改进和错误修复。",
+    "version": "版本：",
+    "updateNow": "立即更新",
+    "later": "稍后"
+  },
+  "disclaimer": {
+    "title": "免责声明",
+    "importantNotice": "重要通知",
+    "independentPlatform": "Path Tracker 是一个独立平台，与纽约和新泽西港务局 (PANYNJ) 没有关联、认可或官方连接。该平台上提供的所有数据均来源于公开可用信息，仅供参考。",
+    "accuracyTitle": "信息准确性",
+    "accuracyDesc": "虽然我们努力确保 Path Tracker 上提供的信息准确无误，但时刻表和更新可能会发生变化，实时数据可能会有所不同。建议用户通过官方来源验证重要的旅行详情，并将 Path Tracker 作为旅行计划的辅助工具。",
+    "officialResources": "官方 PATH 资源",
+    "officialInfo": "如需最新和官方信息，请参考：",
+    "officialWebsite": "官方 PATH 网站",
+    "schedulesAndMaps": "PATH 时刻表和地图",
+    "officialApp": "官方 PATH 移动应用",
+    "stationAnnouncements": "车站公告和显示屏",
+    "lastUpdated": "最后更新：",
+    "backToHome": "返回首页"
+  },
+  "addToHomeScreen": {
+    "title": "将 Path Tracker 添加到您的主屏幕",
+    "description": "通过将 Path Tracker 安装为您设备上的网络应用，快速访问实时 PATH 列车到站信息。",
+    "step1": "步骤 1：打开分享菜单",
+    "step1Desc": "在浏览器中查看 Path Tracker 时，点击屏幕底部的分享按钮（Safari）或浏览器菜单中的分享按钮。",
+    "step2": "步骤 2：找到'添加到主屏幕'",
+    "step2Desc": "在分享菜单中查找\"添加到主屏幕\"选项。您可能需要向下滚动才能找到它。",
+    "step3": "步骤 3：确认安装",
+    "step3Desc": "点击\"添加到主屏幕\"，然后在弹出对话框中点击\"添加\"进行确认。该应用现在将出现在您的主屏幕上！",
+    "whyAdd": "为什么要添加到主屏幕？",
+    "benefit1": "即时访问实时 PATH 到站信息",
+    "benefit2": "无需记住网站地址",
+    "benefit3": "更快的加载速度和更好的性能",
+    "benefit4": "离线查看之前浏览过的站点",
+    "backToTracker": "返回 Path Tracker"
+  },
+  "closestStation": {
+    "title": "最近站点",
+    "nearby": "附近",
+    "autoUpdating": "自动更新",
+    "live": "实时",
+    "loading": "正在加载到站信息...",
+    "error": "加载到站信息时出错：",
+    "noArrivals": "此站点目前没有预定的到站列车。",
+    "basedOnLocation": "基于您的位置：{{lat}}, {{lon}}"
+  },
+  "status": {
+    "live": "实时",
+    "recent": "最近",
+    "stale": "过时",
+    "veryStale": "非常过时",
+    "error": "错误",
+    "unknown": "未知",
+    "usingCachedData": "使用缓存数据",
+    "lastUpdated": "最后更新",
+    "never": "从未"
+  },
+  "direction": {
+    "toNewYork": "前往纽约",
+    "toNewJersey": "前往新泽西"
+  },
+  "time": {
+    "now": "现在",
+    "minutes": "分钟",
+    "minute": "分钟"
+  }
+}

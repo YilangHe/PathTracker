@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from 'next-intl';
 
 interface UpdateNotificationProps {
   show: boolean;
@@ -17,6 +18,7 @@ export function UpdateNotification({
 }: UpdateNotificationProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const t = useTranslations();
 
   useEffect(() => {
     if (show) {
@@ -63,18 +65,18 @@ export function UpdateNotification({
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2">
               <h3 className="text-sm font-semibold text-white">
-                New Update Available!
+                {t('update.title')}
               </h3>
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/30 text-blue-100">
-                Fresh
+                {t('update.fresh')}
               </span>
             </div>
             <p className="text-sm text-blue-100 mt-1 leading-relaxed">
-              Get the latest features, improvements, and bug fixes.
+              {t('update.description')}
             </p>
             {version && (
               <p className="text-xs text-blue-200 mt-1 opacity-75">
-                Version: {version}
+                {t('update.version')} {version}
               </p>
             )}
 
@@ -84,13 +86,13 @@ export function UpdateNotification({
                 onClick={onUpdate}
                 className="flex-1 bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 active:bg-blue-100 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg"
               >
-                Update Now
+                {t('update.updateNow')}
               </button>
               <button
                 onClick={onDismiss}
                 className="px-4 py-2 text-blue-100 hover:text-white hover:bg-blue-500/30 rounded-lg text-sm font-medium transition-all duration-200"
               >
-                Later
+                {t('update.later')}
               </button>
             </div>
           </div>

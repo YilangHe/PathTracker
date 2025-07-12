@@ -1,8 +1,13 @@
+"use client";
+
 import React from "react";
 import { Github, Heart } from "lucide-react";
+import { useTranslations, useLocale } from 'next-intl';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <footer className="border-t bg-muted/30 mt-auto">
@@ -11,24 +16,13 @@ export function Footer() {
           {/* Copyright and Creator Info */}
           <div className="flex flex-col items-center space-y-2 text-center">
             <p className="text-sm text-foreground">
-              © {currentYear} Path Tracker. All rights reserved.
+              {t('footer.copyright', { year: currentYear })}
             </p>
             <p className="text-sm text-muted-foreground italic">
-              By the Path rider, for the path rider
+              {t('footer.tagline')}
             </p>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <span>Made with</span>
-              <Heart className="h-4 w-4 text-red-500 dark:text-red-400" />
-              <span>by</span>
-              <a
-                href="https://github.com/YilangHe"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 text-primary hover:text-primary/80 transition-colors"
-              >
-                <Github className="h-4 w-4" />
-                <span>@Noodles</span>
-              </a>
+              <span dangerouslySetInnerHTML={{ __html: t.raw('footer.madeBy') }} />
             </div>
             {/* Custom Buy Me A Coffee Button */}
             <div className="mt-3">
@@ -49,7 +43,7 @@ export function Footer() {
                   >
                     🚆
                   </span>
-                  <span className="ml-2">Buy me a PATH ride</span>
+                  <span className="ml-2">{t('footer.buyMeCoffee')}</span>
                 </div>
               </a>
             </div>
@@ -61,21 +55,21 @@ export function Footer() {
           {/* Additional Info */}
           <div className="flex flex-col sm:flex-row items-center justify-between w-full space-y-2 sm:space-y-0">
             <div className="text-xs text-muted-foreground">
-              Data © Port Authority of NY & NJ • Updates every 10s
+              {t('footer.dataSource')}
             </div>
             <div className="flex items-center space-x-4 text-xs text-muted-foreground">
               <a
-                href="/disclaimer"
+                href={`/${locale}/disclaimer`}
                 className="hover:text-foreground transition-colors"
               >
-                Disclaimer
+                {t('footer.disclaimer')}
               </a>
               <span>•</span>
               <a
                 href="mailto:livepathtracker@gmail.com"
                 className="hover:text-foreground transition-colors"
               >
-                Contact
+                {t('footer.contact')}
               </a>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { ArrowRight, Radio, ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 import { StationResult } from "../types/path";
 import { STATIONS } from "../constants/stations";
 import {
@@ -14,6 +15,8 @@ interface ArrivalsTableProps {
 }
 
 export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
+  const t = useTranslations();
+  
   // State to track which sections are expanded (both expanded by default)
   const [expandedSections, setExpandedSections] = useState<{
     [key: string]: boolean;
@@ -44,7 +47,7 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
 
   // Helper function to format direction label
   const formatDirectionLabel = (direction: "ToNY" | "ToNJ") => {
-    return direction === "ToNY" ? "To New York" : "To New Jersey";
+    return direction === "ToNY" ? t('direction.toNewYork') : t('direction.toNewJersey');
   };
 
   // Helper function to reorder destinations based on station
@@ -178,15 +181,15 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
                               message
                             )}`}
                           >
-                            {formatArrivalTime(message.arrivalTimeMessage)
+                            {formatArrivalTime(message.arrivalTimeMessage, t('time.now'))
                               .replace(" min", "")
                               .replace("min", "")}
                           </div>
                           <div className={`text-sm ${arrivalClass(message)}`}>
                             {formatArrivalTime(
-                              message.arrivalTimeMessage
+                              message.arrivalTimeMessage, t('time.now')
                             ).includes("min")
-                              ? "minutes"
+                              ? t('time.minutes')
                               : ""}
                           </div>
                         </div>

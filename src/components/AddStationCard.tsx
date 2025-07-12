@@ -1,9 +1,12 @@
+"use client";
+
 import { useState } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Plus, X } from "lucide-react";
 import { StationSelector } from "./StationSelector";
 import { StationCode } from "../types/path";
 import { STATIONS } from "../constants/stations";
+import { useTranslations } from 'next-intl';
 
 interface AddStationCardProps {
   onAddStation: (stationCode: StationCode) => void;
@@ -14,6 +17,7 @@ export const AddStationCard = ({
   onAddStation,
   existingStations,
 }: AddStationCardProps) => {
+  const t = useTranslations();
   const [isAdding, setIsAdding] = useState(false);
   const [selectedStation, setSelectedStation] = useState<StationCode>(
     Object.keys(STATIONS)[0] as StationCode
@@ -59,11 +63,11 @@ export const AddStationCard = ({
       <Card className="bg-gray-800 border-2 border-dashed border-gray-600 text-white">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold">Add New Station</span>
+            <span className="text-lg font-semibold">{t('addStation.title')}</span>
             <button
               onClick={handleCancel}
               className="text-gray-400 hover:text-gray-200 transition-colors p-1 rounded-md hover:bg-gray-700"
-              title="Cancel"
+              title={t('addStation.cancel')}
             >
               <X className="w-4 h-4" />
             </button>
@@ -72,7 +76,7 @@ export const AddStationCard = ({
         <CardContent className="space-y-4">
           <div>
             <p className="text-xs text-gray-400 mb-2">
-              Selected: {selectedStation} ({STATIONS[selectedStation]})
+              {t('addStation.selected')} {selectedStation} ({STATIONS[selectedStation]})
             </p>
             <StationSelector
               value={selectedStation}
@@ -86,14 +90,14 @@ export const AddStationCard = ({
               className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-2 px-4 rounded-md transition-colors"
             >
               {existingStations.includes(selectedStation)
-                ? "Already Added"
-                : "Add Station"}
+                ? t('addStation.alreadyAdded')
+                : t('addStation.add')}
             </button>
             <button
               onClick={handleCancel}
               className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors"
             >
-              Cancel
+              {t('addStation.cancel')}
             </button>
           </div>
         </CardContent>
@@ -109,7 +113,7 @@ export const AddStationCard = ({
           className="w-full flex flex-col items-center gap-2 text-gray-400 hover:text-gray-200 transition-colors"
         >
           <Plus className="w-8 h-8" />
-          <span className="text-lg font-medium">Add Station</span>
+          <span className="text-lg font-medium">{t('addStation.add')}</span>
         </button>
       </CardContent>
     </Card>

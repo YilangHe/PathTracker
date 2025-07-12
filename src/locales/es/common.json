@@ -1,0 +1,166 @@
+{
+  "app": {
+    "title": "Rastreador de Trenes PATH",
+    "description": "Llegadas de trenes PATH en tiempo real para Nueva York y Nueva Jersey",
+    "tagline": "Rastrea llegadas en vivo • Múltiples estaciones • Actualizaciones en tiempo real"
+  },
+  "nav": {
+    "title": "Path Tracker",
+    "features": "Características",
+    "about": "Acerca de",
+    "installApp": "Instalar App",
+    "installGuide": "Guía de Instalación",
+    "appInstalled": "App Instalada",
+    "realTimeArrivals": "Llegadas en Tiempo Real",
+    "realTimeArrivalsDesc": "Rastrea las llegadas de trenes PATH en tiempo real con nuestro panel en vivo",
+    "multiStationView": "Vista Multi-Estación",
+    "multiStationViewDesc": "Monitorea múltiples estaciones simultáneamente",
+    "dragAndDrop": "Arrastrar y Soltar",
+    "dragAndDropDesc": "Reordena las estaciones arrastrando las tarjetas",
+    "serviceAlerts": "Alertas de Servicio",
+    "serviceAlertsDesc": "Manténte informado sobre interrupciones del servicio",
+    "aboutPath": "Acerca de PATH",
+    "aboutPathDesc": "Aprende más sobre el sistema de trenes PATH",
+    "dataSource": "Fuente de Datos",
+    "dataSourceDesc": "Horarios oficiales de PATH y datos en tiempo real",
+    "addToHomeScreen": "Agregar a Pantalla de Inicio",
+    "addToHomeScreenDesc": "Instala esta app en tu dispositivo para acceso rápido",
+    "disclaimer": "Aviso Legal",
+    "disclaimerDesc": "Información legal importante y fuentes de datos",
+    "privacy": "Privacidad",
+    "privacyDesc": "Tus datos permanecen en tu dispositivo",
+    "contact": "Contacto",
+    "contactDesc": "Preguntas o comentarios sobre esta app"
+  },
+  "footer": {
+    "copyright": "© {year} Path Tracker. Todos los derechos reservados.",
+    "tagline": "Por el pasajero de Path, para el pasajero de Path",
+    "madeBy": "Hecho con ❤️ por @Noodles",
+    "buyMeCoffee": "Cómprame un viaje en PATH",
+    "dataSource": "Datos © Autoridad Portuaria de NY y NJ • Actualiza cada 10s",
+    "disclaimer": "Aviso Legal",
+    "contact": "Contacto"
+  },
+  "home": {
+    "features": "Características",
+    "realTimeArrivals": "Llegadas de trenes en tiempo real",
+    "multiStation": "Seguimiento de múltiples estaciones",
+    "liveUpdates": "Actualizaciones en vivo cada 30 segundos",
+    "mobileDesign": "Diseño compatible con móviles",
+    "locationBased": "Estación más cercana basada en ubicación",
+    "pathSystem": "Sistema PATH",
+    "pathSystemDesc": "El sistema PATH conecta la ciudad de Nueva York y Nueva Jersey con 13 estaciones en 4 líneas.",
+    "service247": "Servicio 24/7 entre NYC y NJ",
+    "connectsSubway": "Se conecta con el sistema de metro de NYC",
+    "ridersAnnually": "Sirve a más de 80 millones de pasajeros anualmente",
+    "loading": "Cargando tu rastreador de trenes personalizado...",
+    "serviceUnavailable": "Servicio Temporalmente No Disponible",
+    "serviceUnavailableDesc": "Actualmente no podemos conectarnos al servicio de datos PATH...",
+    "tryAgain": "Intentar de Nuevo"
+  },
+  "station": {
+    "loadingArrivals": "Cargando llegadas...",
+    "errorLatest": "No se pueden obtener las últimas llegadas. Mostrando últimos datos conocidos.",
+    "errorLoading": "Error al cargar llegadas:",
+    "noArrivals": "No hay llegadas programadas para esta estación en este momento.",
+    "moveStation": "Mover estación arriba/abajo",
+    "removeStation": "Eliminar estación"
+  },
+  "addStation": {
+    "title": "Agregar Nueva Estación",
+    "selected": "Seleccionada:",
+    "alreadyAdded": "Ya Agregada",
+    "add": "Agregar Estación",
+    "cancel": "Cancelar"
+  },
+  "alerts": {
+    "title": "Alertas PATH",
+    "loading": "Cargando...",
+    "loadingAlerts": "Cargando alertas...",
+    "alertCount": "{count, plural, =0 {Sin alertas} =1 {# alerta} other {# alertas}}",
+    "usingCached": "Usando datos en caché",
+    "error": "Error",
+    "errorLatest": "No se pueden obtener las últimas alertas. Mostrando últimos datos conocidos.",
+    "errorLoading": "Error al cargar alertas:",
+    "noAlerts": "No hay alertas activas en este momento.",
+    "updated": "Actualizado:"
+  },
+  "weather": {
+    "title": "Clima Actual",
+    "loading": "Cargando...",
+    "error": "No se pueden cargar los datos del clima",
+    "unavailable": "Datos del clima no disponibles",
+    "temperature": "{temp}°F",
+    "wind": "{windSpeed} mph",
+    "humidity": "{humidity}%"
+  },
+  "update": {
+    "title": "¡Nueva Actualización Disponible!",
+    "fresh": "Fresco",
+    "description": "Obtén las últimas características, mejoras y correcciones de errores.",
+    "version": "Versión:",
+    "updateNow": "Actualizar Ahora",
+    "later": "Más Tarde"
+  },
+  "disclaimer": {
+    "title": "Aviso Legal",
+    "importantNotice": "Aviso Importante",
+    "independentPlatform": "Path Tracker es una plataforma independiente y no está afiliada, respaldada o conectada oficialmente con la Autoridad Portuaria de Nueva York y Nueva Jersey (PANYNJ). Todos los datos proporcionados en esta plataforma provienen de información disponible públicamente y están destinados solo para fines informativos.",
+    "accuracyTitle": "Precisión de la Información",
+    "accuracyDesc": "Aunque hacemos todo lo posible para garantizar la precisión de la información proporcionada en Path Tracker, los horarios y actualizaciones están sujetos a cambios, y los datos en tiempo real pueden variar. Se recomienda a los usuarios verificar los detalles críticos del viaje a través de fuentes oficiales y usar Path Tracker como una herramienta complementaria para la planificación de viajes.",
+    "officialResources": "Recursos Oficiales PATH",
+    "officialInfo": "Para la información más actualizada y oficial, consulte:",
+    "officialWebsite": "Sitio Web Oficial de PATH",
+    "schedulesAndMaps": "Horarios y Mapas de PATH",
+    "officialApp": "Aplicación móvil oficial de PATH",
+    "stationAnnouncements": "Anuncios y pantallas de la estación",
+    "lastUpdated": "Última actualización:",
+    "backToHome": "Volver al Inicio"
+  },
+  "addToHomeScreen": {
+    "title": "Agregar Path Tracker a tu Pantalla de Inicio",
+    "description": "Obtén acceso rápido a las llegadas de trenes PATH en tiempo real instalando Path Tracker como una aplicación web en tu dispositivo.",
+    "step1": "Paso 1: Abre el Menú de Compartir",
+    "step1Desc": "Mientras ves Path Tracker en tu navegador, toca el botón de compartir en la parte inferior de tu pantalla (Safari) o en el menú del navegador.",
+    "step2": "Paso 2: Encuentra 'Agregar a Pantalla de Inicio'",
+    "step2Desc": "Busca la opción \"Agregar a Pantalla de Inicio\" en el menú de compartir. Es posible que necesites desplazarte hacia abajo para encontrarla.",
+    "step3": "Paso 3: Confirma la Instalación",
+    "step3Desc": "Toca \"Agregar a Pantalla de Inicio\" y luego confirma tocando \"Agregar\" en el cuadro de diálogo emergente. ¡La aplicación ahora aparecerá en tu pantalla de inicio!",
+    "whyAdd": "¿Por qué Agregar a la Pantalla de Inicio?",
+    "benefit1": "Acceso instantáneo a las llegadas PATH en tiempo real",
+    "benefit2": "No necesitas recordar la URL del sitio web",
+    "benefit3": "Carga más rápida y mejor rendimiento",
+    "benefit4": "Funciona sin conexión para estaciones vistas anteriormente",
+    "backToTracker": "Volver a Path Tracker"
+  },
+  "closestStation": {
+    "title": "Estación Más Cercana",
+    "nearby": "Cercana",
+    "autoUpdating": "Actualización automática",
+    "live": "En vivo",
+    "loading": "Cargando llegadas...",
+    "error": "Error al cargar llegadas:",
+    "noArrivals": "No hay llegadas programadas para esta estación en este momento.",
+    "basedOnLocation": "Basado en tu ubicación: {{lat}}, {{lon}}"
+  },
+  "status": {
+    "live": "En vivo",
+    "recent": "Reciente",
+    "stale": "Desactualizado",
+    "veryStale": "Muy Desactualizado",
+    "error": "Error",
+    "unknown": "Desconocido",
+    "usingCachedData": "Usando datos en caché",
+    "lastUpdated": "Última actualización",
+    "never": "Nunca"
+  },
+  "direction": {
+    "toNewYork": "Hacia Nueva York",
+    "toNewJersey": "Hacia Nueva Jersey"
+  },
+  "time": {
+    "now": "Ahora",
+    "minutes": "minutos",
+    "minute": "minuto"
+  }
+}

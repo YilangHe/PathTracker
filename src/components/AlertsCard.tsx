@@ -1,8 +1,11 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Alert } from "../types/path";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, AlertTriangle } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 interface AlertsCardProps {
   alerts: Alert[];
@@ -17,6 +20,7 @@ export const AlertsCard = ({
   error,
   hasCachedData = false,
 }: AlertsCardProps) => {
+  const t = useTranslations();
   const alertCount = alerts.length;
   const hasAlerts = alertCount > 0;
 
@@ -46,8 +50,8 @@ export const AlertsCard = ({
   let cardBgColor = "bg-green-900";
   let headerTextColor = "text-green-100";
   let statusText = hasAlerts
-    ? `${alertCount} alert${alertCount !== 1 ? "s" : ""}`
-    : "No alerts";
+    ? t('alerts.alertCount', { count: alertCount })
+    : t('alerts.alertCount', { count: 0 });
 
   if (hasAlerts) {
     cardBgColor = "bg-amber-900";
@@ -57,11 +61,11 @@ export const AlertsCard = ({
   if (error && hasCachedData) {
     cardBgColor = "bg-orange-900";
     headerTextColor = "text-orange-100";
-    statusText = "Using cached data";
+    statusText = t('alerts.usingCached');
   } else if (error) {
     cardBgColor = "bg-red-900";
     headerTextColor = "text-red-100";
-    statusText = "Error";
+    statusText = t('alerts.error');
   }
 
   if (loading) {
@@ -74,10 +78,10 @@ export const AlertsCard = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-blue-300" />
-              <h2 className="text-xl font-semibold">PATH Alerts</h2>
+              <h2 className="text-xl font-semibold">{t('alerts.title')}</h2>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-blue-200">Loading...</span>
+              <span className="text-sm text-blue-200">{t('alerts.loading')}</span>
               <motion.div
                 animate={{ rotate: isExpanded ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
@@ -96,7 +100,7 @@ export const AlertsCard = ({
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <CardContent>
-                <p className="text-blue-200">Loading alerts...</p>
+                <p className="text-blue-200">{t('alerts.loadingAlerts')}</p>
               </CardContent>
             </motion.div>
           )}
@@ -117,7 +121,7 @@ export const AlertsCard = ({
               className={`w-5 h-5 ${headerTextColor} opacity-70`}
             />
             <h2 className={`text-xl font-semibold ${headerTextColor}`}>
-              PATH Alerts
+              {t('alerts.title')}
             </h2>
           </div>
           <div className="flex items-center gap-2">
@@ -146,7 +150,7 @@ export const AlertsCard = ({
                   <div className="flex items-center gap-2 text-orange-100 text-sm">
                     <span>⚠️</span>
                     <span>
-                      Unable to get latest alerts. Showing last known data.
+                      {t('alerts.errorLatest')}
                     </span>
                   </div>
                   <div className="text-xs text-orange-200 mt-1">{error}</div>
@@ -157,14 +161,14 @@ export const AlertsCard = ({
                 <div className="p-3 bg-red-800/50 border border-red-600 rounded">
                   <div className="flex items-center gap-2 text-red-100 text-sm">
                     <span>❌</span>
-                    <span>Error loading alerts:</span>
+                    <span>{t('alerts.errorLoading')}</span>
                   </div>
                   <div className="text-red-200 mt-1 text-sm">{error}</div>
                 </div>
               )}
 
               {!error && !hasAlerts && (
-                <p className="text-green-200">No active alerts at this time.</p>
+                <p className="text-green-200">{t('alerts.noAlerts')}</p>
               )}
 
               {hasAlerts && (
@@ -183,7 +187,7 @@ export const AlertsCard = ({
                           {message.trim()}
                         </div>
                         <div className="text-xs text-amber-300">
-                          Updated: {formatAlertTime(alert.ModifiedDate)}
+                          {t('alerts.updated')} {formatAlertTime(alert.ModifiedDate)}
                         </div>
                       </div>
                     );

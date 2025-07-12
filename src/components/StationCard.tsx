@@ -1,9 +1,12 @@
+"use client";
+
 import { memo } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { X, GripVertical, ChevronUp, ChevronDown } from "lucide-react";
 import { StationResult, StationCode } from "../types/path";
 import { STATIONS } from "../constants/stations";
 import { ArrivalsTable } from "./ArrivalsTable";
+import { useTranslations } from 'next-intl';
 
 interface StationCardProps {
   stationCode: StationCode;
@@ -31,6 +34,8 @@ export const StationCard = memo(
     isDragging,
     dragHandleProps,
   }: StationCardProps) => {
+    const t = useTranslations();
+    
     return (
       <Card
         className={`bg-gray-900 text-white transition-all duration-200 ${
@@ -62,7 +67,7 @@ export const StationCard = memo(
                 <button
                   onClick={onMoveUp}
                   className="text-gray-400 hover:text-blue-400 transition-colors p-1 rounded-md hover:bg-blue-900/20"
-                  title="Move station up"
+                  title={t('station.moveStation')}
                 >
                   <ChevronUp className="w-4 h-4" />
                 </button>
@@ -73,7 +78,7 @@ export const StationCard = memo(
                 <button
                   onClick={onMoveDown}
                   className="text-gray-400 hover:text-blue-400 transition-colors p-1 rounded-md hover:bg-blue-900/20"
-                  title="Move station down"
+                  title={t('station.moveStation')}
                 >
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -84,7 +89,7 @@ export const StationCard = memo(
                 <button
                   onClick={onRemove}
                   className="text-gray-400 hover:text-red-400 transition-colors p-1 rounded-md hover:bg-red-900/20"
-                  title="Remove station"
+                  title={t('station.removeStation')}
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -97,7 +102,7 @@ export const StationCard = memo(
           {loading && (
             <div className="flex items-center gap-2 text-gray-400">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
-              <span>Loading arrivals...</span>
+              <span>{t('station.loadingArrivals')}</span>
             </div>
           )}
 
@@ -106,7 +111,7 @@ export const StationCard = memo(
               <div className="flex items-center gap-2 text-orange-100 text-sm">
                 <span>⚠️</span>
                 <span>
-                  Unable to get latest arrivals. Showing last known data.
+                  {t('station.errorLatest')}
                 </span>
               </div>
               <div className="text-xs text-orange-200 mt-1">{error}</div>
@@ -117,7 +122,7 @@ export const StationCard = memo(
             <div className="p-3 bg-red-800/50 border border-red-600 rounded text-sm">
               <div className="flex items-center gap-2 text-red-100 mb-1">
                 <span>❌</span>
-                <span>Error loading arrivals:</span>
+                <span>{t('station.errorLoading')}</span>
               </div>
               <div className="text-red-200">{error}</div>
             </div>
@@ -128,7 +133,7 @@ export const StationCard = memo(
 
           {!error && !loading && !data && (
             <p className="text-gray-400">
-              No arrivals scheduled for this station at the moment.
+              {t('station.noArrivals')}
             </p>
           )}
         </CardContent>

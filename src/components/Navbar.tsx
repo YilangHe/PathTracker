@@ -7,6 +7,8 @@ import { usePWAInstall } from "@/hooks/usePWAInstall";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WeatherToggle } from "@/components/WeatherToggle";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SettingsDropdown } from "@/components/SettingsDropdown";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -18,21 +20,24 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from 'next-intl';
 
 export function Navbar() {
   const { isInstallable, isInstalled, installPWA } = usePWAInstall();
   const { hasPermission } = useGeolocation();
+  const t = useTranslations();
+  const locale = useLocale();
 
   const handleInstallClick = async () => {
     if (isInstallable) {
       const success = await installPWA();
       if (!success) {
         // If programmatic install fails, redirect to instructions
-        window.location.href = "/add-to-home-screen";
+        window.location.href = `/${locale}/add-to-home-screen`;
       }
     } else {
       // If not installable, show instructions
-      window.location.href = "/add-to-home-screen";
+      window.location.href = `/${locale}/add-to-home-screen`;
     }
   };
 
@@ -40,7 +45,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-blue-600 shadow-lg">
       <div className="container max-w-4xl mx-auto flex h-14 items-center px-4">
         <div className="mr-4 flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Link href={`/${locale}`} className="mr-6 flex items-center space-x-2">
             <Image
               src="/logo.png"
               alt="PATH Logo"
@@ -50,7 +55,7 @@ export function Navbar() {
               priority
             />
             <span className="hidden font-bold sm:inline-block text-white">
-              Path Tracker
+              {t('nav.title')}
             </span>
           </Link>
         </div>
@@ -58,7 +63,7 @@ export function Navbar() {
           <NavigationMenuList>
             <NavigationMenuItem className="hidden sm:block">
               <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors">
-                Features
+                {t('nav.features')}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 w-[320px] sm:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-popover border border-border shadow-lg rounded-md">
@@ -66,65 +71,64 @@ export function Navbar() {
                     <NavigationMenuLink asChild>
                       <Link
                         className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-6 no-underline outline-none focus:shadow-md hover:from-primary/10 hover:to-primary/20 dark:hover:from-primary/20 dark:hover:to-primary/30 transition-colors"
-                        href="/"
+                        href={`/${locale}`}
                       >
                         <div className="mb-2 mt-4 text-lg font-medium text-primary">
-                          Real-time Arrivals
+                          {t('nav.realTimeArrivals')}
                         </div>
                         <p className="text-sm leading-tight text-muted-foreground">
-                          Track PATH train arrivals in real-time with our live
-                          dashboard
+                          {t('nav.realTimeArrivalsDesc')}
                         </p>
                       </Link>
                     </NavigationMenuLink>
                   </li>
-                  <ListItem href="/" title="Multi-Station View">
-                    Monitor multiple stations simultaneously
+                  <ListItem href={`/${locale}`} title={t('nav.multiStationView')}>
+                    {t('nav.multiStationViewDesc')}
                   </ListItem>
-                  <ListItem href="/" title="Drag & Drop">
-                    Reorder stations by dragging cards
+                  <ListItem href={`/${locale}`} title={t('nav.dragAndDrop')}>
+                    {t('nav.dragAndDropDesc')}
                   </ListItem>
-                  <ListItem href="/" title="Service Alerts">
-                    Stay informed about service disruptions
+                  <ListItem href={`/${locale}`} title={t('nav.serviceAlerts')}>
+                    {t('nav.serviceAlertsDesc')}
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors">
-                About
+                {t('nav.about')}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[320px] gap-3 p-4 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover border border-border shadow-lg rounded-md">
                   <ListItem
-                    title="About PATH"
+                    title={t('nav.aboutPath')}
                     href="https://www.panynj.gov/path"
                   >
-                    Learn more about the PATH train system
+                    {t('nav.aboutPathDesc')}
                   </ListItem>
                   <ListItem
-                    title="Data Source"
+                    title={t('nav.dataSource')}
                     href="https://www.panynj.gov/path/en/schedules-maps.html"
                   >
-                    Official PATH schedules and real-time data
+                    {t('nav.dataSourceDesc')}
                   </ListItem>
                   <ListItem
-                    title="Add to Home Screen"
-                    href="/add-to-home-screen"
+                    title={t('nav.addToHomeScreen')}
+                    href={`/${locale}/add-to-home-screen`}
                   >
-                    Install this app on your device for quick access
+                    {t('nav.addToHomeScreenDesc')}
                   </ListItem>
-                  <ListItem title="Disclaimer" href="/disclaimer">
-                    Important legal information and data sources
+                  <ListItem title={t('nav.disclaimer')} href={`/${locale}/disclaimer`}>
+                    {t('nav.disclaimerDesc')}
                   </ListItem>
-                  <ListItem title="Privacy" href="/">
-                    Your data stays on your device
+                  <ListItem title={t('nav.privacy')} href={`/${locale}`}>
+                    {t('nav.privacyDesc')}
                   </ListItem>
                   <ListItem
-                    title="Contact"
+                    title={t('nav.contact')}
                     href="mailto:livepathtracker@gmail.com"
                   >
-                    Questions or feedback about this app
+                    {t('nav.contactDesc')}
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
@@ -132,8 +136,16 @@ export function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="ml-auto flex items-center gap-2">
-          {hasPermission && <WeatherToggle />}
-          <ThemeToggle />
+          {/* Desktop: Individual components */}
+          <div className="hidden sm:flex items-center gap-2">
+            {hasPermission && <WeatherToggle />}
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </div>
+          {/* Mobile: Combined settings dropdown */}
+          <div className="sm:hidden">
+            <SettingsDropdown />
+          </div>
           {!isInstalled && (
             <button
               onClick={handleInstallClick}
@@ -154,7 +166,7 @@ export function Navbar() {
                 />
               </svg>
               <span className="hidden sm:inline">
-                {isInstallable ? "Install App" : "Install Guide"}
+                {isInstallable ? t('nav.installApp') : t('nav.installGuide')}
               </span>
               <span className="sm:hidden">
                 {isInstallable ? "Install" : "Guide"}
@@ -175,7 +187,7 @@ export function Navbar() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="hidden sm:inline">App Installed</span>
+              <span className="hidden sm:inline">{t('nav.appInstalled')}</span>
               <span className="sm:hidden">Installed</span>
             </div>
           )}

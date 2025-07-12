@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { StationResult, StationCode } from "../types/path";
 import { STATIONS } from "../constants/stations";
 import { ArrivalsTable } from "./ArrivalsTable";
+import { useTranslations } from 'next-intl';
 
 interface ClosestStationCardProps {
   stationCode: StationCode;
@@ -23,6 +24,7 @@ export const ClosestStationCard = memo(
     userLocation,
   }: ClosestStationCardProps) => {
     const [isExpanded, setIsExpanded] = useState(true); // Expanded by default
+    const t = useTranslations();
 
     const toggleExpanded = () => {
       setIsExpanded(!isExpanded);
@@ -39,9 +41,9 @@ export const ClosestStationCard = memo(
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-blue-300" />
-                <span className="text-lg font-semibold">Closest Station</span>
+                <span className="text-lg font-semibold">{t('closestStation.title')}</span>
                 <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-medium flex items-center justify-center gap-1">
-                  <span className="hidden sm:inline">Nearby</span>
+                  <span className="hidden sm:inline">{t('closestStation.nearby')}</span>
                   <span className="text-sm">🚉</span>
                 </span>
               </div>
@@ -67,8 +69,8 @@ export const ClosestStationCard = memo(
 
               <div className="flex items-center gap-2 text-sm text-blue-200">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="hidden sm:inline">Auto-updating</span>
-                <span className="sm:hidden">Live</span>
+                <span className="hidden sm:inline">{t('closestStation.autoUpdating')}</span>
+                <span className="sm:hidden">{t('closestStation.live')}</span>
               </div>
             </div>
           </div>
@@ -86,7 +88,7 @@ export const ClosestStationCard = memo(
                 {loading && (
                   <div className="flex items-center gap-2 text-blue-300">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-300"></div>
-                    <span>Loading arrivals...</span>
+                    <span>{t('closestStation.loading')}</span>
                   </div>
                 )}
 
@@ -94,7 +96,7 @@ export const ClosestStationCard = memo(
                   <div className="p-3 bg-red-800/50 border border-red-600 rounded text-sm">
                     <div className="flex items-center gap-2 text-red-100 mb-1">
                       <span>❌</span>
-                      <span>Error loading arrivals:</span>
+                      <span>{t('closestStation.error')}</span>
                     </div>
                     <div className="text-red-200">{error}</div>
                   </div>
@@ -104,14 +106,13 @@ export const ClosestStationCard = memo(
 
                 {!error && !loading && !data && (
                   <div className="text-blue-200">
-                    No arrivals scheduled for this station at the moment.
+                    {t('closestStation.noArrivals')}
                   </div>
                 )}
 
                 {userLocation && (
                   <div className="mt-3 text-xs text-blue-300 opacity-75">
-                    Based on your location: {userLocation.lat.toFixed(4)},{" "}
-                    {userLocation.lon.toFixed(4)}
+                    {t('closestStation.basedOnLocation', { lat: userLocation.lat.toFixed(4), lon: userLocation.lon.toFixed(4) })}
                   </div>
                 )}
               </CardContent>
