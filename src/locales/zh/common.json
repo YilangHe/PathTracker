@@ -157,5 +157,10 @@
   "direction": {
     "toNewYork": "前往纽约",
     "toNewJersey": "前往新泽西"
+  },
+  "time": {
+    "now": "现在",
+    "minutes": "分钟",
+    "minute": "分钟"
   }
 }

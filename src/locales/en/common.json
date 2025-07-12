@@ -157,5 +157,10 @@
   "direction": {
     "toNewYork": "To New York",
     "toNewJersey": "To New Jersey"
+  },
+  "time": {
+    "now": "Now",
+    "minutes": "minutes",
+    "minute": "minute"
   }
 }

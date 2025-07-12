@@ -181,15 +181,15 @@ export const ArrivalsTable = ({ data }: ArrivalsTableProps) => {
                               message
                             )}`}
                           >
-                            {formatArrivalTime(message.arrivalTimeMessage)
+                            {formatArrivalTime(message.arrivalTimeMessage, t('time.now'))
                               .replace(" min", "")
                               .replace("min", "")}
                           </div>
                           <div className={`text-sm ${arrivalClass(message)}`}>
                             {formatArrivalTime(
-                              message.arrivalTimeMessage
+                              message.arrivalTimeMessage, t('time.now')
                             ).includes("min")
-                              ? "minutes"
+                              ? t('time.minutes')
                               : ""}
                           </div>
                         </div>

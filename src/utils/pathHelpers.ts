@@ -22,7 +22,10 @@ export const arrivalClass = (message: Message): string =>
     ? "text-red-500 font-semibold"
     : heat(parseInt(message.secondsToArrival, 10));
 
-export const formatArrivalTime = (arrivalTimeMessage: string): string => {
+export const formatArrivalTime = (
+  arrivalTimeMessage: string, 
+  tNow?: string
+): string => {
   // Parse the numeric value from the arrival time message
   const timeMatch = arrivalTimeMessage.match(/(\d+)/);
 
@@ -31,7 +34,7 @@ export const formatArrivalTime = (arrivalTimeMessage: string): string => {
 
     // If it's 0 minutes, show "Now"
     if (minutes === 0) {
-      return "Now";
+      return tNow || "Now";
     }
 
     // Apply -1 offset for times greater than 0
@@ -39,7 +42,7 @@ export const formatArrivalTime = (arrivalTimeMessage: string): string => {
 
     // If after adjustment it becomes 0, show "Now"
     if (adjustedMinutes === 0) {
-      return "Now";
+      return tNow || "Now";
     }
 
     // Return the adjusted time with the same format
