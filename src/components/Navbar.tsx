@@ -8,6 +8,7 @@ import { useGeolocation } from "@/hooks/useGeolocation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WeatherToggle } from "@/components/WeatherToggle";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SettingsDropdown } from "@/components/SettingsDropdown";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -135,9 +136,16 @@ export function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="ml-auto flex items-center gap-2">
-          {hasPermission && <WeatherToggle />}
-          <ThemeToggle />
-          <LanguageSwitcher />
+          {/* Desktop: Individual components */}
+          <div className="hidden sm:flex items-center gap-2">
+            {hasPermission && <WeatherToggle />}
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </div>
+          {/* Mobile: Combined settings dropdown */}
+          <div className="sm:hidden">
+            <SettingsDropdown />
+          </div>
           {!isInstalled && (
             <button
               onClick={handleInstallClick}
