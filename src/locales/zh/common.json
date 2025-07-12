@@ -153,5 +153,9 @@
     "usingCachedData": "使用缓存数据",
     "lastUpdated": "最后更新",
     "never": "从未"
+  },
+  "direction": {
+    "toNewYork": "前往纽约",
+    "toNewJersey": "前往新泽西"
   }
 }

@@ -153,5 +153,9 @@
     "usingCachedData": "Usando datos en caché",
     "lastUpdated": "Última actualización",
     "never": "Nunca"
+  },
+  "direction": {
+    "toNewYork": "Hacia Nueva York",
+    "toNewJersey": "Hacia Nueva Jersey"
   }
 }
