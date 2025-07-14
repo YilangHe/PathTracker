@@ -3,13 +3,16 @@
 User-agent: *
 Allow: /
 
-# Explicitly allow important pages
+# Explicitly allow important pages (all locales)
 Allow: /disclaimer
 Allow: /add-to-home-screen
+Allow: /en/
+Allow: /zh/
+Allow: /es/
 
 # Disallow crawling of potential future admin or sensitive areas
 # Disallow: /admin/
-# Disallow: /api/
+Disallow: /api/
 
 # Special instructions for Google
 User-agent: Googlebot

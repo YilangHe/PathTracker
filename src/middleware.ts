@@ -1,11 +1,24 @@
 import createMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './config/i18n';
+import { NextRequest } from 'next/server';
 
-export default createMiddleware({
+const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
-  localeDetection: true,
+  localeDetection: false, // Disabled to prevent automatic redirects
 });
+
+export default function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  
+  // Allow root path to serve content without redirect
+  if (pathname === '/') {
+    return;
+  }
+  
+  // For all other paths, use next-intl middleware
+  return intlMiddleware(request);
+}
 
 export const config = {
   // Match all pathnames except for

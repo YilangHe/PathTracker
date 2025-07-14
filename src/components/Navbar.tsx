@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -27,17 +28,18 @@ export function Navbar() {
   const { hasPermission } = useGeolocation();
   const t = useTranslations();
   const locale = useLocale();
+  const router = useRouter();
 
   const handleInstallClick = async () => {
     if (isInstallable) {
       const success = await installPWA();
       if (!success) {
-        // If programmatic install fails, redirect to instructions
-        window.location.href = `/${locale}/add-to-home-screen`;
+        // If programmatic install fails, navigate to instructions
+        router.push(`/${locale}/add-to-home-screen`);
       }
     } else {
       // If not installable, show instructions
-      window.location.href = `/${locale}/add-to-home-screen`;
+      router.push(`/${locale}/add-to-home-screen`);
     }
   };
 
