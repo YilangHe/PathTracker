@@ -23,6 +23,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
   const [scale, setScale] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -49,15 +50,21 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       if (scale <= 1) return;
 
       event.preventDefault();
+      event.stopPropagation();
+
       const startX = event.clientX;
       const startY = event.clientY;
       const startPosX = x.get();
       const startPosY = y.get();
 
-      // Change cursor to grabbing
+      // Change cursor to grabbing and prevent page scrolling
+      setIsDragging(true);
       document.body.style.cursor = "grabbing";
+      document.body.style.overflow = "hidden";
 
       const handleMouseMove = (moveEvent: MouseEvent) => {
+        moveEvent.preventDefault();
+
         const deltaX = moveEvent.clientX - startX;
         const deltaY = moveEvent.clientY - startY;
 
@@ -81,8 +88,10 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       const handleMouseUp = () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
+        setIsDragging(false);
         document.body.style.userSelect = "auto";
         document.body.style.cursor = "auto";
+        document.body.style.overflow = "auto";
       };
 
       document.addEventListener("mousemove", handleMouseMove);
@@ -96,12 +105,12 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
     (event: React.TouchEvent) => {
       if (scale <= 1) return;
 
-      event.preventDefault();
       const touch = event.touches[0];
       const startX = touch.clientX;
       const startY = touch.clientY;
       const startPosX = x.get();
       const startPosY = y.get();
+      let hasMoved = false;
 
       const handleTouchMove = (moveEvent: TouchEvent) => {
         if (moveEvent.touches.length !== 1) return;
@@ -110,29 +119,51 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
         const deltaX = touch.clientX - startX;
         const deltaY = touch.clientY - startY;
 
-        const container = containerRef.current;
-        if (!container) return;
+        // Only prevent page scrolling once we detect actual movement
+        if (!hasMoved && (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5)) {
+          hasMoved = true;
+          setIsDragging(true);
+          moveEvent.preventDefault();
+          moveEvent.stopPropagation();
+          document.body.style.overflow = "hidden";
+          document.body.style.touchAction = "none";
+        }
 
-        const containerRect = container.getBoundingClientRect();
-        const imageWidth = containerRect.width * scale;
-        const imageHeight = containerRect.height * scale;
+        if (hasMoved) {
+          moveEvent.preventDefault();
+          moveEvent.stopPropagation();
 
-        const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
-        const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+          const container = containerRef.current;
+          if (!container) return;
 
-        const newX = Math.max(-maxX, Math.min(maxX, startPosX + deltaX));
-        const newY = Math.max(-maxY, Math.min(maxY, startPosY + deltaY));
+          const containerRect = container.getBoundingClientRect();
+          const imageWidth = containerRect.width * scale;
+          const imageHeight = containerRect.height * scale;
 
-        x.set(newX);
-        y.set(newY);
+          const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
+          const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+
+          const newX = Math.max(-maxX, Math.min(maxX, startPosX + deltaX));
+          const newY = Math.max(-maxY, Math.min(maxY, startPosY + deltaY));
+
+          x.set(newX);
+          y.set(newY);
+        }
       };
 
       const handleTouchEnd = () => {
         document.removeEventListener("touchmove", handleTouchMove);
         document.removeEventListener("touchend", handleTouchEnd);
+
+        // Restore page scrolling
+        setIsDragging(false);
+        document.body.style.overflow = "auto";
+        document.body.style.touchAction = "auto";
       };
 
-      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchmove", handleTouchMove, {
+        passive: false,
+      });
       document.addEventListener("touchend", handleTouchEnd);
     },
     [scale, x, y]
@@ -174,6 +205,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       document.body.style.overflow = "auto";
       document.body.style.cursor = "auto";
       document.body.style.userSelect = "auto";
+      document.body.style.touchAction = "auto";
     };
   }, []);
 
@@ -255,9 +287,14 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       {/* Map Container */}
       <div
         ref={containerRef}
-        className={`relative w-full h-[400px] sm:h-[500px] lg:h-[600px] border rounded-lg overflow-hidden bg-muted touch-pan-x touch-pan-y ${
-          scale > 1 ? "cursor-grab" : "cursor-default"
+        className={`relative w-full h-[400px] sm:h-[500px] lg:h-[600px] border rounded-lg overflow-hidden bg-muted ${
+          scale > 1
+            ? isDragging
+              ? "cursor-grabbing"
+              : "cursor-grab"
+            : "cursor-default"
         }`}
+        style={{ touchAction: scale > 1 ? "none" : "auto" }}
         onWheel={handleWheel}
         onTouchStart={handleTouchStart}
         onMouseEnter={handleMouseEnter}
