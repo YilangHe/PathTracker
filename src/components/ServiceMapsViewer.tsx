@@ -103,7 +103,19 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
 
   const handleTouchStart = useCallback(
     (event: React.TouchEvent) => {
-      if (scale <= 1) return;
+      // Always disable page scrolling when touching the map (mobile equivalent of mouse enter)
+      document.body.style.overflow = "hidden";
+
+      // Only handle dragging if zoomed in
+      if (scale <= 1) {
+        // Set up touch end handler to restore scrolling
+        const handleTouchEnd = () => {
+          document.removeEventListener("touchend", handleTouchEnd);
+          document.body.style.overflow = "auto";
+        };
+        document.addEventListener("touchend", handleTouchEnd);
+        return;
+      }
 
       const touch = event.touches[0];
       const startX = touch.clientX;
@@ -125,7 +137,6 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
           setIsDragging(true);
           moveEvent.preventDefault();
           moveEvent.stopPropagation();
-          document.body.style.overflow = "hidden";
           document.body.style.touchAction = "none";
         }
 
