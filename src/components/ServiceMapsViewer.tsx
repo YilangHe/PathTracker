@@ -24,6 +24,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isMapActive, setIsMapActive] = useState(false);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -104,6 +105,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
   const handleTouchStart = useCallback(
     (event: React.TouchEvent) => {
       // Always disable page scrolling when touching the map (mobile equivalent of mouse enter)
+      setIsMapActive(true);
       document.body.style.overflow = "hidden";
 
       // Only handle dragging if zoomed in
@@ -111,6 +113,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
         // Set up touch end handler to restore scrolling
         const handleTouchEnd = () => {
           document.removeEventListener("touchend", handleTouchEnd);
+          setIsMapActive(false);
           document.body.style.overflow = "auto";
         };
         document.addEventListener("touchend", handleTouchEnd);
@@ -168,6 +171,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
 
         // Restore page scrolling
         setIsDragging(false);
+        setIsMapActive(false);
         document.body.style.overflow = "auto";
         document.body.style.touchAction = "auto";
       };
@@ -186,20 +190,30 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
     setImageError(false);
   }, []);
 
-  const handleWheel = useCallback((event: React.WheelEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const delta = event.deltaY > 0 ? 0.9 : 1.1;
-    setScale((prev) => Math.max(0.5, Math.min(4, prev * delta)));
-  }, []);
+  const handleWheel = useCallback(
+    (event: React.WheelEvent) => {
+      // Prevent default scroll behavior
+      event.preventDefault();
+      event.stopPropagation();
+
+      // Only handle wheel events if the map is active
+      if (isMapActive) {
+        const delta = event.deltaY > 0 ? 0.9 : 1.1;
+        setScale((prev) => Math.max(0.5, Math.min(4, prev * delta)));
+      }
+    },
+    [isMapActive]
+  );
 
   const handleMouseEnter = useCallback(() => {
     // Disable page scrolling when mouse enters the map
+    setIsMapActive(true);
     document.body.style.overflow = "hidden";
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     // Re-enable page scrolling when mouse leaves the map
+    setIsMapActive(false);
     document.body.style.overflow = "auto";
   }, []);
 
@@ -210,6 +224,33 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
     }
   }, [scale, x, y]);
 
+  // More targeted scroll prevention using CSS and container-level event handling
+  useEffect(() => {
+    if (isMapActive) {
+      // Use CSS-based scroll prevention
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+      document.body.style.userSelect = "none";
+      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.touchAction = "none";
+
+      // Store original values for restoration
+      const originalBodyStyle = {
+        overflow: document.body.style.overflow,
+        touchAction: document.body.style.touchAction,
+        userSelect: document.body.style.userSelect,
+      };
+
+      return () => {
+        document.body.style.overflow = "auto";
+        document.body.style.touchAction = "auto";
+        document.body.style.userSelect = "auto";
+        document.documentElement.style.overflow = "auto";
+        document.documentElement.style.touchAction = "auto";
+      };
+    }
+  }, [isMapActive]);
+
   // Cleanup effect to restore scrolling and cursor
   useEffect(() => {
     return () => {
@@ -217,6 +258,8 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       document.body.style.cursor = "auto";
       document.body.style.userSelect = "auto";
       document.body.style.touchAction = "auto";
+      setIsMapActive(false);
+      setIsDragging(false);
     };
   }, []);
 
@@ -308,8 +351,23 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
         style={{ touchAction: scale > 1 ? "none" : "auto" }}
         onWheel={handleWheel}
         onTouchStart={handleTouchStart}
+        onTouchMove={(e) => {
+          // Prevent any scrolling when touching the map
+          if (isMapActive) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        onTouchEnd={() => {
+          // Ensure map is deactivated when touch ends
+          if (!isDragging) {
+            setIsMapActive(false);
+            document.body.style.overflow = "auto";
+          }
+        }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onContextMenu={(e) => e.preventDefault()}
       >
         <motion.div
           ref={imageRef}
