@@ -19,6 +19,8 @@
     "dragAndDropDesc": "Reorder stations by dragging cards",
     "serviceAlerts": "Service Alerts",
     "serviceAlertsDesc": "Stay informed about service disruptions",
+    "serviceMaps": "Service Maps",
+    "serviceMapsDesc": "View PATH system maps for different service periods",
     "aboutPath": "About PATH",
     "aboutPathDesc": "Learn more about the PATH train system",
     "dataSource": "Data Source",
@@ -162,5 +164,17 @@
     "now": "Now",
     "minutes": "minutes",
     "minute": "minute"
+  },
+  "serviceMaps": {
+    "title": "PATH Service Maps",
+    "description": "View PATH system maps for different service periods. Click and drag to pan, use controls to zoom.",
+    "weekdays": "Weekdays",
+    "weeknights": "Weeknights",
+    "weekends": "Weekends",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "resetZoom": "Reset Zoom",
+    "loading": "Loading map...",
+    "error": "Error loading map"
   }
 }

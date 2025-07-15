@@ -1,0 +1,317 @@
+"use client";
+
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
+
+interface ServiceMapsViewerProps {
+  className?: string;
+}
+
+type MapType = "weekdays" | "weeknights" | "weekends";
+
+const mapImages = {
+  weekdays: "/ServiceMaps/weekdays.jpg",
+  weeknights: "/ServiceMaps/weeknights.jpg",
+  weekends: "/ServiceMaps/weekends.jpg",
+};
+
+export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
+  const t = useTranslations("serviceMaps");
+  const [activeMap, setActiveMap] = useState<MapType>("weekdays");
+  const [scale, setScale] = useState(1);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  const handleZoomIn = useCallback(() => {
+    setScale((prev) => Math.min(prev * 1.5, 4));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setScale((prev) => Math.max(prev / 1.5, 0.5));
+  }, []);
+
+  const handleResetZoom = useCallback(() => {
+    setScale(1);
+    x.set(0);
+    y.set(0);
+  }, [x, y]);
+
+  const handleDrag = useCallback(
+    (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+      if (scale <= 1) return;
+
+      const container = containerRef.current;
+      if (!container) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const imageWidth = containerRect.width * scale;
+      const imageHeight = containerRect.height * scale;
+
+      const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
+      const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+
+      const currentX = x.get();
+      const currentY = y.get();
+
+      const newX = Math.max(-maxX, Math.min(maxX, currentX + info.delta.x));
+      const newY = Math.max(-maxY, Math.min(maxY, currentY + info.delta.y));
+
+      x.set(newX);
+      y.set(newY);
+    },
+    [scale, x, y]
+  );
+
+  const handleDragStart = useCallback(() => {
+    if (scale > 1) {
+      document.body.style.userSelect = "none";
+    }
+  }, [scale]);
+
+  const handleDragEnd = useCallback(() => {
+    document.body.style.userSelect = "auto";
+  }, []);
+
+  // Get drag constraints dynamically
+  const getDragConstraints = useCallback(() => {
+    const container = containerRef.current;
+    if (!container || scale <= 1)
+      return { left: 0, right: 0, top: 0, bottom: 0 };
+
+    const containerRect = container.getBoundingClientRect();
+    const imageWidth = containerRect.width * scale;
+    const imageHeight = containerRect.height * scale;
+
+    const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
+    const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+
+    return {
+      left: -maxX,
+      right: maxX,
+      top: -maxY,
+      bottom: maxY,
+    };
+  }, [scale]);
+
+  const handleTouchStart = useCallback(
+    (event: React.TouchEvent) => {
+      // Prevent default touch behavior to enable smooth panning
+      if (scale > 1) {
+        event.preventDefault();
+      }
+    },
+    [scale]
+  );
+
+  const handleTouchMove = useCallback(
+    (event: React.TouchEvent) => {
+      // Prevent scrolling when panning the map
+      if (scale > 1 && event.touches.length === 1) {
+        event.preventDefault();
+      }
+    },
+    [scale]
+  );
+
+  const handleMapChange = useCallback((mapType: MapType) => {
+    setActiveMap(mapType);
+    setImageLoaded(false);
+    setImageError(false);
+  }, []);
+
+  const handleWheel = useCallback((event: React.WheelEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const delta = event.deltaY > 0 ? 0.9 : 1.1;
+    setScale((prev) => Math.max(0.5, Math.min(4, prev * delta)));
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
+    // Disable page scrolling when mouse enters the map
+    document.body.style.overflow = "hidden";
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    // Re-enable page scrolling when mouse leaves the map
+    document.body.style.overflow = "auto";
+  }, []);
+
+  useEffect(() => {
+    if (scale === 1) {
+      x.set(0);
+      y.set(0);
+    }
+  }, [scale, x, y]);
+
+  // Cleanup effect to restore scrolling
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  return (
+    <div className={`space-y-4 ${className}`}>
+      {/* Map Selection Tabs */}
+      <div className="flex flex-wrap gap-2 p-1 bg-muted rounded-lg">
+        {Object.keys(mapImages).map((mapType) => (
+          <button
+            key={mapType}
+            onClick={() => handleMapChange(mapType as MapType)}
+            className={`flex-1 sm:flex-none px-4 py-2 rounded-md text-sm font-medium transition-colors touch-manipulation ${
+              activeMap === mapType
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted-foreground/10"
+            }`}
+          >
+            {t(mapType as keyof typeof mapImages)}
+          </button>
+        ))}
+      </div>
+
+      {/* Zoom Controls */}
+      <div className="flex items-center justify-between gap-2 p-2 bg-muted rounded-lg">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleZoomOut}
+            className="p-2 rounded-md bg-background hover:bg-muted-foreground/10 transition-colors touch-manipulation"
+            disabled={scale <= 0.5}
+          >
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M20 12H4"
+              />
+            </svg>
+          </button>
+
+          <span className="text-sm font-mono min-w-[3rem] text-center">
+            {Math.round(scale * 100)}%
+          </span>
+
+          <button
+            onClick={handleZoomIn}
+            className="p-2 rounded-md bg-background hover:bg-muted-foreground/10 transition-colors touch-manipulation"
+            disabled={scale >= 4}
+          >
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <button
+          onClick={handleResetZoom}
+          className="px-3 py-2 text-sm rounded-md bg-background hover:bg-muted-foreground/10 transition-colors touch-manipulation"
+        >
+          {t("resetZoom")}
+        </button>
+      </div>
+
+      {/* Map Container */}
+      <div
+        ref={containerRef}
+        className={`relative w-full h-[400px] sm:h-[500px] lg:h-[600px] border rounded-lg overflow-hidden bg-muted touch-pan-x touch-pan-y ${
+          scale > 1 ? "cursor-grab active:cursor-grabbing" : "cursor-default"
+        }`}
+        onWheel={handleWheel}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <motion.div
+          ref={imageRef}
+          className="w-full h-full flex items-center justify-center"
+          style={{
+            scale,
+            x,
+            y,
+          }}
+          drag={scale > 1}
+          dragConstraints={getDragConstraints()}
+          dragElastic={0.05}
+          onDrag={handleDrag}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          whileDrag={{ cursor: "grabbing" }}
+          dragMomentum={false}
+          dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+        >
+          {!imageLoaded && !imageError && (
+            <div className="flex items-center justify-center text-muted-foreground">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mr-2"></div>
+              {t("loading")}
+            </div>
+          )}
+
+          {imageError && (
+            <div className="flex items-center justify-center text-destructive">
+              <svg
+                className="w-6 h-6 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
+              </svg>
+              {t("error")}
+            </div>
+          )}
+
+          <Image
+            src={mapImages[activeMap]}
+            alt={`PATH ${t(activeMap)} service map`}
+            fill
+            className={`object-contain transition-opacity duration-300 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
+            priority
+          />
+        </motion.div>
+      </div>
+
+      {/* Help Text */}
+      <div className="text-sm text-muted-foreground text-center space-y-2">
+        <p>{t("description")}</p>
+        <p className="text-xs">
+          <span className="hidden sm:inline">Use mouse wheel to zoom. </span>
+          <span className="sm:hidden">Pinch to zoom on mobile. </span>
+          {scale > 1 && "Drag to pan around the map."}
+        </p>
+      </div>
+    </div>
+  );
+}

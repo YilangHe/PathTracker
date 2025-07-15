@@ -19,6 +19,8 @@
     "dragAndDropDesc": "通过拖动卡片重新排列站点",
     "serviceAlerts": "服务警报",
     "serviceAlertsDesc": "及时了解服务中断信息",
+    "serviceMaps": "服务地图",
+    "serviceMapsDesc": "查看不同服务时段的 PATH 系统地图",
     "aboutPath": "关于 PATH",
     "aboutPathDesc": "了解更多关于 PATH 列车系统的信息",
     "dataSource": "数据来源",
@@ -162,5 +164,17 @@
     "now": "现在",
     "minutes": "分钟",
     "minute": "分钟"
+  },
+  "serviceMaps": {
+    "title": "PATH 服务地图",
+    "description": "查看不同服务时段的 PATH 系统地图。点击并拖拽来平移，使用控件来缩放。",
+    "weekdays": "工作日",
+    "weeknights": "工作日夜间",
+    "weekends": "周末",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "resetZoom": "重置缩放",
+    "loading": "正在加载地图...",
+    "error": "加载地图时出错"
   }
 }

@@ -21,7 +21,7 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations, useLocale } from "next-intl";
 
 export function Navbar() {
   const { isInstallable, isInstalled, installPWA } = usePWAInstall();
@@ -47,7 +47,10 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-blue-600 shadow-lg">
       <div className="container max-w-4xl mx-auto flex h-14 items-center px-4">
         <div className="mr-4 flex">
-          <Link href={`/${locale}`} className="mr-6 flex items-center space-x-2">
+          <Link
+            href={`/${locale}`}
+            className="mr-6 flex items-center space-x-2"
+          >
             <Image
               src="/logo.png"
               alt="PATH Logo"
@@ -57,7 +60,7 @@ export function Navbar() {
               priority
             />
             <span className="hidden font-bold sm:inline-block text-white">
-              {t('nav.title')}
+              {t("nav.title")}
             </span>
           </Link>
         </div>
@@ -65,7 +68,7 @@ export function Navbar() {
           <NavigationMenuList>
             <NavigationMenuItem className="hidden sm:block">
               <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors">
-                {t('nav.features')}
+                {t("nav.features")}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 w-[320px] sm:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr] bg-popover border border-border shadow-lg rounded-md">
@@ -76,64 +79,86 @@ export function Navbar() {
                         href={`/${locale}`}
                       >
                         <div className="mb-2 mt-4 text-lg font-medium text-primary">
-                          {t('nav.realTimeArrivals')}
+                          {t("nav.realTimeArrivals")}
                         </div>
                         <p className="text-sm leading-tight text-muted-foreground">
-                          {t('nav.realTimeArrivalsDesc')}
+                          {t("nav.realTimeArrivalsDesc")}
                         </p>
                       </Link>
                     </NavigationMenuLink>
                   </li>
-                  <ListItem href={`/${locale}`} title={t('nav.multiStationView')}>
-                    {t('nav.multiStationViewDesc')}
+                  <ListItem
+                    href={`/${locale}`}
+                    title={t("nav.multiStationView")}
+                  >
+                    {t("nav.multiStationViewDesc")}
                   </ListItem>
-                  <ListItem href={`/${locale}`} title={t('nav.dragAndDrop')}>
-                    {t('nav.dragAndDropDesc')}
+                  <ListItem href={`/${locale}`} title={t("nav.dragAndDrop")}>
+                    {t("nav.dragAndDropDesc")}
                   </ListItem>
-                  <ListItem href={`/${locale}`} title={t('nav.serviceAlerts')}>
-                    {t('nav.serviceAlertsDesc')}
+                  <ListItem href={`/${locale}`} title={t("nav.serviceAlerts")}>
+                    {t("nav.serviceAlertsDesc")}
+                  </ListItem>
+                  <ListItem
+                    href={`/${locale}/service-maps`}
+                    title={t("nav.serviceMaps")}
+                  >
+                    {t("nav.serviceMapsDesc")}
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors">
-                {t('nav.about')}
+                {t("nav.about")}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[320px] gap-3 p-4 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover border border-border shadow-lg rounded-md">
                   <ListItem
-                    title={t('nav.aboutPath')}
+                    title={t("nav.aboutPath")}
                     href="https://www.panynj.gov/path"
                   >
-                    {t('nav.aboutPathDesc')}
+                    {t("nav.aboutPathDesc")}
                   </ListItem>
                   <ListItem
-                    title={t('nav.dataSource')}
+                    title={t("nav.dataSource")}
                     href="https://www.panynj.gov/path/en/schedules-maps.html"
                   >
-                    {t('nav.dataSourceDesc')}
+                    {t("nav.dataSourceDesc")}
                   </ListItem>
                   <ListItem
-                    title={t('nav.addToHomeScreen')}
+                    title={t("nav.addToHomeScreen")}
                     href={`/${locale}/add-to-home-screen`}
                   >
-                    {t('nav.addToHomeScreenDesc')}
-                  </ListItem>
-                  <ListItem title={t('nav.disclaimer')} href={`/${locale}/disclaimer`}>
-                    {t('nav.disclaimerDesc')}
-                  </ListItem>
-                  <ListItem title={t('nav.privacy')} href={`/${locale}`}>
-                    {t('nav.privacyDesc')}
+                    {t("nav.addToHomeScreenDesc")}
                   </ListItem>
                   <ListItem
-                    title={t('nav.contact')}
+                    title={t("nav.disclaimer")}
+                    href={`/${locale}/disclaimer`}
+                  >
+                    {t("nav.disclaimerDesc")}
+                  </ListItem>
+                  <ListItem title={t("nav.privacy")} href={`/${locale}`}>
+                    {t("nav.privacyDesc")}
+                  </ListItem>
+                  <ListItem
+                    title={t("nav.contact")}
                     href="mailto:livepathtracker@gmail.com"
                   >
-                    {t('nav.contactDesc')}
+                    {t("nav.contactDesc")}
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link
+                  href={`/${locale}/service-maps`}
+                  className="text-white hover:text-white/90 data-[active]:text-white bg-transparent hover:bg-white/10 px-3 py-2 rounded-md transition-colors text-sm font-medium"
+                >
+                  {t("nav.serviceMaps")}
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -168,7 +193,7 @@ export function Navbar() {
                 />
               </svg>
               <span className="hidden sm:inline">
-                {isInstallable ? t('nav.installApp') : t('nav.installGuide')}
+                {isInstallable ? t("nav.installApp") : t("nav.installGuide")}
               </span>
               <span className="sm:hidden">
                 {isInstallable ? "Install" : "Guide"}
@@ -189,7 +214,7 @@ export function Navbar() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="hidden sm:inline">{t('nav.appInstalled')}</span>
+              <span className="hidden sm:inline">{t("nav.appInstalled")}</span>
               <span className="sm:hidden">Installed</span>
             </div>
           )}

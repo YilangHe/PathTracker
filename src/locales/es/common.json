@@ -19,6 +19,8 @@
     "dragAndDropDesc": "Reordena las estaciones arrastrando las tarjetas",
     "serviceAlerts": "Alertas de Servicio",
     "serviceAlertsDesc": "Manténte informado sobre interrupciones del servicio",
+    "serviceMaps": "Mapas de Servicio",
+    "serviceMapsDesc": "Ver mapas del sistema PATH para diferentes períodos de servicio",
     "aboutPath": "Acerca de PATH",
     "aboutPathDesc": "Aprende más sobre el sistema de trenes PATH",
     "dataSource": "Fuente de Datos",
@@ -162,5 +164,17 @@
     "now": "Ahora",
     "minutes": "minutos",
     "minute": "minuto"
+  },
+  "serviceMaps": {
+    "title": "Mapas de Servicio PATH",
+    "description": "Ver mapas del sistema PATH para diferentes períodos de servicio. Haga clic y arrastre para mover, use los controles para acercar.",
+    "weekdays": "Días de semana",
+    "weeknights": "Noches de semana",
+    "weekends": "Fines de semana",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "resetZoom": "Restablecer zoom",
+    "loading": "Cargando mapa...",
+    "error": "Error al cargar el mapa"
   }
 }
