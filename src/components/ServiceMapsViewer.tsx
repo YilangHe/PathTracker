@@ -44,81 +44,98 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
     y.set(0);
   }, [x, y]);
 
-  const handleDrag = useCallback(
-    (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleMouseDown = useCallback(
+    (event: React.MouseEvent) => {
       if (scale <= 1) return;
 
-      const container = containerRef.current;
-      if (!container) return;
+      event.preventDefault();
+      const startX = event.clientX;
+      const startY = event.clientY;
+      const startPosX = x.get();
+      const startPosY = y.get();
 
-      const containerRect = container.getBoundingClientRect();
-      const imageWidth = containerRect.width * scale;
-      const imageHeight = containerRect.height * scale;
+      // Change cursor to grabbing
+      document.body.style.cursor = "grabbing";
 
-      const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
-      const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+      const handleMouseMove = (moveEvent: MouseEvent) => {
+        const deltaX = moveEvent.clientX - startX;
+        const deltaY = moveEvent.clientY - startY;
 
-      const currentX = x.get();
-      const currentY = y.get();
+        const container = containerRef.current;
+        if (!container) return;
 
-      const newX = Math.max(-maxX, Math.min(maxX, currentX + info.delta.x));
-      const newY = Math.max(-maxY, Math.min(maxY, currentY + info.delta.y));
+        const containerRect = container.getBoundingClientRect();
+        const imageWidth = containerRect.width * scale;
+        const imageHeight = containerRect.height * scale;
 
-      x.set(newX);
-      y.set(newY);
+        const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
+        const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+
+        const newX = Math.max(-maxX, Math.min(maxX, startPosX + deltaX));
+        const newY = Math.max(-maxY, Math.min(maxY, startPosY + deltaY));
+
+        x.set(newX);
+        y.set(newY);
+      };
+
+      const handleMouseUp = () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.body.style.userSelect = "auto";
+        document.body.style.cursor = "auto";
+      };
+
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.body.style.userSelect = "none";
     },
     [scale, x, y]
   );
 
-  const handleDragStart = useCallback(() => {
-    if (scale > 1) {
-      document.body.style.userSelect = "none";
-    }
-  }, [scale]);
-
-  const handleDragEnd = useCallback(() => {
-    document.body.style.userSelect = "auto";
-  }, []);
-
-  // Get drag constraints dynamically
-  const getDragConstraints = useCallback(() => {
-    const container = containerRef.current;
-    if (!container || scale <= 1)
-      return { left: 0, right: 0, top: 0, bottom: 0 };
-
-    const containerRect = container.getBoundingClientRect();
-    const imageWidth = containerRect.width * scale;
-    const imageHeight = containerRect.height * scale;
-
-    const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
-    const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
-
-    return {
-      left: -maxX,
-      right: maxX,
-      top: -maxY,
-      bottom: maxY,
-    };
-  }, [scale]);
-
   const handleTouchStart = useCallback(
     (event: React.TouchEvent) => {
-      // Prevent default touch behavior to enable smooth panning
-      if (scale > 1) {
-        event.preventDefault();
-      }
-    },
-    [scale]
-  );
+      if (scale <= 1) return;
 
-  const handleTouchMove = useCallback(
-    (event: React.TouchEvent) => {
-      // Prevent scrolling when panning the map
-      if (scale > 1 && event.touches.length === 1) {
-        event.preventDefault();
-      }
+      event.preventDefault();
+      const touch = event.touches[0];
+      const startX = touch.clientX;
+      const startY = touch.clientY;
+      const startPosX = x.get();
+      const startPosY = y.get();
+
+      const handleTouchMove = (moveEvent: TouchEvent) => {
+        if (moveEvent.touches.length !== 1) return;
+
+        const touch = moveEvent.touches[0];
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+
+        const container = containerRef.current;
+        if (!container) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const imageWidth = containerRect.width * scale;
+        const imageHeight = containerRect.height * scale;
+
+        const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
+        const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+
+        const newX = Math.max(-maxX, Math.min(maxX, startPosX + deltaX));
+        const newY = Math.max(-maxY, Math.min(maxY, startPosY + deltaY));
+
+        x.set(newX);
+        y.set(newY);
+      };
+
+      const handleTouchEnd = () => {
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleTouchEnd);
+      };
+
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
     },
-    [scale]
+    [scale, x, y]
   );
 
   const handleMapChange = useCallback((mapType: MapType) => {
@@ -151,10 +168,12 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
     }
   }, [scale, x, y]);
 
-  // Cleanup effect to restore scrolling
+  // Cleanup effect to restore scrolling and cursor
   useEffect(() => {
     return () => {
       document.body.style.overflow = "auto";
+      document.body.style.cursor = "auto";
+      document.body.style.userSelect = "auto";
     };
   }, []);
 
@@ -237,11 +256,10 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       <div
         ref={containerRef}
         className={`relative w-full h-[400px] sm:h-[500px] lg:h-[600px] border rounded-lg overflow-hidden bg-muted touch-pan-x touch-pan-y ${
-          scale > 1 ? "cursor-grab active:cursor-grabbing" : "cursor-default"
+          scale > 1 ? "cursor-grab" : "cursor-default"
         }`}
         onWheel={handleWheel}
         onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -253,15 +271,8 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
             x,
             y,
           }}
-          drag={scale > 1}
-          dragConstraints={getDragConstraints()}
-          dragElastic={0.05}
-          onDrag={handleDrag}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          whileDrag={{ cursor: "grabbing" }}
-          dragMomentum={false}
-          dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
         >
           {!imageLoaded && !imageError && (
             <div className="flex items-center justify-center text-muted-foreground">
