@@ -39,6 +39,40 @@ export function ServiceMapsPageClient() {
               </div>
             </div>
           </div>
+
+          {/* Disclaimer */}
+          <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-6 space-y-3">
+            <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
+              {t("disclaimerTitle")}
+            </h3>
+            <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+              {t("disclaimerText")}
+            </p>
+            <div className="pt-2">
+              <a
+                href="https://www.panynj.gov/path/en/schedules-maps.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+                {t("officialSource")}
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -173,7 +173,7 @@ export function Navbar() {
                   <span className="hidden sm:inline">
                     {t("nav.serviceMaps")}
                   </span>
-                  <span className="sm:hidden">Maps</span>
+                  <span className="sm:hidden">{t("nav.serviceMapsShort")}</span>
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
@@ -213,7 +213,9 @@ export function Navbar() {
                 {isInstallable ? t("nav.installApp") : t("nav.installGuide")}
               </span>
               <span className="sm:hidden">
-                {isInstallable ? "Install" : "Guide"}
+                {isInstallable
+                  ? t("nav.installAppShort")
+                  : t("nav.installGuideShort")}
               </span>
             </button>
           )}
@@ -232,7 +234,7 @@ export function Navbar() {
                 />
               </svg>
               <span className="hidden sm:inline">{t("nav.appInstalled")}</span>
-              <span className="sm:hidden">Installed</span>
+              <span className="sm:hidden">{t("nav.appInstalledShort")}</span>
             </div>
           )}
         </div>
