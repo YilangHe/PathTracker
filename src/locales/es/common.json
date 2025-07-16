@@ -168,6 +168,10 @@
   "serviceMaps": {
     "title": "Mapas de Servicio PATH",
     "description": "Ver mapas del sistema PATH para diferentes períodos de servicio. Haga clic y arrastre para mover, use los controles para acercar.",
+    "aboutTitle": "Acerca de los Mapas de Servicio PATH",
+    "pinchToZoom": "Pellizca para acercar en móvil.",
+    "mouseWheelZoom": "Usa la rueda del ratón para acercar.",
+    "dragToPan": "Arrastra para mover el mapa.",
     "weekdays": "Días de semana",
     "weeknights": "Noches de semana",
     "weekends": "Fines de semana",

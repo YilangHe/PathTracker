@@ -168,6 +168,10 @@
   "serviceMaps": {
     "title": "PATH 服务地图",
     "description": "查看不同服务时段的 PATH 系统地图。点击并拖拽来平移，使用控件来缩放。",
+    "aboutTitle": "关于 PATH 服务地图",
+    "pinchToZoom": "在手机上双指缩放。",
+    "mouseWheelZoom": "使用鼠标滚轮缩放。",
+    "dragToPan": "拖拽来移动地图。",
     "weekdays": "工作日",
     "weeknights": "工作日夜间",
     "weekends": "周末",

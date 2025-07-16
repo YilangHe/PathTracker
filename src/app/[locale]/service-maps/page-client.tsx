@@ -23,7 +23,7 @@ export function ServiceMapsPageClient() {
 
           {/* Additional Information */}
           <div className="bg-muted/50 rounded-lg p-4 sm:p-6 space-y-4">
-            <h2 className="text-xl font-semibold">About PATH Service Maps</h2>
+            <h2 className="text-xl font-semibold">{t("aboutTitle")}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
               <div>
                 <h3 className="font-medium mb-2">{t("weekdays")}</h3>

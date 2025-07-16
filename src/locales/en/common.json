@@ -168,6 +168,10 @@
   "serviceMaps": {
     "title": "PATH Service Maps",
     "description": "View PATH system maps for different service periods. Click and drag to pan, use controls to zoom.",
+    "aboutTitle": "About PATH Service Maps",
+    "pinchToZoom": "Pinch to zoom on mobile.",
+    "mouseWheelZoom": "Use mouse wheel to zoom.",
+    "dragToPan": "Drag to pan around the map.",
     "weekdays": "Weekdays",
     "weeknights": "Weeknights",
     "weekends": "Weekends",

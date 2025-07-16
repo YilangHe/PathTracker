@@ -120,7 +120,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       // Prevent all default touch behaviors on the map
       event.preventDefault();
       event.stopPropagation();
-      
+
       // Always disable page scrolling when touching the map (mobile equivalent of mouse enter)
       setIsMapActive(true);
       document.body.style.overflow = "hidden";
@@ -137,7 +137,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       // Handle single touch - only proceed with dragging if zoomed in
       if (event.touches.length === 1) {
         setIsPinching(false);
-        
+
         if (scale <= 1) {
           // Set up touch end handler to restore scrolling
           const handleTouchEnd = () => {
@@ -161,11 +161,14 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
           if (moveEvent.touches.length === 2) {
             moveEvent.preventDefault();
             moveEvent.stopPropagation();
-            
+
             const currentDistance = getTouchDistance(moveEvent.touches as any);
             if (initialPinchDistance > 0) {
               const scaleChange = currentDistance / initialPinchDistance;
-              const newScale = Math.max(0.5, Math.min(4, initialPinchScale * scaleChange));
+              const newScale = Math.max(
+                0.5,
+                Math.min(4, initialPinchScale * scaleChange)
+              );
               setScale(newScale);
             }
             return;
@@ -393,12 +396,12 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
               : "cursor-grab"
             : "cursor-default"
         }`}
-        style={{ 
+        style={{
           touchAction: "none",
           WebkitUserSelect: "none",
           userSelect: "none",
           WebkitTouchCallout: "none",
-          WebkitTapHighlightColor: "transparent"
+          WebkitTapHighlightColor: "transparent",
         }}
         onWheel={handleWheel}
         onTouchStart={handleTouchStart}
@@ -406,13 +409,16 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
           // Always prevent default touch behaviors on the map
           e.preventDefault();
           e.stopPropagation();
-          
+
           // Handle pinch gestures on the container
           if (e.touches.length === 2 && isPinching) {
             const currentDistance = getTouchDistance(e.touches);
             if (initialPinchDistance > 0) {
               const scaleChange = currentDistance / initialPinchDistance;
-              const newScale = Math.max(0.5, Math.min(4, initialPinchScale * scaleChange));
+              const newScale = Math.max(
+                0.5,
+                Math.min(4, initialPinchScale * scaleChange)
+              );
               setScale(newScale);
             }
             return;
@@ -440,7 +446,7 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
             touchAction: "none",
             WebkitUserSelect: "none",
             userSelect: "none",
-            WebkitTouchCallout: "none"
+            WebkitTouchCallout: "none",
           }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
@@ -489,9 +495,9 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       <div className="text-sm text-muted-foreground text-center space-y-2">
         <p>{t("description")}</p>
         <p className="text-xs">
-          <span className="hidden sm:inline">Use mouse wheel to zoom. </span>
-          <span className="sm:hidden">Pinch to zoom on mobile. </span>
-          {scale > 1 && "Drag to pan around the map."}
+          <span className="hidden sm:inline">{t("mouseWheelZoom")} </span>
+          <span className="sm:hidden">{t("pinchToZoom")} </span>
+          {scale > 1 && t("dragToPan")}
         </p>
       </div>
     </div>
