@@ -27,23 +27,15 @@ export function ServiceMapsPageClient() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
               <div>
                 <h3 className="font-medium mb-2">{t("weekdays")}</h3>
-                <p className="text-muted-foreground">
-                  Regular service Monday through Friday, typically 6:00 AM to
-                  10:00 PM
-                </p>
+                <p className="text-muted-foreground">{t("weekdaysDesc")}</p>
               </div>
               <div>
                 <h3 className="font-medium mb-2">{t("weeknights")}</h3>
-                <p className="text-muted-foreground">
-                  Late night service Monday through Friday, typically 10:00 PM
-                  to 6:00 AM
-                </p>
+                <p className="text-muted-foreground">{t("weeknightsDesc")}</p>
               </div>
               <div className="sm:col-span-2 lg:col-span-1">
                 <h3 className="font-medium mb-2">{t("weekends")}</h3>
-                <p className="text-muted-foreground">
-                  Saturday and Sunday service with modified schedules and routes
-                </p>
+                <p className="text-muted-foreground">{t("weekendsDesc")}</p>
               </div>
             </div>
           </div>
