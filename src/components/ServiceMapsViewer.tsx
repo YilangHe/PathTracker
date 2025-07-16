@@ -117,6 +117,10 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
 
   const handleTouchStart = useCallback(
     (event: React.TouchEvent) => {
+      // Prevent all default touch behaviors on the map
+      event.preventDefault();
+      event.stopPropagation();
+      
       // Always disable page scrolling when touching the map (mobile equivalent of mouse enter)
       setIsMapActive(true);
       document.body.style.overflow = "hidden";
@@ -269,20 +273,25 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
   // More targeted scroll prevention using CSS and container-level event handling
   useEffect(() => {
     if (isMapActive) {
-      // Use CSS-based scroll prevention
+      // Use CSS-based scroll prevention and zoom prevention
       document.body.style.overflow = "hidden";
       document.body.style.touchAction = "none";
       document.body.style.userSelect = "none";
+      (document.body.style as any).webkitUserSelect = "none";
+      (document.body.style as any).webkitTouchCallout = "none";
       document.documentElement.style.overflow = "hidden";
       document.documentElement.style.touchAction = "none";
-
+      document.documentElement.style.userSelect = "none";
 
       return () => {
         document.body.style.overflow = "auto";
         document.body.style.touchAction = "auto";
         document.body.style.userSelect = "auto";
+        (document.body.style as any).webkitUserSelect = "auto";
+        (document.body.style as any).webkitTouchCallout = "auto";
         document.documentElement.style.overflow = "auto";
         document.documentElement.style.touchAction = "auto";
+        document.documentElement.style.userSelect = "auto";
       };
     }
   }, [isMapActive]);
@@ -384,15 +393,22 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
               : "cursor-grab"
             : "cursor-default"
         }`}
-        style={{ touchAction: scale > 1 ? "none" : "auto" }}
+        style={{ 
+          touchAction: "none",
+          WebkitUserSelect: "none",
+          userSelect: "none",
+          WebkitTouchCallout: "none",
+          WebkitTapHighlightColor: "transparent"
+        }}
         onWheel={handleWheel}
         onTouchStart={handleTouchStart}
         onTouchMove={(e) => {
+          // Always prevent default touch behaviors on the map
+          e.preventDefault();
+          e.stopPropagation();
+          
           // Handle pinch gestures on the container
           if (e.touches.length === 2 && isPinching) {
-            e.preventDefault();
-            e.stopPropagation();
-            
             const currentDistance = getTouchDistance(e.touches);
             if (initialPinchDistance > 0) {
               const scaleChange = currentDistance / initialPinchDistance;
@@ -400,12 +416,6 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
               setScale(newScale);
             }
             return;
-          }
-
-          // Prevent any scrolling when touching the map
-          if (isMapActive) {
-            e.preventDefault();
-            e.stopPropagation();
           }
         }}
         onTouchEnd={() => {
@@ -427,6 +437,10 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
             scale,
             x,
             y,
+            touchAction: "none",
+            WebkitUserSelect: "none",
+            userSelect: "none",
+            WebkitTouchCallout: "none"
           }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
