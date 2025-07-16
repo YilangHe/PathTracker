@@ -3,7 +3,7 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 
 interface ServiceMapsViewerProps {
   className?: string;
@@ -25,12 +25,25 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
   const [imageError, setImageError] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isMapActive, setIsMapActive] = useState(false);
+  const [isPinching, setIsPinching] = useState(false);
+  const [initialPinchDistance, setInitialPinchDistance] = useState(0);
+  const [initialPinchScale, setInitialPinchScale] = useState(1);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+
+  // Helper function to calculate distance between two touch points
+  const getTouchDistance = useCallback((touches: React.TouchList) => {
+    if (touches.length < 2) return 0;
+    const touch1 = touches[0];
+    const touch2 = touches[1];
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }, []);
 
   const handleZoomIn = useCallback(() => {
     setScale((prev) => Math.min(prev * 1.5, 4));
@@ -108,80 +121,109 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       setIsMapActive(true);
       document.body.style.overflow = "hidden";
 
-      // Only handle dragging if zoomed in
-      if (scale <= 1) {
-        // Set up touch end handler to restore scrolling
-        const handleTouchEnd = () => {
-          document.removeEventListener("touchend", handleTouchEnd);
-          setIsMapActive(false);
-          document.body.style.overflow = "auto";
-        };
-        document.addEventListener("touchend", handleTouchEnd);
+      // Handle multi-touch pinch gestures
+      if (event.touches.length === 2) {
+        const distance = getTouchDistance(event.touches);
+        setInitialPinchDistance(distance);
+        setInitialPinchScale(scale);
+        setIsPinching(true);
         return;
       }
 
-      const touch = event.touches[0];
-      const startX = touch.clientX;
-      const startY = touch.clientY;
-      const startPosX = x.get();
-      const startPosY = y.get();
-      let hasMoved = false;
-
-      const handleTouchMove = (moveEvent: TouchEvent) => {
-        if (moveEvent.touches.length !== 1) return;
-
-        const touch = moveEvent.touches[0];
-        const deltaX = touch.clientX - startX;
-        const deltaY = touch.clientY - startY;
-
-        // Only prevent page scrolling once we detect actual movement
-        if (!hasMoved && (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5)) {
-          hasMoved = true;
-          setIsDragging(true);
-          moveEvent.preventDefault();
-          moveEvent.stopPropagation();
-          document.body.style.touchAction = "none";
+      // Handle single touch - only proceed with dragging if zoomed in
+      if (event.touches.length === 1) {
+        setIsPinching(false);
+        
+        if (scale <= 1) {
+          // Set up touch end handler to restore scrolling
+          const handleTouchEnd = () => {
+            document.removeEventListener("touchend", handleTouchEnd);
+            setIsMapActive(false);
+            document.body.style.overflow = "auto";
+          };
+          document.addEventListener("touchend", handleTouchEnd);
+          return;
         }
 
-        if (hasMoved) {
-          moveEvent.preventDefault();
-          moveEvent.stopPropagation();
+        const touch = event.touches[0];
+        const startX = touch.clientX;
+        const startY = touch.clientY;
+        const startPosX = x.get();
+        const startPosY = y.get();
+        let hasMoved = false;
 
-          const container = containerRef.current;
-          if (!container) return;
+        const handleTouchMove = (moveEvent: TouchEvent) => {
+          // Handle pinch gestures
+          if (moveEvent.touches.length === 2) {
+            moveEvent.preventDefault();
+            moveEvent.stopPropagation();
+            
+            const currentDistance = getTouchDistance(moveEvent.touches as any);
+            if (initialPinchDistance > 0) {
+              const scaleChange = currentDistance / initialPinchDistance;
+              const newScale = Math.max(0.5, Math.min(4, initialPinchScale * scaleChange));
+              setScale(newScale);
+            }
+            return;
+          }
 
-          const containerRect = container.getBoundingClientRect();
-          const imageWidth = containerRect.width * scale;
-          const imageHeight = containerRect.height * scale;
+          // Handle single touch drag
+          if (moveEvent.touches.length !== 1) return;
 
-          const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
-          const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+          const touch = moveEvent.touches[0];
+          const deltaX = touch.clientX - startX;
+          const deltaY = touch.clientY - startY;
 
-          const newX = Math.max(-maxX, Math.min(maxX, startPosX + deltaX));
-          const newY = Math.max(-maxY, Math.min(maxY, startPosY + deltaY));
+          // Only prevent page scrolling once we detect actual movement
+          if (!hasMoved && (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5)) {
+            hasMoved = true;
+            setIsDragging(true);
+            moveEvent.preventDefault();
+            moveEvent.stopPropagation();
+            document.body.style.touchAction = "none";
+          }
 
-          x.set(newX);
-          y.set(newY);
-        }
-      };
+          if (hasMoved) {
+            moveEvent.preventDefault();
+            moveEvent.stopPropagation();
 
-      const handleTouchEnd = () => {
-        document.removeEventListener("touchmove", handleTouchMove);
-        document.removeEventListener("touchend", handleTouchEnd);
+            const container = containerRef.current;
+            if (!container) return;
 
-        // Restore page scrolling
-        setIsDragging(false);
-        setIsMapActive(false);
-        document.body.style.overflow = "auto";
-        document.body.style.touchAction = "auto";
-      };
+            const containerRect = container.getBoundingClientRect();
+            const imageWidth = containerRect.width * scale;
+            const imageHeight = containerRect.height * scale;
 
-      document.addEventListener("touchmove", handleTouchMove, {
-        passive: false,
-      });
-      document.addEventListener("touchend", handleTouchEnd);
+            const maxX = Math.max(0, (imageWidth - containerRect.width) / 2);
+            const maxY = Math.max(0, (imageHeight - containerRect.height) / 2);
+
+            const newX = Math.max(-maxX, Math.min(maxX, startPosX + deltaX));
+            const newY = Math.max(-maxY, Math.min(maxY, startPosY + deltaY));
+
+            x.set(newX);
+            y.set(newY);
+          }
+        };
+
+        const handleTouchEnd = () => {
+          document.removeEventListener("touchmove", handleTouchMove);
+          document.removeEventListener("touchend", handleTouchEnd);
+
+          // Restore page scrolling
+          setIsDragging(false);
+          setIsMapActive(false);
+          setIsPinching(false);
+          document.body.style.overflow = "auto";
+          document.body.style.touchAction = "auto";
+        };
+
+        document.addEventListener("touchmove", handleTouchMove, {
+          passive: false,
+        });
+        document.addEventListener("touchend", handleTouchEnd);
+      }
     },
-    [scale, x, y]
+    [scale, x, y, getTouchDistance, initialPinchDistance, initialPinchScale]
   );
 
   const handleMapChange = useCallback((mapType: MapType) => {
@@ -234,12 +276,6 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
       document.documentElement.style.overflow = "hidden";
       document.documentElement.style.touchAction = "none";
 
-      // Store original values for restoration
-      const originalBodyStyle = {
-        overflow: document.body.style.overflow,
-        touchAction: document.body.style.touchAction,
-        userSelect: document.body.style.userSelect,
-      };
 
       return () => {
         document.body.style.overflow = "auto";
@@ -352,6 +388,20 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
         onWheel={handleWheel}
         onTouchStart={handleTouchStart}
         onTouchMove={(e) => {
+          // Handle pinch gestures on the container
+          if (e.touches.length === 2 && isPinching) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const currentDistance = getTouchDistance(e.touches);
+            if (initialPinchDistance > 0) {
+              const scaleChange = currentDistance / initialPinchDistance;
+              const newScale = Math.max(0.5, Math.min(4, initialPinchScale * scaleChange));
+              setScale(newScale);
+            }
+            return;
+          }
+
           // Prevent any scrolling when touching the map
           if (isMapActive) {
             e.preventDefault();
@@ -359,7 +409,8 @@ export function ServiceMapsViewer({ className = "" }: ServiceMapsViewerProps) {
           }
         }}
         onTouchEnd={() => {
-          // Ensure map is deactivated when touch ends
+          // Reset pinch state and ensure map is deactivated when touch ends
+          setIsPinching(false);
           if (!isDragging) {
             setIsMapActive(false);
             document.body.style.overflow = "auto";
