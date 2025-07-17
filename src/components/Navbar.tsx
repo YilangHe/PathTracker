@@ -174,31 +174,32 @@ export function Navbar() {
             <SettingsDropdown />
           </div>
           {!isInstalled && (
-            <Tooltip
-              content={isInstallable ? t("nav.installApp") : t("nav.installGuide")}
-              position="bottom"
+            <button
+              onClick={handleInstallClick}
+              className="inline-flex items-center h-11 sm:h-9 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-white bg-white/10 hover:bg-white/20 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 border border-white/20 hover:border-white/30 touch-manipulation"
+              aria-label={isInstallable ? t("nav.installApp") : t("nav.installGuide")}
             >
-              <button
-                onClick={handleInstallClick}
-                className="inline-flex items-center justify-center h-9 w-9 text-white hover:text-white/90 bg-transparent hover:bg-white/10 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
-                aria-label={isInstallable ? t("nav.installApp") : t("nav.installGuide")}
+              <svg
+                className="w-5 h-5 sm:w-4 sm:h-4 sm:mr-1.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-              </button>
-            </Tooltip>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+                />
+              </svg>
+              <span className="hidden sm:inline ml-1">
+                {isInstallable ? t("nav.installAppShort") : "Install"}
+              </span>
+              <span className="sm:hidden ml-1.5 text-xs">
+                Install
+              </span>
+            </button>
           )}
           {isInstalled && (
             <Tooltip
