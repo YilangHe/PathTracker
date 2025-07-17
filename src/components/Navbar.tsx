@@ -6,10 +6,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 import { useGeolocation } from "@/hooks/useGeolocation";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { WeatherToggle } from "@/components/WeatherToggle";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { DesktopSettingsDropdown } from "@/components/DesktopSettingsDropdown";
 import { SettingsDropdown } from "@/components/SettingsDropdown";
+import { Tooltip } from "@/components/ui/tooltip";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -45,7 +44,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-blue-600 shadow-lg">
-      <div className="container max-w-4xl mx-auto flex h-14 items-center px-4">
+      <div className="container max-w-4xl mx-auto flex h-16 sm:h-14 items-center px-4 lg:px-6">
         <div className="mr-4 flex">
           <Link
             href={`/${locale}`}
@@ -59,15 +58,15 @@ export function Navbar() {
               className="h-8 w-8 object-contain"
               priority
             />
-            <span className="hidden font-bold sm:inline-block text-white">
+            <span className="hidden font-bold md:inline-block text-white">
               {t("nav.title")}
             </span>
           </Link>
         </div>
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem className="hidden sm:block">
-              <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors">
+            <NavigationMenuItem className="hidden md:block">
+              <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors min-h-[44px] touch-manipulation">
                 {t("nav.features")}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
@@ -109,7 +108,7 @@ export function Navbar() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors">
+              <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors min-h-[44px] touch-manipulation">
                 {t("nav.about")}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
@@ -154,37 +153,21 @@ export function Navbar() {
               <NavigationMenuLink asChild>
                 <Link
                   href={`/${locale}/service-maps`}
-                  className="text-white hover:text-white/90 data-[active]:text-white bg-transparent hover:bg-white/10 px-3 py-2 rounded-md transition-colors text-sm font-medium inline-flex items-center"
+                  className="text-white hover:text-white/90 data-[active]:text-white bg-transparent hover:bg-white/10 px-3 py-2 rounded-md transition-colors text-sm font-medium inline-flex items-center min-h-[44px] touch-manipulation"
                 >
-                  <svg
-                    className="w-4 h-4 sm:mr-2 mr-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7"
-                    />
-                  </svg>
-                  <span className="hidden sm:inline">
+                  <span className="hidden md:inline">
                     {t("nav.serviceMaps")}
                   </span>
-                  <span className="sm:hidden">{t("nav.serviceMapsShort")}</span>
+                  <span className="md:hidden">{t("nav.serviceMapsShort")}</span>
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <div className="ml-auto flex items-center gap-2">
-          {/* Desktop: Individual components */}
-          <div className="hidden sm:flex items-center gap-2">
-            {hasPermission && <WeatherToggle />}
-            <ThemeToggle />
-            <LanguageSwitcher />
+        <div className="ml-auto flex items-center gap-2 md:gap-3">
+          {/* Desktop/Tablet: Unified settings dropdown */}
+          <div className="hidden sm:flex items-center">
+            <DesktopSettingsDropdown />
           </div>
           {/* Mobile: Combined settings dropdown */}
           <div className="sm:hidden">
@@ -193,10 +176,11 @@ export function Navbar() {
           {!isInstalled && (
             <button
               onClick={handleInstallClick}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 hover:text-blue-700 transition-colors sm:px-4"
+              className="inline-flex items-center h-11 sm:h-9 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-white bg-white/10 hover:bg-white/20 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 border border-white/20 hover:border-white/30 touch-manipulation"
+              aria-label={isInstallable ? t("nav.installApp") : t("nav.installGuide")}
             >
               <svg
-                className="w-4 h-4 sm:mr-2"
+                className="w-5 h-5 sm:w-4 sm:h-4 sm:mr-1.5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -206,36 +190,37 @@ export function Navbar() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"
                 />
               </svg>
-              <span className="hidden sm:inline">
-                {isInstallable ? t("nav.installApp") : t("nav.installGuide")}
+              <span className="hidden sm:inline ml-1">
+                {isInstallable ? t("nav.installAppShort") : "Install"}
               </span>
-              <span className="sm:hidden">
-                {isInstallable
-                  ? t("nav.installAppShort")
-                  : t("nav.installGuideShort")}
+              <span className="sm:hidden ml-1.5 text-xs">
+                Install
               </span>
             </button>
           )}
           {isInstalled && (
-            <div className="inline-flex items-center px-3 py-2 text-sm font-medium text-green-600 bg-green-50 border border-green-200 rounded-md sm:px-4">
-              <svg
-                className="w-4 h-4 sm:mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="hidden sm:inline">{t("nav.appInstalled")}</span>
-              <span className="sm:hidden">{t("nav.appInstalledShort")}</span>
-            </div>
+            <Tooltip
+              content={t("nav.appInstalled")}
+              position="bottom"
+            >
+              <div className="inline-flex items-center justify-center h-9 w-9 text-green-600 bg-green-50 border border-green-200 rounded-md">
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </Tooltip>
           )}
         </div>
       </div>

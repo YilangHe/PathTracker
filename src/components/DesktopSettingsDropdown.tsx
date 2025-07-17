@@ -1,16 +1,18 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Settings, Monitor, Moon, Sun, Cloud, CloudOff, Globe } from "lucide-react";
+import { Settings, Monitor, Moon, Sun, Cloud, CloudOff } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useUserPreferences } from "@/contexts/UserPreferencesContext";
+import { useGeolocation } from "@/hooks/useGeolocation";
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { locales, localeNames, localeFlags } from '@/config/i18n';
 
-export const SettingsDropdown: React.FC = () => {
+export const DesktopSettingsDropdown: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const { preferences, toggleWeatherWidget } = useUserPreferences();
+  const { hasPermission } = useGeolocation();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const locale = useLocale();
@@ -65,11 +67,11 @@ export const SettingsDropdown: React.FC = () => {
     <div ref={containerRef} className="relative">
       <button
         onClick={handleToggleClick}
-        className="inline-flex items-center justify-center h-11 w-11 rounded-md text-white hover:text-white/90 bg-transparent hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 touch-manipulation"
+        className="inline-flex items-center justify-center h-9 w-9 rounded-md text-white hover:text-white/90 bg-transparent hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
         aria-label="Settings menu"
         aria-expanded={isOpen}
       >
-        <Settings className="h-5 w-5" />
+        <Settings className="h-4 w-4" />
       </button>
 
       {/* Dropdown Menu */}
@@ -105,26 +107,30 @@ export const SettingsDropdown: React.FC = () => {
             );
           })}
 
-          {/* Divider */}
-          <div className="my-1 h-px bg-border" />
+          {/* Weather Section - Only show if geolocation permission is granted */}
+          {hasPermission && (
+            <>
+              {/* Divider */}
+              <div className="my-1 h-px bg-border" />
 
-          {/* Weather Section */}
-          <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
-            Weather
-          </div>
-          <button
-            onClick={toggleWeatherWidget}
-            className="relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-foreground"
-          >
-            {preferences.showWeatherWidget ? (
-              <Cloud className="mr-3 h-4 w-4" />
-            ) : (
-              <CloudOff className="mr-3 h-4 w-4" />
-            )}
-            <span className="flex-1 text-left">
-              {preferences.showWeatherWidget ? "Hide Weather" : "Show Weather"}
-            </span>
-          </button>
+              <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+                Weather
+              </div>
+              <button
+                onClick={toggleWeatherWidget}
+                className="relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-foreground"
+              >
+                {preferences.showWeatherWidget ? (
+                  <Cloud className="mr-3 h-4 w-4" />
+                ) : (
+                  <CloudOff className="mr-3 h-4 w-4" />
+                )}
+                <span className="flex-1 text-left">
+                  {preferences.showWeatherWidget ? "Hide Weather" : "Show Weather"}
+                </span>
+              </button>
+            </>
+          )}
 
           {/* Divider */}
           <div className="my-1 h-px bg-border" />
