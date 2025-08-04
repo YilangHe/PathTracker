@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Alert } from "../types/path";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,15 +24,8 @@ export const AlertsCard = ({
   const alertCount = alerts.length;
   const hasAlerts = alertCount > 0;
 
-  // Auto-collapse when there are no alerts, expand when there are alerts
-  const [isExpanded, setIsExpanded] = useState(hasAlerts);
-
-  // Update expansion state when alerts change
-  useEffect(() => {
-    if (!loading) {
-      setIsExpanded(hasAlerts);
-    }
-  }, [hasAlerts, loading]);
+  // Start collapsed by default
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const formatAlertTime = (timestamp: string) => {
     const date = new Date(parseInt(timestamp));
