@@ -59,7 +59,7 @@ export default function RootLayout({ children }: Props) {
           src="https://plausible.io/js/script.js"
         ></script>
       </head>
-      <body className={`${inter.className} min-h-screen flex flex-col pb-20`}>{children}</body>
+      <body className={`${inter.className} min-h-screen flex flex-col`}>{children}</body>
     </html>
   );
 }

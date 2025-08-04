@@ -45,7 +45,12 @@
     "buyMeCoffee": "请我坐一次 PATH",
     "dataSource": "数据 © 纽约和新泽西港务局 • 每10秒更新",
     "disclaimer": "免责声明",
-    "contact": "联系我们"
+    "contact": "联系我们",
+    "supportTitle": "让 PATH Tracker 保持免费！",
+    "supportMessage": "您的支持帮助我们为所有 PATH 乘客提供这项免费服务。",
+    "supportMessageShort": "帮助我们为所有乘客保持免费！",
+    "bannerMessage": "请我们坐一次 PATH，帮助我们为所有乘客保持免费服务",
+    "bannerMessageShort": "支持我们保持免费！"
   },
   "home": {
     "features": "功能特点",

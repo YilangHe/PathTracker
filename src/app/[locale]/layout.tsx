@@ -177,7 +177,7 @@ export default async function LocaleLayout({
           src="https://plausible.io/js/script.js"
         ></script>
       </head>
-      <body className={`${inter.className} min-h-screen flex flex-col pb-20`}>
+      <body className={`${inter.className} min-h-screen flex flex-col`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

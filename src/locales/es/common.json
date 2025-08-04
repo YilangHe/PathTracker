@@ -45,7 +45,12 @@
     "buyMeCoffee": "Cómprame un viaje en PATH",
     "dataSource": "Datos © Autoridad Portuaria de NY y NJ • Actualiza cada 10s",
     "disclaimer": "Aviso Legal",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "supportTitle": "¡Mantén PATH Tracker Gratis!",
+    "supportMessage": "Tu apoyo nos ayuda a proporcionar este servicio gratuito a todos los pasajeros de PATH.",
+    "supportMessageShort": "¡Ayuda a mantenerlo gratis para todos!",
+    "bannerMessage": "Cómpranos un viaje en PATH para mantener este servicio gratuito para todos",
+    "bannerMessageShort": "¡Apóyanos para mantenerlo gratis!"
   },
   "home": {
     "features": "Características",
