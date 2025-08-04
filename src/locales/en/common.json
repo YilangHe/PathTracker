@@ -45,7 +45,12 @@
     "buyMeCoffee": "Buy me a PATH ride",
     "dataSource": "Data © Port Authority of NY & NJ • Updates every 10s",
     "disclaimer": "Disclaimer",
-    "contact": "Contact"
+    "contact": "Contact",
+    "supportTitle": "Keep PATH Tracker Free!",
+    "supportMessage": "Your support helps us provide this free service to all PATH riders.",
+    "supportMessageShort": "Help keep this free for all riders!",
+    "bannerMessage": "Buy us a PATH ride to help keep this service free for all riders",
+    "bannerMessageShort": "Support us to keep it free!"
   },
   "home": {
     "features": "Features",

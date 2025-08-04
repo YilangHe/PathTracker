@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 import { OpenPanelComponent } from "@openpanel/nextjs";
 import { Analytics } from "@vercel/analytics/next";
+import { BottomBanner } from "@/components/BottomBanner";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = 'en';
@@ -145,6 +146,7 @@ export default async function RootPage() {
               <PathTrackerClient />
             </main>
             <Footer />
+            <BottomBanner />
             <Analytics />
           </PWAProvider>
         </UserPreferencesProvider>
