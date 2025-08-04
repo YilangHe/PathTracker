@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 import { OpenPanelComponent } from "@openpanel/nextjs";
 import { Analytics } from "@vercel/analytics/next";
+import { BottomBanner } from "@/components/BottomBanner";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -176,7 +177,7 @@ export default async function LocaleLayout({
           src="https://plausible.io/js/script.js"
         ></script>
       </head>
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+      <body className={`${inter.className} min-h-screen flex flex-col pb-20`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -271,6 +272,7 @@ export default async function LocaleLayout({
                 <Navbar />
                 <main className="flex-grow">{children}</main>
                 <Footer />
+                <BottomBanner />
                 <Analytics />
               </PWAProvider>
             </UserPreferencesProvider>
