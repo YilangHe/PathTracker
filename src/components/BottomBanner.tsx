@@ -12,9 +12,24 @@ export function BottomBanner() {
   const t = useTranslations('footer');
 
   useEffect(() => {
-    const bannerDismissed = localStorage.getItem('pathRideBannerDismissed');
-    if (!bannerDismissed) {
+    // Check if banner was dismissed and if enough time has passed
+    const dismissedAt = localStorage.getItem('pathRideBannerDismissedAt');
+    
+    if (!dismissedAt) {
+      // Never dismissed or old key, show banner
       setIsVisible(true);
+      // Clean up old key if it exists
+      localStorage.removeItem('pathRideBannerDismissed');
+    } else {
+      // Check if 7 days have passed
+      const dismissedTimestamp = parseInt(dismissedAt, 10);
+      const currentTime = Date.now();
+      const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+      
+      if (currentTime - dismissedTimestamp >= sevenDaysInMs) {
+        // 7 days have passed, show banner again
+        setIsVisible(true);
+      }
     }
   }, []);
 
@@ -48,7 +63,8 @@ export function BottomBanner() {
 
   const handleDismiss = () => {
     setIsVisible(false);
-    localStorage.setItem('pathRideBannerDismissed', 'true');
+    // Store the timestamp when the banner was dismissed
+    localStorage.setItem('pathRideBannerDismissedAt', Date.now().toString());
   };
 
   if (!isVisible || !shouldShow) return null;
