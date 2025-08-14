@@ -126,15 +126,44 @@
   },
   "alerts": {
     "title": "Alertas PATH",
+    "pageDescription": "Alertas PATH en tiempo real, interrupciones del servicio y retrasos",
     "loading": "Cargando...",
     "loadingAlerts": "Cargando alertas...",
+    "updatingAlerts": "Actualizando alertas...",
     "alertCount": "{count, plural, =0 {Sin alertas} =1 {# alerta} other {# alertas}}",
+    "activeAlerts": "{count} alertas activas",
+    "allServicesNormal": "Todos los servicios funcionan normalmente",
     "usingCached": "Usando datos en caché",
+    "showingCachedAlerts": "Mostrando datos de alertas en caché. Intentando obtener información actualizada...",
     "error": "Error",
     "errorLatest": "No se pueden obtener las últimas alertas. Mostrando últimos datos conocidos.",
     "errorLoading": "Error al cargar alertas:",
+    "unableToLoadAlerts": "No se pueden cargar las alertas",
     "noAlerts": "No hay alertas activas en este momento.",
-    "updated": "Actualizado:"
+    "noActiveAlerts": "No hay alertas activas",
+    "noMatchingAlerts": "No hay alertas que coincidan con sus filtros",
+    "updated": "Actualizado:",
+    "lastUpdated": "Última actualización:",
+    "justNow": "Ahora mismo",
+    "minutesAgo": "Hace {count} minutos",
+    "hoursAgo": "Hace {count} horas",
+    "daysAgo": "Hace {count} días",
+    "firstReported": "Reportado por primera vez:",
+    "searchPlaceholder": "Buscar alertas...",
+    "filterByCategory": "Filtrar por {category}",
+    "categories": {
+      "all": "Todas las Alertas",
+      "suspension": "Suspensiones de Servicio",
+      "delay": "Retrasos",
+      "maintenance": "Mantenimiento",
+      "schedule": "Cambios de Horario",
+      "general": "General"
+    },
+    "severity": {
+      "critical": "Crítico",
+      "warning": "Advertencia",
+      "info": "Información"
+    }
   },
   "weather": {
     "title": "Clima Actual",

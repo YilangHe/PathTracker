@@ -1,4 +1,4 @@
-import { Message, StalenessStatus, StationCode } from "../types/path";
+import { Message, StalenessStatus, StationCode, Alert } from "../types/path";
 import { STATION_COORDINATES } from "../constants/stations";
 
 export const getLineColor = (raw: string): string => {
@@ -77,12 +77,22 @@ export const cacheData = (key: string, data: any, timestamp?: string) => {
   }
 };
 
-export const getCachedData = (key: string) => {
+export const getCachedData = (key: string, maxAge?: number) => {
   try {
     if (typeof window !== "undefined") {
       const cached = localStorage.getItem(key);
       if (cached) {
         const parsed = JSON.parse(cached);
+        
+        // Check if cache is expired (default 10 minutes for alerts, 5 minutes for other data)
+        if (maxAge) {
+          const cacheAge = Date.now() - new Date(parsed.cachedAt).getTime();
+          if (cacheAge > maxAge) {
+            localStorage.removeItem(key);
+            return null;
+          }
+        }
+        
         return {
           data: parsed.data,
           timestamp: parsed.timestamp,
@@ -104,12 +114,13 @@ export const getCachedStationData = () => {
   return getCachedData(CACHE_KEYS.STATION_DATA);
 };
 
-export const cacheAlertsData = (alertsData: any, timestamp: string) => {
+export const cacheAlertsData = (alertsData: Alert[], timestamp: string) => {
   cacheData(CACHE_KEYS.ALERTS_DATA, alertsData, timestamp);
 };
 
-export const getCachedAlertsData = () => {
-  return getCachedData(CACHE_KEYS.ALERTS_DATA);
+export const getCachedAlertsData = (): { data: Alert[]; timestamp: string; cachedAt?: string } | null => {
+  // Allow alerts cache to live for 10 minutes
+  return getCachedData(CACHE_KEYS.ALERTS_DATA, 10 * 60 * 1000);
 };
 
 export const getStalenessStatus = (

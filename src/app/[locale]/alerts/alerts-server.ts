@@ -36,10 +36,10 @@ export async function getAlertsData(): Promise<AlertsData> {
   }
 }
 
-// Cache alerts data in memory for 30 seconds to reduce API calls
+// Cache alerts data in memory for 5 minutes to reduce API calls
 let cachedData: AlertsData | null = null;
 let cacheTime: number = 0;
-const CACHE_DURATION = 30000; // 30 seconds
+const CACHE_DURATION = 300000; // 5 minutes
 
 export async function getCachedAlertsData(): Promise<AlertsData> {
   const now = Date.now();

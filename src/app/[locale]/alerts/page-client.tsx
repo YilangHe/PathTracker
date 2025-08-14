@@ -19,27 +19,13 @@ import {
   RefreshCw
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { AlertsData } from "./alerts-server";
+import { AlertsSkeleton } from "@/components/AlertsSkeleton";
 
-interface AlertsPageClientProps {
-  initialData?: AlertsData;
-}
-
-export function AlertsPageClient({ initialData }: AlertsPageClientProps) {
+export function AlertsPageClient() {
   const t = useTranslations();
-  const { data: liveAlerts, loading, error, hasCachedData, lastSuccessfulUpdate } = useAlerts();
+  const { data: alerts, loading, error, hasCachedData, lastSuccessfulUpdate } = useAlerts();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
-  
-  // Use initial data from server on first render, then switch to live data
-  const [hasHydrated, setHasHydrated] = useState(false);
-  const alerts = hasHydrated ? liveAlerts : (initialData?.alerts || []);
-  const displayError = hasHydrated ? error : initialData?.error;
-  const displayLastUpdate = hasHydrated ? lastSuccessfulUpdate : initialData?.lastUpdated;
-  
-  useEffect(() => {
-    setHasHydrated(true);
-  }, []);
 
   const formatAlertTime = (timestamp: string) => {
     // Handle both ISO string and Unix timestamp formats
@@ -187,9 +173,9 @@ export function AlertsPageClient({ initialData }: AlertsPageClientProps) {
                 </>
               )}
             </div>
-            {displayLastUpdate && (
+            {lastSuccessfulUpdate && (
               <div className="text-xs text-muted-foreground">
-                {t('alerts.lastUpdated')} {formatAlertTime(displayLastUpdate)}
+                {t('alerts.lastUpdated')} {formatAlertTime(lastSuccessfulUpdate)}
               </div>
             )}
           </div>
@@ -243,14 +229,14 @@ export function AlertsPageClient({ initialData }: AlertsPageClientProps) {
       </div>
 
       {/* Error State */}
-      {displayError && !hasCachedData && alerts.length === 0 && (
+      {error && !hasCachedData && alerts.length === 0 && (
         <Card className="border-red-500 bg-red-900/20">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <XCircle className="w-6 h-6 text-red-500" />
               <div>
                 <h3 className="font-semibold text-red-500">{t('alerts.unableToLoadAlerts')}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{displayError}</p>
+                <p className="text-sm text-muted-foreground mt-1">{error}</p>
               </div>
             </div>
           </CardContent>
@@ -258,7 +244,7 @@ export function AlertsPageClient({ initialData }: AlertsPageClientProps) {
       )}
 
       {/* Cached Data Warning */}
-      {displayError && (hasCachedData || alerts.length > 0) && (
+      {error && (hasCachedData || alerts.length > 0) && (
         <Card className="border-orange-500 bg-orange-900/20 mb-4">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -275,6 +261,11 @@ export function AlertsPageClient({ initialData }: AlertsPageClientProps) {
 
       {/* Alerts List */}
       <main role="main" aria-label="PATH alerts list">
+        {/* Show skeleton loader on initial load */}
+        {loading && alerts.length === 0 && !hasCachedData && (
+          <AlertsSkeleton />
+        )}
+        
         {filteredAlerts.length === 0 && !loading && (
           <Card className="border-green-500 bg-green-900/20">
             <CardContent className="p-8 text-center">
@@ -354,10 +345,10 @@ export function AlertsPageClient({ initialData }: AlertsPageClientProps) {
         </AnimatePresence>
       </main>
 
-      {/* Loading State */}
-      {loading && (
-        <div className="flex justify-center items-center py-12">
-          <RefreshCw className="w-8 h-8 animate-spin text-primary" />
+      {/* Loading State for refreshing */}
+      {loading && alerts.length > 0 && (
+        <div className="flex justify-center items-center py-4">
+          <RefreshCw className="w-6 h-6 animate-spin text-primary opacity-50" />
         </div>
       )}
     </div>

@@ -1,42 +1,71 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Alert } from "../types/path";
 import { fetchAlerts } from "../services/pathApi";
-import { POLLING_INTERVAL } from "../constants/stations";
+import { ALERTS_POLLING_INTERVAL } from "../constants/stations";
 import { cacheAlertsData, getCachedAlertsData } from "../utils/pathHelpers";
 
 export const useAlerts = () => {
-  const [data, setData] = useState<Alert[]>([]);
+  // Initialize with cached data if available - this makes data available immediately
+  const [data, setData] = useState<Alert[]>(() => {
+    if (typeof window !== "undefined") {
+      const cachedData = getCachedAlertsData();
+      if (cachedData && cachedData.data) {
+        console.log("[Alerts Cache] Initializing with cached data:", {
+          dataLength: cachedData.data.length,
+          timestamp: cachedData.timestamp,
+          age: Date.now() - new Date(cachedData.cachedAt || cachedData.timestamp).getTime()
+        });
+        return cachedData.data;
+      }
+    }
+    return [];
+  });
+  
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
-  const [lastSuccessfulUpdate, setLastSuccessfulUpdate] = useState<
-    string | null
-  >(null);
+  const [lastSuccessfulUpdate, setLastSuccessfulUpdate] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      const cachedData = getCachedAlertsData();
+      if (cachedData && cachedData.timestamp) {
+        return cachedData.timestamp;
+      }
+    }
+    return null;
+  });
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hasCachedData, setHasCachedData] = useState(false);
-
-  // Load cached data on initial mount
-  useEffect(() => {
-    const cachedData = getCachedAlertsData();
-    if (cachedData && cachedData.data) {
-      console.log("Loading cached alerts data:", cachedData);
-      setData(cachedData.data);
-      setLastSuccessfulUpdate(cachedData.timestamp);
-      setHasCachedData(true);
+  const [hasCachedData, setHasCachedData] = useState(() => {
+    if (typeof window !== "undefined") {
+      const cachedData = getCachedAlertsData();
+      return !!(cachedData && cachedData.data && cachedData.data.length > 0);
     }
-  }, []);
+    return false;
+  });
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const load = useCallback(async () => {
     try {
+      console.log("[Alerts Fetch] Starting fetch...");
+      const startTime = Date.now();
       const json = await fetchAlerts();
-      console.log("Alerts API Response:", json);
+      const fetchTime = Date.now() - startTime;
+      console.log(`[Alerts Fetch] Response received in ${fetchTime}ms:`, {
+        status: json.status,
+        dataLength: json.data?.length || 0
+      });
 
       if (json.status === "Success" && json.data) {
         // Cache successful data
-        cacheAlertsData(json.data, new Date().toISOString());
+        const timestamp = new Date().toISOString();
+        cacheAlertsData(json.data, timestamp);
+        console.log("[Alerts Cache] Saved to localStorage:", {
+          dataLength: json.data.length,
+          timestamp
+        });
 
         setData(json.data);
-        setLastUpdated(new Date().toISOString());
-        setLastSuccessfulUpdate(new Date().toISOString());
+        setLastUpdated(timestamp);
+        setLastSuccessfulUpdate(timestamp);
         setError(null);
         setHasCachedData(false); // Fresh data, not cached
       } else {
@@ -92,20 +121,54 @@ export const useAlerts = () => {
       }
     }
 
-    // Delay initial load by 1 second to allow server data to be used first
-    const initialLoadTimeout = setTimeout(() => {
+    // Only show loading if we don't already have data (from cache)
+    if (data.length === 0) {
       setLoading(true);
-      load();
-    }, 1000);
+    }
     
-    // Set up polling interval
-    const id = setInterval(load, POLLING_INTERVAL);
+    // Always fetch fresh data in background
+    load();
+    
+    // Set up smart polling with visibility detection
+    const setupPolling = () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      
+      // Only poll when tab is visible
+      if (document.visibilityState === 'visible') {
+        intervalRef.current = setInterval(load, ALERTS_POLLING_INTERVAL);
+      }
+    };
+    
+    // Handle visibility change
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Resume polling and fetch fresh data when tab becomes visible
+        load();
+        setupPolling();
+      } else {
+        // Stop polling when tab is hidden
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      }
+    };
+    
+    // Initial polling setup
+    setupPolling();
+    
+    // Add visibility change listener
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     
     return () => {
-      clearTimeout(initialLoadTimeout);
-      clearInterval(id);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [load]);
+  }, [load, data.length]);
 
   return {
     data,

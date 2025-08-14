@@ -1,11 +1,10 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { AlertsPageClient } from "./page-client";
-import { getCachedAlertsData } from "./alerts-server";
 
-// Force dynamic rendering for this page since it fetches real-time data
-export const dynamic = 'force-dynamic';
-export const revalidate = 30; // Revalidate every 30 seconds
+// Use static generation for faster initial page load
+// Data will be fetched client-side
+export const dynamic = 'force-static';
 
 type Props = {
   params: { locale: string };
@@ -156,15 +155,8 @@ function generateAlertStructuredData() {
 }
 
 export default async function AlertsPage({ params: { locale } }: Props) {
-  // Try to fetch initial data on server for faster first paint
-  // But don't fail if it doesn't work (e.g., during static generation)
-  let initialData;
-  try {
-    initialData = await getCachedAlertsData();
-  } catch (error) {
-    console.log("Could not fetch initial alerts data:", error);
-    initialData = undefined;
-  }
+  // Don't fetch data on server - let client handle it for faster page load
+  // This way the page loads immediately and shows skeleton/cached data
   
   return (
     <>
@@ -174,7 +166,7 @@ export default async function AlertsPage({ params: { locale } }: Props) {
           __html: JSON.stringify(generateAlertStructuredData()),
         }}
       />
-      <AlertsPageClient initialData={initialData} />
+      <AlertsPageClient />
     </>
   );
 }
