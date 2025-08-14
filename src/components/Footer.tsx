@@ -20,10 +20,10 @@ export function Footer() {
       {/* Desktop Footer - Multi-column layout */}
       <div className="hidden md:block">
         <div className="mx-auto max-w-7xl px-6 py-12">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8 justify-items-center">
             {/* Stations Column */}
-            <div>
-              <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
+            <div className="text-center">
+              <h3 className="font-semibold text-sm mb-4 flex items-center justify-center gap-2">
                 <Train className="h-4 w-4" />
                 {t('footer.sections.stations')}
               </h3>
@@ -62,8 +62,8 @@ export function Footer() {
             </div>
 
             {/* Features Column */}
-            <div>
-              <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
+            <div className="text-center">
+              <h3 className="font-semibold text-sm mb-4 flex items-center justify-center gap-2">
                 <MapPin className="h-4 w-4" />
                 {t('footer.sections.features')}
               </h3>
@@ -112,8 +112,8 @@ export function Footer() {
             </div>
 
             {/* Popular Routes Column */}
-            <div>
-              <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
+            <div className="text-center">
+              <h3 className="font-semibold text-sm mb-4 flex items-center justify-center gap-2">
                 <Map className="h-4 w-4" />
                 {t('footer.sections.popularRoutes')}
               </h3>
@@ -162,8 +162,8 @@ export function Footer() {
             </div>
 
             {/* Resources Column */}
-            <div>
-              <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
+            <div className="text-center">
+              <h3 className="font-semibold text-sm mb-4 flex items-center justify-center gap-2">
                 <Shield className="h-4 w-4" />
                 {t('footer.sections.resources')}
               </h3>
@@ -207,8 +207,8 @@ export function Footer() {
             </div>
 
             {/* Connect Column */}
-            <div>
-              <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
+            <div className="text-center">
+              <h3 className="font-semibold text-sm mb-4 flex items-center justify-center gap-2">
                 <Mail className="h-4 w-4" />
                 {t('footer.sections.connect')}
               </h3>
@@ -230,16 +230,6 @@ export function Footer() {
                   >
                     GitHub
                     <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.buymeacoffee.com/himrnoodles"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('footer.buyMeCoffee')}
                   </a>
                 </li>
                 <li>
@@ -268,6 +258,29 @@ export function Footer() {
                 </p>
                 <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                   <span dangerouslySetInnerHTML={{ __html: t.raw('footer.madeBy') }} />
+                </div>
+                {/* Buy Me A Coffee Button */}
+                <div className="mt-3">
+                  <a
+                    href="https://www.buymeacoffee.com/himrnoodles"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center font-medium text-sm px-4 py-2 rounded-lg transition-all duration-300 hover:opacity-90 hover:scale-105"
+                    style={{
+                      backgroundColor: "rgb(95, 127, 255)",
+                      color: "rgb(255, 255, 255)",
+                    }}
+                  >
+                    <div className="flex">
+                      <span
+                        className="inline-block"
+                        style={{ transform: "scale(0.8)", marginTop: "-2px" }}
+                      >
+                        🚆
+                      </span>
+                      <span className="ml-2">{t('footer.buyMeCoffee')}</span>
+                    </div>
+                  </a>
                 </div>
               </div>
               <div className="text-xs text-muted-foreground text-center md:text-right">
