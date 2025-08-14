@@ -10,11 +10,8 @@ export const useAlerts = () => {
     if (typeof window !== "undefined") {
       const cachedData = getCachedAlertsData();
       if (cachedData && cachedData.data) {
-        console.log("[Alerts Cache] Initializing with cached data:", {
-          dataLength: cachedData.data.length,
-          timestamp: cachedData.timestamp,
-          age: Date.now() - new Date(cachedData.cachedAt || cachedData.timestamp).getTime()
-        });
+        const age = Date.now() - new Date(cachedData.cachedAt || cachedData.timestamp).getTime();
+        console.log(`[Alerts] Using cached data: ${cachedData.data.length} alerts (${Math.round(age/1000)}s old)`);
         return cachedData.data;
       }
     }
@@ -45,23 +42,15 @@ export const useAlerts = () => {
 
   const load = useCallback(async () => {
     try {
-      console.log("[Alerts Fetch] Starting fetch...");
       const startTime = Date.now();
       const json = await fetchAlerts();
       const fetchTime = Date.now() - startTime;
-      console.log(`[Alerts Fetch] Response received in ${fetchTime}ms:`, {
-        status: json.status,
-        dataLength: json.data?.length || 0
-      });
-
+      
       if (json.status === "Success" && json.data) {
         // Cache successful data
         const timestamp = new Date().toISOString();
         cacheAlertsData(json.data, timestamp);
-        console.log("[Alerts Cache] Saved to localStorage:", {
-          dataLength: json.data.length,
-          timestamp
-        });
+        console.log(`[Alerts] Fetched and cached ${json.data.length} alerts in ${fetchTime}ms`);
 
         setData(json.data);
         setLastUpdated(timestamp);
@@ -121,13 +110,24 @@ export const useAlerts = () => {
       }
     }
 
-    // Only show loading if we don't already have data (from cache)
-    if (data.length === 0) {
-      setLoading(true);
-    }
+    // Check if cache is fresh enough (less than 30 seconds old)
+    const cachedData = getCachedAlertsData();
+    const isCacheFresh = cachedData && cachedData.cachedAt && 
+      (Date.now() - new Date(cachedData.cachedAt).getTime()) < 30000; // 30 seconds
     
-    // Always fetch fresh data in background
-    load();
+    if (isCacheFresh) {
+      console.log("[Alerts Cache] Cache is fresh, skipping initial fetch");
+      // Don't fetch immediately if cache is fresh
+      // Just set up polling for later updates
+    } else {
+      console.log("[Alerts Cache] Cache is stale or missing, fetching fresh data");
+      // Only show loading if we don't already have data (from cache)
+      if (data.length === 0) {
+        setLoading(true);
+      }
+      // Fetch fresh data
+      load();
+    }
     
     // Set up smart polling with visibility detection
     const setupPolling = () => {
@@ -144,8 +144,17 @@ export const useAlerts = () => {
     // Handle visibility change
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        // Resume polling and fetch fresh data when tab becomes visible
-        load();
+        // Check cache freshness before fetching when tab becomes visible
+        const cachedData = getCachedAlertsData();
+        const isCacheFresh = cachedData && cachedData.cachedAt && 
+          (Date.now() - new Date(cachedData.cachedAt).getTime()) < 30000; // 30 seconds
+        
+        if (!isCacheFresh) {
+          console.log("[Alerts Cache] Tab became visible, cache is stale, fetching...");
+          load();
+        } else {
+          console.log("[Alerts Cache] Tab became visible, cache is still fresh");
+        }
         setupPolling();
       } else {
         // Stop polling when tab is hidden
