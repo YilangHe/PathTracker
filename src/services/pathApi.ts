@@ -40,15 +40,52 @@ export const fetchRidePath = async (): Promise<RidePathResponse> => {
 };
 
 export const fetchAlerts = async (): Promise<AlertsResponse> => {
-  const attempt = async (url: string) => {
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(getErrorMessage(res.status));
-    return res.json();
+  const isDev = process.env.NODE_ENV === 'development';
+  
+  const attempt = async (url: string, timeout = 5000, label = "") => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+      if (isDev) console.log(`[Alerts API] Attempting ${label}: ${url.substring(0, 50)}... (timeout: ${timeout}ms)`);
+      const startTime = Date.now();
+      const res = await fetch(url, { 
+        cache: "no-store",
+        signal: controller.signal 
+      });
+      clearTimeout(timeoutId);
+      const fetchTime = Date.now() - startTime;
+      if (isDev) console.log(`[Alerts API] ${label} responded in ${fetchTime}ms with status ${res.status}`);
+      
+      if (!res.ok) throw new Error(getErrorMessage(res.status));
+      const data = await res.json();
+      console.log(`[Alerts API] ${label} succeeded with ${data.data?.length || 0} alerts in ${fetchTime}ms`);
+      return data;
+    } catch (error: any) {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        if (isDev) console.log(`[Alerts API] ${label} timed out after ${timeout}ms`);
+        throw new Error('Request timeout');
+      }
+      if (isDev) console.log(`[Alerts API] ${label} failed:`, error.message);
+      throw error;
+    }
   };
 
+  // Try both endpoints in parallel, return whichever succeeds first
   try {
-    return await attempt(ALERTS_API_URL);
-  } catch {
-    return await attempt(ALERTS_PROXY_URL);
+    if (isDev) console.log("[Alerts API] Starting parallel fetch race...");
+    return await Promise.race([
+      attempt(ALERTS_API_URL, 3000, "Direct API"),
+      attempt(ALERTS_PROXY_URL, 5000, "CORS Proxy")
+    ]);
+  } catch (error) {
+    if (isDev) console.log("[Alerts API] Both parallel attempts failed, trying sequential fallback...");
+    // If both fail, try them sequentially with longer timeout as fallback
+    try {
+      return await attempt(ALERTS_API_URL, 10000, "Direct API (fallback)");
+    } catch {
+      return await attempt(ALERTS_PROXY_URL, 10000, "CORS Proxy (fallback)");
+    }
   }
 };

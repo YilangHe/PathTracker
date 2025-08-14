@@ -40,4 +40,5 @@ export const ALERTS_PROXY_URL = `https://corsproxy.io/?${encodeURIComponent(
   ALERTS_API_URL
 )}`;
 
-export const POLLING_INTERVAL = 10_000; // 10 seconds
+export const POLLING_INTERVAL = 10_000; // 10 seconds for station data
+export const ALERTS_POLLING_INTERVAL = 30_000; // 30 seconds for alerts

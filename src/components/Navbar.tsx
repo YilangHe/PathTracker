@@ -95,7 +95,7 @@ export function Navbar() {
                   <ListItem href={`/${locale}`} title={t("nav.dragAndDrop")}>
                     {t("nav.dragAndDropDesc")}
                   </ListItem>
-                  <ListItem href={`/${locale}`} title={t("nav.serviceAlerts")}>
+                  <ListItem href={`/${locale}/alerts`} title={t("nav.serviceAlerts")}>
                     {t("nav.serviceAlertsDesc")}
                   </ListItem>
                   <ListItem
@@ -149,18 +149,48 @@ export function Navbar() {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            <NavigationMenuItem>
+            {/* Desktop: Show Alerts and Maps as separate items */}
+            <NavigationMenuItem className="hidden md:block">
+              <NavigationMenuLink asChild>
+                <Link
+                  href={`/${locale}/alerts`}
+                  className="text-white hover:text-white/90 data-[active]:text-white bg-transparent hover:bg-white/10 px-3 py-2 rounded-md transition-colors text-sm font-medium inline-flex items-center min-h-[44px] touch-manipulation"
+                >
+                  {t("nav.serviceAlerts")}
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem className="hidden md:block">
               <NavigationMenuLink asChild>
                 <Link
                   href={`/${locale}/service-maps`}
                   className="text-white hover:text-white/90 data-[active]:text-white bg-transparent hover:bg-white/10 px-3 py-2 rounded-md transition-colors text-sm font-medium inline-flex items-center min-h-[44px] touch-manipulation"
                 >
-                  <span className="hidden md:inline">
-                    {t("nav.serviceMaps")}
-                  </span>
-                  <span className="md:hidden">{t("nav.serviceMapsShort")}</span>
+                  {t("nav.serviceMaps")}
                 </Link>
               </NavigationMenuLink>
+            </NavigationMenuItem>
+            {/* Mobile: Group Alerts and Maps in a dropdown */}
+            <NavigationMenuItem className="md:hidden">
+              <NavigationMenuTrigger className="text-white hover:text-white/90 data-[active]:text-white data-[state=open]:text-white bg-transparent hover:bg-white/10 data-[state=open]:bg-white/10 px-3 py-2 rounded-md transition-colors min-h-[44px] touch-manipulation">
+                {t("nav.services")}
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[320px] gap-3 p-4 bg-popover border border-border shadow-lg rounded-md">
+                  <ListItem
+                    href={`/${locale}/alerts`}
+                    title={t("nav.serviceAlerts")}
+                  >
+                    {t("nav.serviceAlertsDesc")}
+                  </ListItem>
+                  <ListItem
+                    href={`/${locale}/service-maps`}
+                    title={t("nav.serviceMaps")}
+                  >
+                    {t("nav.serviceMapsDesc")}
+                  </ListItem>
+                </ul>
+              </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
