@@ -19,25 +19,55 @@ import {
   RefreshCw
 } from "lucide-react";
 import { useTranslations } from 'next-intl';
+import { AlertsData } from "./alerts-server";
 
-export function AlertsPageClient() {
+interface AlertsPageClientProps {
+  initialData?: AlertsData;
+}
+
+export function AlertsPageClient({ initialData }: AlertsPageClientProps) {
   const t = useTranslations();
-  const { data: alerts, loading, error, hasCachedData, lastSuccessfulUpdate } = useAlerts();
+  const { data: liveAlerts, loading, error, hasCachedData, lastSuccessfulUpdate } = useAlerts();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Use initial data from server on first render, then switch to live data
+  const [hasHydrated, setHasHydrated] = useState(false);
+  const alerts = hasHydrated ? liveAlerts : (initialData?.alerts || []);
+  const displayError = hasHydrated ? error : initialData?.error;
+  const displayLastUpdate = hasHydrated ? lastSuccessfulUpdate : initialData?.lastUpdated;
+  
+  useEffect(() => {
+    setHasHydrated(true);
+  }, []);
 
   const formatAlertTime = (timestamp: string) => {
-    const date = new Date(parseInt(timestamp));
+    // Handle both ISO string and Unix timestamp formats
+    let date: Date;
+    if (timestamp.includes('-') || timestamp.includes('T')) {
+      // ISO string format
+      date = new Date(timestamp);
+    } else {
+      // Unix timestamp (assume milliseconds if large number)
+      const ts = parseInt(timestamp);
+      date = new Date(ts > 9999999999 ? ts : ts * 1000);
+    }
+    
+    // Validate date
+    if (isNaN(date.getTime())) {
+      return t('alerts.justNow');
+    }
+    
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    if (diffMins < 1) return t('alerts.justNow');
+    if (diffMins < 60) return t('alerts.minutesAgo', { count: diffMins });
+    if (diffHours < 24) return t('alerts.hoursAgo', { count: diffHours });
+    if (diffDays < 7) return t('alerts.daysAgo', { count: diffDays });
     return date.toLocaleDateString();
   };
 
@@ -78,12 +108,12 @@ export function AlertsPageClient() {
   };
 
   const categories = [
-    { id: "all", label: "All Alerts", icon: AlertCircle },
-    { id: "suspension", label: "Service Suspensions", icon: XCircle },
-    { id: "delay", label: "Delays", icon: Clock },
-    { id: "maintenance", label: "Maintenance", icon: Train },
-    { id: "schedule", label: "Schedule Changes", icon: Calendar },
-    { id: "general", label: "General", icon: Info },
+    { id: "all", label: t('alerts.categories.all'), icon: AlertCircle },
+    { id: "suspension", label: t('alerts.categories.suspension'), icon: XCircle },
+    { id: "delay", label: t('alerts.categories.delay'), icon: Clock },
+    { id: "maintenance", label: t('alerts.categories.maintenance'), icon: Train },
+    { id: "schedule", label: t('alerts.categories.schedule'), icon: Calendar },
+    { id: "general", label: t('alerts.categories.general'), icon: Info },
   ];
 
   const filteredAlerts = alerts.filter(alert => {
@@ -128,10 +158,10 @@ export function AlertsPageClient() {
       <header className="mb-8">
         <h1 className="text-4xl font-bold mb-4 flex items-center gap-3">
           <AlertTriangle className="w-10 h-10 text-amber-500" />
-          PATH Alerts
+          {t('alerts.title')}
         </h1>
         <p className="text-lg text-muted-foreground">
-          Real-time service alerts, delays, and disruptions for the PATH train system
+          {t('alerts.pageDescription')}
         </p>
         
         {/* Status Bar */}
@@ -141,25 +171,25 @@ export function AlertsPageClient() {
               {loading ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span className="text-sm">Updating alerts...</span>
+                  <span className="text-sm">{t('alerts.updatingAlerts')}</span>
                 </>
               ) : alerts.length === 0 ? (
                 <>
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span className="text-sm font-medium">All services operating normally</span>
+                  <span className="text-sm font-medium">{t('alerts.allServicesNormal')}</span>
                 </>
               ) : (
                 <>
                   <AlertCircle className="w-4 h-4 text-amber-500" />
                   <span className="text-sm font-medium">
-                    {alerts.length} active {alerts.length === 1 ? 'alert' : 'alerts'}
+                    {t('alerts.activeAlerts', { count: alerts.length })}
                   </span>
                 </>
               )}
             </div>
-            {lastSuccessfulUpdate && (
+            {displayLastUpdate && (
               <div className="text-xs text-muted-foreground">
-                Last updated: {formatAlertTime(lastSuccessfulUpdate)}
+                {t('alerts.lastUpdated')} {formatAlertTime(displayLastUpdate)}
               </div>
             )}
           </div>
@@ -172,11 +202,11 @@ export function AlertsPageClient() {
           <div className="flex-1 min-w-[200px]">
             <input
               type="search"
-              placeholder="Search alerts..."
+              placeholder={t('alerts.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-4 py-2 rounded-lg border bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary"
-              aria-label="Search PATH alerts"
+              aria-label={t('alerts.searchPlaceholder')}
             />
           </div>
         </div>
@@ -213,14 +243,14 @@ export function AlertsPageClient() {
       </div>
 
       {/* Error State */}
-      {error && !hasCachedData && (
+      {displayError && !hasCachedData && alerts.length === 0 && (
         <Card className="border-red-500 bg-red-900/20">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <XCircle className="w-6 h-6 text-red-500" />
               <div>
-                <h3 className="font-semibold text-red-500">Unable to load alerts</h3>
-                <p className="text-sm text-muted-foreground mt-1">{error}</p>
+                <h3 className="font-semibold text-red-500">{t('alerts.unableToLoadAlerts')}</h3>
+                <p className="text-sm text-muted-foreground mt-1">{displayError}</p>
               </div>
             </div>
           </CardContent>
@@ -228,14 +258,14 @@ export function AlertsPageClient() {
       )}
 
       {/* Cached Data Warning */}
-      {error && hasCachedData && (
+      {displayError && (hasCachedData || alerts.length > 0) && (
         <Card className="border-orange-500 bg-orange-900/20 mb-4">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-orange-500" />
               <div>
                 <p className="text-sm text-orange-500">
-                  Showing cached alerts. Unable to fetch latest updates.
+                  {t('alerts.showingCachedAlerts')}
                 </p>
               </div>
             </div>
@@ -249,11 +279,11 @@ export function AlertsPageClient() {
           <Card className="border-green-500 bg-green-900/20">
             <CardContent className="p-8 text-center">
               <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold mb-2">No Active Alerts</h2>
+              <h2 className="text-xl font-semibold mb-2">{t('alerts.noActiveAlerts')}</h2>
               <p className="text-muted-foreground">
                 {searchTerm || selectedCategory !== "all" 
-                  ? "No alerts match your filter criteria."
-                  : "All PATH services are operating normally."}
+                  ? t('alerts.noMatchingAlerts')
+                  : t('alerts.allServicesNormal')}
               </p>
             </CardContent>
           </Card>
@@ -311,7 +341,7 @@ export function AlertsPageClient() {
                         <div className="mt-3 pt-3 border-t border-current/10">
                           <div className="flex items-center gap-2 text-xs opacity-70">
                             <Clock className="w-3 h-3" />
-                            <span>First reported: {formatAlertTime(alert.CreatedDate)}</span>
+                            <span>{t('alerts.firstReported')} {formatAlertTime(alert.CreatedDate)}</span>
                           </div>
                         </div>
                       )}

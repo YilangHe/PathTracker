@@ -92,10 +92,19 @@ export const useAlerts = () => {
       }
     }
 
-    setLoading(true);
-    load();
+    // Delay initial load by 1 second to allow server data to be used first
+    const initialLoadTimeout = setTimeout(() => {
+      setLoading(true);
+      load();
+    }, 1000);
+    
+    // Set up polling interval
     const id = setInterval(load, POLLING_INTERVAL);
-    return () => clearInterval(id);
+    
+    return () => {
+      clearTimeout(initialLoadTimeout);
+      clearInterval(id);
+    };
   }, [load]);
 
   return {
