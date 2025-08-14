@@ -69,7 +69,12 @@
       "officialPath": "PATH 官方网站",
       "apiStatus": "API 状态",
       "reportIssue": "报告问题"
-    }
+    },
+    "supportTitle": "让 PATH Tracker 保持免费！",
+    "supportMessage": "您的支持帮助我们为所有 PATH 乘客提供这项免费服务。",
+    "supportMessageShort": "帮助我们为所有乘客保持免费！",
+    "bannerMessage": "请我们坐一次 PATH，帮助我们为所有乘客保持免费服务",
+    "bannerMessageShort": "支持我们保持免费！"
   },
   "home": {
     "features": "功能特点",

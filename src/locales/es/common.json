@@ -69,7 +69,12 @@
       "officialPath": "Sitio Oficial de PATH",
       "apiStatus": "Estado de API",
       "reportIssue": "Reportar un Problema"
-    }
+    },
+    "supportTitle": "¡Mantén PATH Tracker Gratis!",
+    "supportMessage": "Tu apoyo nos ayuda a proporcionar este servicio gratuito a todos los pasajeros de PATH.",
+    "supportMessageShort": "¡Ayuda a mantenerlo gratis para todos!",
+    "bannerMessage": "Cómpranos un viaje en PATH para mantener este servicio gratuito para todos",
+    "bannerMessageShort": "¡Apóyanos para mantenerlo gratis!"
   },
   "home": {
     "features": "Características",
