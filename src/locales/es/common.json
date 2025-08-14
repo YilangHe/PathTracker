@@ -45,7 +45,30 @@
     "buyMeCoffee": "Cómprame un viaje en PATH",
     "dataSource": "Datos © Autoridad Portuaria de NY y NJ • Actualiza cada 10s",
     "disclaimer": "Aviso Legal",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "sections": {
+      "stations": "Estaciones",
+      "features": "Características",
+      "popularRoutes": "Rutas Populares",
+      "resources": "Recursos",
+      "connect": "Conectar"
+    },
+    "links": {
+      "realTimeTracking": "Seguimiento en Tiempo Real",
+      "serviceMaps": "Mapas de Servicio",
+      "serviceAlerts": "Alertas de Servicio",
+      "multiStation": "Vista Multi-Estación",
+      "closestStation": "Estación Más Cercana",
+      "wtcToNewark": "WTC a Newark",
+      "midtownToJersey": "Midtown a Jersey City",
+      "hobokenToManhattan": "Hoboken a Manhattan",
+      "weekendService": "Servicio de Fin de Semana",
+      "lateNightService": "Servicio Nocturno",
+      "installGuide": "Guía de Instalación",
+      "officialPath": "Sitio Oficial de PATH",
+      "apiStatus": "Estado de API",
+      "reportIssue": "Reportar un Problema"
+    }
   },
   "home": {
     "features": "Características",
@@ -70,7 +93,28 @@
     "errorLoading": "Error al cargar llegadas:",
     "noArrivals": "No hay llegadas programadas para esta estación en este momento.",
     "moveStation": "Mover estación arriba/abajo",
-    "removeStation": "Eliminar estación"
+    "removeStation": "Eliminar estación",
+    "liveArrivals": "Llegadas en Vivo",
+    "connections": "Conexiones",
+    "nearby": "Cercano",
+    "travelTimes": "Tiempos de Viaje",
+    "amenities": "Comodidades",
+    "transportConnections": "Conexiones de Transporte",
+    "subway": "Líneas de Metro",
+    "busRoutes": "Rutas de Autobús",
+    "ferryServices": "Servicios de Ferry",
+    "lightRail": "Tren Ligero",
+    "nearbyAttractions": "Atracciones Cercanas",
+    "parking": "Estacionamiento",
+    "parkingAvailable": "Estacionamiento Disponible",
+    "noParking": "Sin Estacionamiento Disponible",
+    "parkingSpaces": "{count} espacios",
+    "stationAmenities": "Comodidades de la Estación",
+    "accessibility": "Accesibilidad",
+    "wheelchairAccessible": "Accesible para Sillas de Ruedas",
+    "elevators": "Ascensores",
+    "escalators": "Escaleras Mecánicas",
+    "facilities": "Instalaciones"
   },
   "addStation": {
     "title": "Agregar Nueva Estación",

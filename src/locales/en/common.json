@@ -45,7 +45,30 @@
     "buyMeCoffee": "Buy me a PATH ride",
     "dataSource": "Data © Port Authority of NY & NJ • Updates every 10s",
     "disclaimer": "Disclaimer",
-    "contact": "Contact"
+    "contact": "Contact",
+    "sections": {
+      "stations": "Stations",
+      "features": "Features",
+      "popularRoutes": "Popular Routes",
+      "resources": "Resources",
+      "connect": "Connect"
+    },
+    "links": {
+      "realTimeTracking": "Real-time Tracking",
+      "serviceMaps": "Service Maps",
+      "serviceAlerts": "Service Alerts",
+      "multiStation": "Multi-Station View",
+      "closestStation": "Closest Station",
+      "wtcToNewark": "WTC to Newark",
+      "midtownToJersey": "Midtown to Jersey City",
+      "hobokenToManhattan": "Hoboken to Manhattan",
+      "weekendService": "Weekend Service",
+      "lateNightService": "Late Night Service",
+      "installGuide": "Install Guide",
+      "officialPath": "Official PATH Site",
+      "apiStatus": "API Status",
+      "reportIssue": "Report an Issue"
+    }
   },
   "home": {
     "features": "Features",
@@ -70,7 +93,28 @@
     "errorLoading": "Error loading arrivals:",
     "noArrivals": "No arrivals scheduled for this station at the moment.",
     "moveStation": "Move station up/down",
-    "removeStation": "Remove station"
+    "removeStation": "Remove station",
+    "liveArrivals": "Live Arrivals",
+    "connections": "Connections",
+    "nearby": "Nearby",
+    "travelTimes": "Travel Times",
+    "amenities": "Amenities",
+    "transportConnections": "Transportation Connections",
+    "subway": "Subway Lines",
+    "busRoutes": "Bus Routes",
+    "ferryServices": "Ferry Services",
+    "lightRail": "Light Rail",
+    "nearbyAttractions": "Nearby Attractions",
+    "parking": "Parking",
+    "parkingAvailable": "Parking Available",
+    "noParking": "No Parking Available",
+    "parkingSpaces": "{count} spaces",
+    "stationAmenities": "Station Amenities",
+    "accessibility": "Accessibility",
+    "wheelchairAccessible": "Wheelchair Accessible",
+    "elevators": "Elevators",
+    "escalators": "Escalators",
+    "facilities": "Facilities"
   },
   "addStation": {
     "title": "Add New Station",
