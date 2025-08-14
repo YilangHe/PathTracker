@@ -13,6 +13,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
+      path: '/alerts',
+      changeFrequency: 'always' as const,
+      priority: 0.95,
+    },
+    {
       path: '/disclaimer',
       changeFrequency: 'monthly' as const,
       priority: 0.5,

@@ -7,6 +7,7 @@
   "nav": {
     "title": "Path Tracker",
     "features": "Features",
+    "services": "Services",
     "about": "About",
     "installApp": "Install App",
     "installAppShort": "Install",
@@ -125,15 +126,45 @@
   },
   "alerts": {
     "title": "PATH Alerts",
+    "pageTitle": "PATH Alerts - Real-time Service Updates",
+    "pageDescription": "Real-time service alerts, delays, and disruptions for the PATH train system",
     "loading": "Loading...",
     "loadingAlerts": "Loading alerts...",
+    "updatingAlerts": "Updating alerts...",
     "alertCount": "{count, plural, =0 {No alerts} =1 {# alert} other {# alerts}}",
+    "activeAlerts": "{count} active {count, plural, =1 {alert} other {alerts}}",
     "usingCached": "Using cached data",
+    "showingCachedAlerts": "Showing cached alerts. Unable to fetch latest updates.",
     "error": "Error",
     "errorLatest": "Unable to get latest alerts. Showing last known data.",
     "errorLoading": "Error loading alerts:",
+    "unableToLoadAlerts": "Unable to load alerts",
     "noAlerts": "No active alerts at this time.",
-    "updated": "Updated:"
+    "noActiveAlerts": "No Active Alerts",
+    "allServicesNormal": "All PATH services are operating normally.",
+    "noMatchingAlerts": "No alerts match your filter criteria.",
+    "updated": "Updated:",
+    "lastUpdated": "Last updated:",
+    "firstReported": "First reported:",
+    "justNow": "Just now",
+    "minutesAgo": "{count} minute{count, plural, =1 {} other {s}} ago",
+    "hoursAgo": "{count} hour{count, plural, =1 {} other {s}} ago",
+    "daysAgo": "{count} day{count, plural, =1 {} other {s}} ago",
+    "searchPlaceholder": "Search alerts...",
+    "filterByCategory": "Filter by {category}",
+    "categories": {
+      "all": "All Alerts",
+      "suspension": "Service Suspensions",
+      "delay": "Delays",
+      "maintenance": "Maintenance",
+      "schedule": "Schedule Changes",
+      "general": "General"
+    },
+    "severity": {
+      "critical": "Critical",
+      "warning": "Warning",
+      "info": "Information"
+    }
   },
   "weather": {
     "title": "Current Weather",

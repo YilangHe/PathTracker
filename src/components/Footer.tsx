@@ -86,7 +86,7 @@ export function Footer() {
                 </li>
                 <li>
                   <Link
-                    href={`/${locale}#alerts`}
+                    href={`/${locale}/alerts`}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {t('footer.links.serviceAlerts')}
@@ -332,6 +332,30 @@ export function Footer() {
 
           {/* Divider */}
           <div className="w-full border-t border-border"></div>
+
+          {/* Quick Links for Mobile */}
+          <div className="flex flex-wrap justify-center gap-3 text-xs">
+            <a
+              href={`/${locale}/alerts`}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              PATH Alerts
+            </a>
+            <span className="text-muted-foreground">•</span>
+            <a
+              href={`/${locale}/service-maps`}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Service Maps
+            </a>
+            <span className="text-muted-foreground">•</span>
+            <a
+              href={`/${locale}`}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Live Tracker
+            </a>
+          </div>
 
           {/* Additional Info */}
           <div className="flex flex-col sm:flex-row items-center justify-between w-full space-y-2 sm:space-y-0">
