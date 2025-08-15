@@ -31,6 +31,30 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://www.livepathtracker.com",
+    siteName: "PATH Train Tracker",
+    title: "PATH Train Tracker - Real-time Arrivals for NYC & NJ",
+    description: "Track real-time PATH train arrivals across New York and New Jersey. Monitor multiple stations, get live updates, and never miss your train.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "PATH Train Tracker - Real-time arrivals and alerts",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PATH Train Tracker - Real-time Arrivals for NYC & NJ",
+    description: "Track real-time PATH train arrivals across New York and New Jersey. Monitor multiple stations, get live updates, and never miss your train.",
+    images: ["/og-image.png"],
+    creator: "@pathtracker",
+    site: "@pathtracker",
+  },
 };
 
 type Props = {
